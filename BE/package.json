@@ -1,0 +1,39 @@
+{
+  "name": "bao-duy",
+  "version": "1.0.0",
+  "description": "e-commerce project",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/sever.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitmetmoi/E-Commerce.git"
+  },
+  "author": "BaoDuy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitmetmoi/E-Commerce/issues"
+  },
+  "homepage": "https://github.com/vitmetmoi/E-Commerce#readme",
+  "dependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mysql2": "^3.12.0",
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2"
+  }
+}
