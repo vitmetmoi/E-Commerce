@@ -1,6 +1,6 @@
 import express from "express";
-import homeController from "../controller/homeController"
-import userController from '../controller/userController'
+import homeController from "../controllers/homeController"
+import userController from '../controllers/userController'
 import JWTservice from '../middleware/JWTservice'
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 const initApiRoutes = (app) => {
-
+    router.post("/user/create", userController.handleCreateUser)
     return app.use("/api", router)
 }
 
