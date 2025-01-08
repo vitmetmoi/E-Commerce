@@ -10,16 +10,23 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.belongsTo(models.Group, { foreignKey: "groupId" })
+      User.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
     }
   }
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    phoneNumber: DataTypes.STRING,
+    address: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    avatar: DataTypes.BLOB('long'),
+    groupId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',
   });
+  User.sync();
   return User;
 };
