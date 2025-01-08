@@ -16,11 +16,11 @@ module.exports = {
             },
             userId: {
                 allowNull: true,
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER
             },
             clothesId: {
                 allowNull: true,
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER
             },
             comment: {
                 allowNull: true,

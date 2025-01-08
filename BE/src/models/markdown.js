@@ -10,12 +10,11 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Markdown.belongsTo(models.Group, { foreignKey: "groupId" })
-            Markdown.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
+            Markdown.belongsTo(models.Clothes, { foreignKey: "clothesId" })
         }
     }
     Markdown.init({
-        clothesId: DataTypes.STRING,
+        clothesId: DataTypes.INTEGER,
         contentHTML: DataTypes.TEXT('long'),
         contentMarkdown: DataTypes.TEXT('LONG'),
     }, {
