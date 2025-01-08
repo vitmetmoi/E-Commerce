@@ -9,22 +9,49 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
       firstName: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       lastName: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       email: {
+        allowNull: true,
         type: Sequelize.STRING
+      },
+      phoneNumber: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      address: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      avatar: {
+        allowNull: true,
+        type: Sequelize.BLOB('long')
+      },
+      gender: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      groupId: {
+        allowNull: true,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW'),
+
       }
     });
   },

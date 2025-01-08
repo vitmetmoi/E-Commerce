@@ -16,10 +16,16 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    phoneNumber: DataTypes.STRING,
+    address: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    avatar: DataTypes.BLOB('long'),
+    groupId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',
   });
+  User.sync();
   return User;
 };
