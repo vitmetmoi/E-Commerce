@@ -14,7 +14,7 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.STRING
             },
-            BillId: {
+            userId: {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },

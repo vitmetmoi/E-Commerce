@@ -2,6 +2,7 @@
 const {
     Model
 } = require('sequelize');
+const Review = require('./Review');
 module.exports = (sequelize, DataTypes) => {
     class ReviewImage extends Model {
         /**
@@ -10,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            ReviewImage.belongsTo(models.Group, { foreignKey: "groupId" })
-            ReviewImage.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
+            ReviewImage.belongsTo(models.Review, { foreignKey: "reviewId" })
         }
     }
     ReviewImage.init({

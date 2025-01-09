@@ -10,14 +10,15 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Review.belongsTo(models.Group, { foreignKey: "groupId" })
-            Review.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
+            Review.belongsTo(models.User, { foreignKey: "userId" })
+            Review.belongsTo(models.Clothes, { foreignKey: "clothesId" })
+            Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId' });
         }
     }
     Review.init({
         star: DataTypes.STRING,
-        userId: DataTypes.STRING,
-        clothesId: DataTypes.STRING,
+        userId: DataTypes.INTEGER,
+        clothesId: DataTypes.INTEGER,
         comment: DataTypes.TEXT('long'),
     }, {
         sequelize,

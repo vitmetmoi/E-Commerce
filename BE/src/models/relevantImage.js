@@ -10,12 +10,11 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            RelevantImage.belongsTo(models.Group, { foreignKey: "groupId" })
-            RelevantImage.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
+            RelevantImage.belongsTo(models.Clothes, { foreignKey: "clothesId" })
         }
     }
     RelevantImage.init({
-        clothesId: DataTypes.STRING,
+        clothesId: DataTypes.INTEGER,
         image: DataTypes.BLOB('long'),
     }, {
         sequelize,
