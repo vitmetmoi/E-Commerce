@@ -1,0 +1,29 @@
+.ads-container {
+    .swiper {
+        width : 100%;
+        height: 40px;
+
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size : 15px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        cursor          : pointer;
+        display         : flex;
+        justify-content : center;
+        align-items     : center;
+        background-color: #f1f1f1;
+    }
+
+    .swiper-slide img {
+        display   : block;
+        width     : 100%;
+        height    : 100%;
+        object-fit: cover;
+    }
+
+
+}
