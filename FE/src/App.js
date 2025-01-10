@@ -1,35 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import './App.scss';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useSelector, useDispatch } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
+import { useGetUserDataQuery, useCreateUserMutation } from './store/slice/API/userAPI';
+import Home from './container/homePage/Home.js';
 function App() {
+
+  const userData = useSelector((state) => state.user.userData)
+  const queryData = useSelector((state) => state.userAPI.queries)
+  const mutationData = useSelector((state) => state.userAPI.mutations)
+  const dispatch = useDispatch()
+  const { data, error, isLoading } = useGetUserDataQuery('ALL');
+  const [createUser, { isLoading: createUserLoading }] = useCreateUserMutation();
+
   return (
     <div className="App">
-      <Swiper
-        // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={50}
-        slidesPerView={3}
-        navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log('slide change')}
-      >
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-        <SwiperSlide><img src="https://i.pinimg.com/736x/37/a6/44/37a64464d32f8dc2e26d172c2d981a56.jpg"></img></SwiperSlide>
-      </Swiper>
+      <Home></Home>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }
