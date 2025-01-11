@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import { useGetUserDataQuery, useCreateUserMutation } from './store/slice/API/userAPI';
-import Home from './container/homePage/Home.js';
+import Home from './container/home/Home.js';
 function App() {
 
   const userData = useSelector((state) => state.user.userData)
