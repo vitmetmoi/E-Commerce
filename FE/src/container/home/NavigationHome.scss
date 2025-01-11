@@ -1,4 +1,5 @@
 .home-nav-container {
+
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
     * {
@@ -6,13 +7,23 @@
         padding    : 0;
         box-sizing : border-box;
         font-family: 'Poppins', sans-serif;
+
     }
 
-    nav {
-        position  : sticky;
+
+    .nav-sticky {
         z-index   : 99;
         width     : 100%;
         background: white;
+        position  : relative;
+    }
+
+    .nav-fixed {
+        z-index   : 99;
+        width     : 100%;
+        background: white;
+        position  : fixed;
+        top       : 0;
     }
 
     nav .wrapper {
@@ -26,16 +37,32 @@
         align-items: center;
     }
 
-    .wrapper .logo {
-        width                : 6%;
-        height               : 100%;
-        background-image     : url('https://www.elleman.vn/wp-content/uploads/2018/09/11/logo-thuong-hieu-stussy-3-elle-man.jpg');
-        background-repeat    : no-repeat;
-        background-size      : contain;
-        background-position-y: center;
-        background-position-x: center;
-        cursor               : pointer;
+    .logo-container {
+        width : 6%;
+        height: 100%;
+
+        .swiper {
+            width : 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            cursor: pointer;
+        }
+
+        .logo {
+            width                   : 100%;
+            height                  : 100%;
+            // background-image     : url('https://www.elleman.vn/wp-content/uploads/2018/09/11/logo-thuong-hieu-stussy-3-elle-man.jpg');
+            background-repeat       : no-repeat;
+            background-size         : contain;
+            background-position-y   : center;
+            background-position-x   : center;
+            cursor                  : pointer;
+        }
+
     }
+
 
     .wrapper .nav-links {
         display: inline-flex;

@@ -15,14 +15,14 @@ function AdsHome(props) {
                     delay: 2500,
                     disableOnInteraction: false,
                 }}
+                loop={true}
                 className="mySwiper"
             >
                 <SwiperSlide>115 Wardour Street Soho London, W1F 0UN United Kingdom</SwiperSlide>
-                <SwiperSlide>Clothes spirit of Bao Duy</SwiperSlide>
+                <SwiperSlide>"An attitude, a lifestyle and the way to express yourself"</SwiperSlide>
                 <SwiperSlide>~ Happy 15th holiday ~</SwiperSlide>
-                <SwiperSlide>Stussy x WHO.AU</SwiperSlide>
+                <SwiperSlide>Stussy x WHO.AU x AFGK </SwiperSlide>
                 <SwiperSlide>Discount 15% all accessory items!</SwiperSlide>
-
             </Swiper>
         </div>
     );

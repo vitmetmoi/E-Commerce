@@ -1,13 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './NavigationHome.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import './AdsHome.scss'
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination, Autoplay } from 'swiper/modules';
+
 function NavigationHome(props) {
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [navClass, setNavClass] = useState('nav-sticky');
+    const handleScroll = () => {
+        const position = window.pageYOffset;
+        if (position > 0) {
+            setNavClass('nav-fixed')
+        }
+        else if (position === 0) {
+            setNavClass('nav-sticky')
+        }
+        setScrollPosition(position);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
         <div className='home-nav-container col-12'>
-            <nav className=''>
+            <nav className={navClass}>
                 <div class="wrapper">
-                    <div className="logo"></div>
+                    <div className='logo-container'>
+                        <Swiper
+                            direction={'vertical'}
+                            modules={[Autoplay]}
+                            autoplay={{
+                                delay: 2500,
+                                disableOnInteraction: false,
+                            }}
+                            className="mySwiper"
+                            loop={true}
+                        >
+                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://www.elleman.vn/wp-content/uploads/2018/09/11/logo-thuong-hieu-stussy-3-elle-man.jpg" + ")" }}></div></SwiperSlide>
+                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://pbs.twimg.com/profile_images/509047538691743744/brOoco8P_400x400.png" + ")" }}></div></SwiperSlide>
+                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://wellbredstore.com/wp-content/uploads/2021/06/A-FEW-GOOD-KIDS-1200-X-630.jpg" + ")" }}></div></SwiperSlide>
+
+                        </Swiper>
+                    </div>
 
                     <ul class="nav-links ms-4">
                         <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
@@ -219,10 +260,10 @@ function NavigationHome(props) {
                         </svg>
                     </div>
                 </div>
-            </nav>
+            </nav >
 
 
-        </div>
+        </div >
     );
 }
 

@@ -15,29 +15,53 @@ function HomeBanner(props) {
                 spaceBetween={0}
                 slidesPerView={1}
                 navigation
-            // loop={true}
-
-            // pagination={{ clickable: true }}
-            // scrollbar={{ draggable: true }}
-            // autoplay={{
-            //     delay: 2500,
-            //     disableOnInteraction: false,
-            // }}
             >
-                <SwiperSlide><img src="https://whoau.com/web/upload/NNEditor/20241212/726a0d37ac5396aa741713f389c6371a.jpg"></img></SwiperSlide>
-                <SwiperSlide><img src="https://culltique.in/cdn/shop/files/posterdesignmockup-2-26_0bf8b966-c4c2-4af9-aae1-fbf889a0449a.jpg?v=1715892315&width=1946"></img></SwiperSlide>
-                <SwiperSlide><img src="https://whoau.com/web/upload/NNEditor/20241016/8427f4c98cc4bf7892f7760ce4d3101f.jpg"></img></SwiperSlide>
-                <SwiperSlide><img src="https://cdn.mykiot.vn/2023/03/1678271046c0cc899a718902b1b84ff3d5571c1d48.jpg"></img></SwiperSlide>
-                <SwiperSlide><img src="https://whoau.com/web/upload/NNEditor/20241004/604bb55812ce7bc39c36914a09b23e6d.jpg"></img></SwiperSlide>
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241212/726a0d37ac5396aa741713f389c6371a.jpg` + ")", }}
+                        className='banner-cover'>
 
-                {/* <SwiperSlide>
-                    <iframe width="100%" height="100%"
-                        src="https://www.youtube.com/embed/GMAZpAKkFwA"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen></iframe>
-                </SwiperSlide> */}
+                    </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://culltique.in/cdn/shop/files/posterdesignmockup-2-26_0bf8b966-c4c2-4af9-aae1-fbf889a0449a.jpg?v=1715892315&width=1946` + ")", }}
+                        className='banner-cover'>
+                        <span className='text-1'>Tell Your Own Story</span>
+                        <span className='text-2'>Stussy Spirit</span>
+                        <span className='text-3'>SHOP</span>
+                    </div>
+
+                </SwiperSlide>
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241016/8427f4c98cc4bf7892f7760ce4d3101f.jpg` + ")", }}
+                        className='banner-cover'>
+                        <span className='text-1'>Warmth in every outer</span>
+                        <span className='text-2'>Just wear it</span>
+                        <span className='text-3'>SHOP</span>
+                    </div>
+
+                </SwiperSlide>
+                <SwiperSlide>
+                    <div style={{
+                        backgroundPositionY: "15%",
+                        backgroundImage: "url(" + `https://doncare-club.com/cdn/shop/files/5_68cd7cdf-4b4b-4dbe-bcc8-f9d7526c85e1.jpg?v=1734677425&width=2400` + ")",
+                    }}
+                        className='banner-cover'>
+                        <span className='text-1'>AFGK X TOMBONIA</span>
+                        <span className='text-2'>Puppy Friends</span>
+                        <span className='text-3'>Explore The Collection</span>
+                    </div>
+
+                </SwiperSlide>
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241004/604bb55812ce7bc39c36914a09b23e6d.jpg` + ")", }}
+                        className='banner-cover'>
+                        <span className='text-1'>Timeless Adventure</span>
+                        <span className='text-2'>Endless Comfort in Every Moment</span>
+                        <span className='text-3'>SHOP</span>
+                    </div>
+
+                </SwiperSlide>
+
 
             </Swiper>
         </div>
