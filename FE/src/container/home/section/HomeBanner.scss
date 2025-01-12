@@ -11,13 +11,86 @@
         display        : flex;
         justify-content: center;
         align-items    : center;
+        cursor         : pointer;
+
+        .img-doncare {
+            object-position: 53.7758% 30.354%;
+            size           : 100vw;
+        }
+
+        .banner-cover {
+            width                : 100%;
+            height               : 100%;
+            background-repeat    : no-repeat;
+            background-size      : cover;
+            background-position-x: center;
+            background-position-y: center;
+            display              : flex;
+            flex-direction       : column;
+            justify-content      : end;
+            padding-bottom       : 3%;
+            z-index              : 1;
+
+            .text-1 {
+
+                font-size     : 60px;
+                font-weight   : 700;
+                line-height   : 1;
+                color         : #fff;
+                font-family   : 'Garamond Premiere', 'pretendard';
+                letter-spacing: -0.5px;
+                z-index       : 5;
+            }
+
+            .text-2 {
+                font-size     : 20px;
+                font-weight   : 400;
+                line-height   : 1;
+                color         : #fff;
+                margin-top    : 10px;
+                letter-spacing: -0.02em;
+                font-family   : 'Poppins', 'pretendard';
+                z-index       : 5;
+            }
+
+            .text-3 {
+                font-size            : 20px;
+                font-weight          : 400;
+                line-height          : 1;
+                color                : #fff;
+                margin-top           : 45px;
+                letter-spacing       : -0.02em;
+                text-decoration      : underline;
+                font-family          : 'Poppins', 'pretendard';
+                text-underline-offset: 5px;
+                z-index              : 5;
+
+            }
+
+            &::after {
+                content   : "";
+                position  : absolute;
+                left      : 0;
+                bottom    : 0;
+                right     : 0;
+                z-index   : 1;
+                width     : 100%;
+                height    : 31rem;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.40) 100%);
+            }
+
+        }
 
         img {
+
             display   : block;
             width     : 100%;
             height    : 100%;
             object-fit: cover;
+
+
         }
+
     }
 
 

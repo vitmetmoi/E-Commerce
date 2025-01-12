@@ -1,0 +1,182 @@
+.product-card-container {
+    width         : 257.6px;
+    height        : 440px;
+    display       : flex;
+    flex-direction: column;
+    overflow      : hidden;
+    cursor        : pointer;
+
+    .content-top {
+        width   : 100%;
+        height  : 80%;
+        position: relative;
+
+        &:hover {
+            .main-img {
+                opacity: 0;
+            }
+
+            .relevant-img-swiper {
+                opacity: 1;
+            }
+
+            .group-color {
+                height: 40px;
+
+                .color {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .main-img {
+            width                : 100%;
+            height               : 100%;
+            background-repeat    : no-repeat;
+            background-size      : cover;
+            background-position-x: center;
+            background-position-y: center;
+            opacity              : 1;
+            position             : absolute;
+            transition           : all 0.5s ease;
+
+
+        }
+
+        .relevant-img-swiper {
+            width       : 100%;
+            height      : 100%;
+            opacity     : 0;
+            position    : absolute;
+            z-index     : 1;
+            border-top  : 1px solid rgba(0, 0, 0, 0.1);
+            border-left : 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            transition  : all 0.5s ease;
+
+            .swiper {
+                width : 100%;
+                height: 100%;
+            }
+
+            .relevant-img {
+                width                : 100%;
+                height               : 100%;
+                background-repeat    : no-repeat;
+                background-size      : cover;
+                background-position-x: center;
+                background-position-y: center;
+            }
+
+
+
+            .swiper-button-prev,
+            .swiper-button-next {
+                color: white
+            }
+
+
+            .swiper-wrapper {
+                transition-duration: 0.8s !important;
+            }
+
+            .swiper-button-next:after,
+            .swiper-rtl .swiper-button-prev:after {
+                font-size: 25px;
+                fill     : #1a1a1a;
+            }
+
+            .swiper-button-prev:after,
+            .swiper-button-next:after {
+                font-size: 25px;
+                fill     : #1a1a1a;
+                color    : black;
+                opacity  : 0.5;
+            }
+        }
+
+        .group-color {
+            z-index         : 2;
+            opacity         : 1;
+            position        : absolute;
+            width           : 100%;
+            height          : 0px;
+            background-color: white;
+            bottom          : 0;
+            display         : flex;
+            flex-direction  : row;
+            justify-content : left;
+            align-items     : center;
+            gap             : 7px;
+            padding-left    : 15px;
+            transition      : all 0.3s ease;
+
+            .color {
+                transition      : all 0.3s ease;
+                opacity         : 0;
+                position        : relative;
+                width           : 18px;
+                height          : 18px;
+                border-radius   : 20px;
+                border          : 1.5px solid rgba(0, 0, 0, 0.1);
+                background-color: pink;
+            }
+        }
+    }
+
+
+    .content-bottom {
+
+        width             : 100%;
+        height            : 20%;
+        // border         : 1px solid black;
+        display           : flex;
+        flex-direction    : column;
+        justify-content   : flex-end;
+        padding-bottom    : 23px;
+        padding-left      : 3px;
+
+        .name-product {
+            width      : 100%;
+            text-align : left;
+            font-size  : 13px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .price-inf {
+            width: 100%;
+
+            text-align    : left;
+            display       : flex;
+            flex-direction: row;
+
+            .discount {
+                margin-right: 7px;
+                margin-top  : 4px;
+                font-size   : 14px;
+                font-weight : 600;
+                color       : #f06e00;
+                font-family : 'Poppins', 'pretendard', sans-serif;
+            }
+
+            .price {
+
+                font-size  : 18px !important;
+                font-weight: 600;
+                font-family: 'Poppins', 'pretendard', sans-serif;
+
+            }
+
+            .primary-price {
+                margin-left    : 7px;
+                margin-top     : 5px;
+                font-size      : 13px !important;
+                color          : #b6b6b6;
+                text-decoration: line-through;
+                font-weight    : 400;
+                font-family    : 'Poppins', 'pretendard', sans-serif;
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+.the-new-drop-container {
+    width        : 100%;
+    text-align   : left;
+    margin-top   : 300px;
+    margin-bottom: 300px;
+    border       : 1px solid red;
+
+    .title {
+        width         : fit-content;
+        font-size     : 28px;
+        font-weight   : 700;
+        line-height   : 1;
+        color         : #000;
+        font-family   : 'Garamond Premiere', 'pretendard';
+        max-width     : 1720px;
+        width         : 92%;
+        margin        : 0 auto 22px;
+        letter-spacing: -0.5px;
+    }
+
+    .section-clothes {
+        margin-left   : 5%;
+        width         : 100%;
+        border        : 1px solid green;
+        display       : flex;
+        flex-direction: row;
+        align-items   : flex-start;
+        gap           : 30px
+    }
+}
