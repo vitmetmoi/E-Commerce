@@ -11,7 +11,8 @@ function TheNewDropSection(props) {
                 <ProductCard></ProductCard>
                 <ProductCard></ProductCard>
                 <ProductCard></ProductCard>
-
+                <ProductCard></ProductCard>
+                <ProductCard></ProductCard>
             </div>
         </div>
     );
