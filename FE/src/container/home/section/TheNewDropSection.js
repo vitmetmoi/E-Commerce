@@ -6,7 +6,7 @@ function TheNewDropSection(props) {
     return (
         <div className='the-new-drop-container'>
             <div className='title'>The New Drop</div>
-            <div className='section-clothes container'>
+            <div className='section-clothes'>
                 <ProductCard></ProductCard>
                 <ProductCard></ProductCard>
                 <ProductCard></ProductCard>

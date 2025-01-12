@@ -19,10 +19,12 @@
     }
 
     .section-clothes {
+        margin-left   : 5%;
         width         : 100%;
         border        : 1px solid green;
         display       : flex;
         flex-direction: row;
+        align-items   : flex-start;
         gap           : 30px
     }
 }
