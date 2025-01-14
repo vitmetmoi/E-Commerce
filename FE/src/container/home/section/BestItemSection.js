@@ -1,5 +1,5 @@
 import React from 'react';
-import './TheNewDropSection.scss'
+import './BestItemSection.scss'
 import ProductCard from './components/ProductCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -7,18 +7,15 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-
-function TheNewDropSection(props) {
+function BestItemSection(props) {
     return (
-        <div className='the-new-drop-container'>
-            <div className='title'>The New Drop</div>
+        <div className='best-item-container'>
+            <div className='title'>BEST ITEM</div>
             <div className='section-clothes'>
 
                 <Swiper
                     // install Swiper modules
                     modules={[A11y]}
-                    // spaceBetween={20}
-                    // slidesPerView={5}
                     breakpoints={{
                         640: {
                             slidesPerView: 1,
@@ -69,4 +66,4 @@ function TheNewDropSection(props) {
     );
 }
 
-export default TheNewDropSection;
+export default BestItemSection;

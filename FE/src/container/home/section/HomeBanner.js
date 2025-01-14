@@ -11,16 +11,24 @@ function HomeBanner(props) {
         <div className='home-banner-container'>
             <Swiper
                 // install Swiper modules
-                modules={[Navigation, A11y, Autoplay]}
+                modules={[Navigation, A11y]}
                 spaceBetween={0}
                 slidesPerView={1}
                 navigation
+            // autoplay={{
+            //     delay: 5000,
+            //     disableOnInteraction: false,
+            // }}
             >
-                <SwiperSlide>
-                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241212/726a0d37ac5396aa741713f389c6371a.jpg` + ")", }}
-                        className='banner-cover'>
 
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241004/604bb55812ce7bc39c36914a09b23e6d.jpg` + ")", }}
+                        className='banner-cover'>
+                        <span className='text-1'>Timeless Adventure</span>
+                        <span className='text-2'>Endless Comfort in Every Moment</span>
+                        <span className='text-3'>SHOP</span>
                     </div>
+
                 </SwiperSlide>
                 <SwiperSlide>
                     <div style={{ backgroundImage: "url(" + `https://culltique.in/cdn/shop/files/posterdesignmockup-2-26_0bf8b966-c4c2-4af9-aae1-fbf889a0449a.jpg?v=1715892315&width=1946` + ")", }}
@@ -52,19 +60,16 @@ function HomeBanner(props) {
                     </div>
 
                 </SwiperSlide>
-                <SwiperSlide>
-                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241004/604bb55812ce7bc39c36914a09b23e6d.jpg` + ")", }}
-                        className='banner-cover'>
-                        <span className='text-1'>Timeless Adventure</span>
-                        <span className='text-2'>Endless Comfort in Every Moment</span>
-                        <span className='text-3'>SHOP</span>
-                    </div>
 
+                <SwiperSlide>
+                    <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241212/726a0d37ac5396aa741713f389c6371a.jpg` + ")", }}
+                        className='banner-cover'>
+
+                    </div>
                 </SwiperSlide>
 
-
             </Swiper>
-        </div>
+        </div >
     );
 }
 
