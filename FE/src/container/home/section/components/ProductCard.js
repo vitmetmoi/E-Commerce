@@ -51,12 +51,12 @@ function ProductCard(props) {
                 </div>
 
             </div>
-            <div className='content-bottom'>
-                <span className='name-product'>[WAU X SQUID GAME] ○△□ Graphic T-Shirt</span>
-                <div className='price-inf'>
-                    <span className='discount'>5%</span>
-                    <span className='price'>28,400</span>
-                    <span className='primary-price'>29,900</span>
+            <div className='content-bottom noselect'>
+                <span className='name-product noselect'>[WAU X SQUID GAME] ○△□ Graphic T-Shirt</span>
+                <div className='price-inf noselect'>
+                    <span className='discount noselect'>5%</span>
+                    <span className='price noselect'>28,400</span>
+                    <span className='primary-price noselect'>29,900</span>
                 </div>
             </div>
         </div>
