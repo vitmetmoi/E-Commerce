@@ -10,8 +10,42 @@
 }
 
 .first-about-container {
-    width : 100%;
-    height: 690px;
+    margin-top              : 110px;
+    margin-bottom           : 110px;
+    width                   : 100%;
+    height                  : 980px;
+    // border               : 1px solid red;
+    background-image        : url("https://doncare-club.com/cdn/shop/files/84bf1f225j2fc3bfc10efd814ea11029.jpg?v=1714221306&width=2400");
+    background-repeat       : no-repeat;
+    background-size         : cover;
+    background-position-x   : center;
+    background-position-y   : 63%;
+    position                : relative;
+    z-index                 : 1;
+
+    &::after {
+        content         : "";
+        position        : absolute;
+        left            : 0;
+        bottom          : 0;
+        right           : 0;
+        z-index         : 1;
+        width           : 100%;
+        height          : 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
 }
 
-.second-about-container {}
+.second-about-container {
+    width        : 100%;
+    height       : 180px;
+    margin-bottom: 100px;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    width           : 100%;
+    height          : 388px;
+    // border : 1px solid red;
+    padding         : 65px 0;
+}

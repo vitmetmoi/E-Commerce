@@ -4,7 +4,10 @@ import HomeBanner from './section/HomeBanner';
 import AdsHome from './AdsHome.js';
 import TheNewDropSection from './section/TheNewDropSection.js';
 import CollecSection from './section/CollectionSection.js';
-import BestItemSection from './section/BestItemSection.js'
+import BestItemSection from './section/BestItemSection.js';
+import FirstAboutSection from './section/FirstAboutSection.js';
+import SecondAboutSection from './section/SecondAboutSection.js';
+import Footer from './Footer.js';
 import './Home.scss'
 function Home(props) {
     return (
@@ -28,9 +31,13 @@ function Home(props) {
             </div>
 
             <div className='first-about-container'>
+                <FirstAboutSection></FirstAboutSection>
             </div>
             <div className='second-about-container'>
-
+                <SecondAboutSection></SecondAboutSection>
+            </div>
+            <div className='footer'>
+                <Footer></Footer>
             </div>
         </>
     );
