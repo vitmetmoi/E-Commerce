@@ -59,6 +59,35 @@ const handleGetUser = async (req, res) => {
     }
 }
 
+const handleRegister = async (req, res) => {
+    try {
+        let data = req.body;
+        let response = await userService.registerService(data);
+        if (response) {
+            return res.status(200).json({
+                DT: response.DT,
+                EC: response.EC,
+                EM: response.EM
+            })
+        }
+        else {
+            return req.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: "err from sever controller..."
+            })
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return req.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+}
+
 module.exports = {
-    handleCreateUser, handleGetUser
+    handleCreateUser, handleGetUser, handleRegister
 }
