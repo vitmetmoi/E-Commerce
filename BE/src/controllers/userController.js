@@ -88,6 +88,37 @@ const handleRegister = async (req, res) => {
     }
 }
 
+const handleLogin = async (req, res) => {
+    try {
+        let loginAcc = req.query.loginAcc;
+        let password = req.query.password;
+
+        let response = await userService.loginService(loginAcc, password);
+        if (response) {
+            return res.status(200).json({
+                DT: response.DT,
+                EC: response.EC,
+                EM: response.EM
+            })
+        }
+        else {
+            return req.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: "err from sever controller..."
+            })
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return req.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+}
+
 module.exports = {
-    handleCreateUser, handleGetUser, handleRegister
+    handleCreateUser, handleGetUser, handleRegister, handleLogin
 }

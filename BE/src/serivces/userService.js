@@ -1,6 +1,9 @@
 import { raw } from "body-parser";
 import db from "../models"
-import _ from 'lodash'
+import _, { has } from 'lodash'
+import bcrypt from 'bcryptjs';
+import { Op } from "sequelize";
+const saltRounds = 10;
 const createUserService = async (data) => {
     try {
         if (!data || !data.email || !data.firstName || !data.lastName) {
@@ -70,48 +73,10 @@ const getUserService = async (type, userId) => {
     }
 }
 
-const checkValidatePhoneNumber = (phoneNumber) => {
-    try {
-        let isValid = true;
-        let user = db.User.findOne({
-            where: {
-                phoneNumber: phoneNumber,
-                raw: true
-            }
-        })
-        if (!_.isEmpty(user)) {
-            isValid = false;
-        }
-        return isValid;
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
 
-const checkValidateEmail = (email) => {
+const loginService = async (loginAcc, password) => {
     try {
-        let isValid = true;
-        let user = db.User.findOne({
-            where: {
-                email: email,
-                raw: true
-            }
-        })
-        if (!_.isEmpty(user)) {
-            isValid = false;
-        }
-        return isValid;
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
-
-
-const registerService = async (data) => {
-    try {
-        if (!data || !data.email || !data.firstName || !data.lastName || !data.phoneNumber || !data.address) {
+        if (!loginAcc || !password) {
             return {
                 DT: "",
                 EC: -1,
@@ -119,7 +84,131 @@ const registerService = async (data) => {
             }
         }
         else {
-            if (checkValidateEmail(data.email) === false || checkValidatePhoneNumber(data.phoneNumber)) {
+
+            let user = await db.User.findOne({
+                where: {
+                    [Op.or]: {
+                        email: loginAcc,
+                        phoneNumber: loginAcc,
+                    },
+                },
+                raw: true
+            });
+            if (!_.isEmpty(user)) {
+                let checkPassword = bcrypt.compareSync(password, user.password);
+                if (checkPassword === true) {
+
+                    let data = {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        phoneNumber: user.phoneNumber,
+                        address: user.address,
+                        gender: user.gender,
+                        groupId: user.groupId ? user.groupId : 3,
+                    }
+
+                    return {
+                        DT: data,
+                        EC: 0,
+                        EM: 'Login completed!'
+                    }
+                }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Your password doesnt correct!'
+                    }
+                }
+
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Your phone number or email isnt exist!'
+                }
+            }
+
+
+
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: "",
+            EC: -1,
+            EM: 'Err from sever service...'
+        }
+    }
+}
+
+const checkValidatePhoneNumber = async (phoneNumber) => {
+    try {
+        let isValid = true;
+        let user = await db.User.findOne({
+            where: {
+                phoneNumber: phoneNumber,
+            },
+            raw: true
+        })
+        if (!_.isEmpty(user)) {
+            isValid = false;
+        }
+        return isValid;
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
+const checkValidateEmail = async (email) => {
+    try {
+        let isValid = true;
+        let user = await db.User.findOne({
+            where: {
+                email: email,
+            }, raw: true
+        })
+
+        if (!_.isEmpty(user)) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
+const hashPasswordService = async (password) => {
+    let hashPassword = '';
+
+    hashPassword = await new Promise((resolve, reject) => {
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+            if (err) reject(err)
+            resolve(hash)
+        });
+    })
+
+    return hashPassword;
+}
+
+
+const registerService = async (data) => {
+    try {
+        if (!data || !data.password || !data.email || !data.firstName || !data.lastName || !data.phoneNumber) {
+            return {
+                DT: "",
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+            if (await checkValidateEmail(data.email) === false || await checkValidatePhoneNumber(data.phoneNumber) === false) {
                 return {
                     DT: "",
                     EC: -1,
@@ -127,6 +216,8 @@ const registerService = async (data) => {
                 }
             }
             else {
+                let hashPassword = '';
+                hashPassword = await hashPasswordService(data.password);
                 let user = {
                     firstName: data.firstName,
                     lastName: data.lastName,
@@ -134,7 +225,8 @@ const registerService = async (data) => {
                     phoneNumber: data.phoneNumber,
                     address: data.address,
                     gender: data.gender,
-                    groupId: data.groupId ? data.groupId : 3
+                    groupId: data.groupId ? data.groupId : 3,
+                    password: hashPassword
                 }
                 await db.User.create(user);
                 return {
@@ -157,5 +249,5 @@ const registerService = async (data) => {
 }
 
 module.exports = {
-    createUserService, getUserService, registerService
+    createUserService, getUserService, registerService, loginService
 }
