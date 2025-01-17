@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import { useGetUserDataQuery, useCreateUserMutation } from './store/slice/API/userAPI';
 import Home from './container/home/Home.js';
+import RouteIndex from './route/RouteIndex.js'
 function App() {
 
   const userData = useSelector((state) => state.user.userData)
@@ -15,10 +16,9 @@ function App() {
 
   return (
     <div className="App">
-      <Home></Home>
+      <RouteIndex></RouteIndex>
 
-      <ToastContainer
-        position="bottom-right"
+      <ToastContainer position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
