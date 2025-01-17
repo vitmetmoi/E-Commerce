@@ -5,10 +5,12 @@ import './AdsHome.scss'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay } from 'swiper/modules';
+import { useNavigate } from 'react-router';
 
 function NavigationHome(props) {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [navClass, setNavClass] = useState('nav-sticky');
+    const navigate = useNavigate();
     const handleScroll = () => {
         const position = window.pageYOffset;
         if (position > 0) {
@@ -28,11 +30,21 @@ function NavigationHome(props) {
         };
     }, []);
 
+    const handleOnclickLogin = () => {
+        navigate('/login');
+    }
+
+    const handleOnclickLogo = () => [
+        navigate('/')
+    ]
+
     return (
         <div className='home-nav-container col-12'>
             <nav className={navClass}>
                 <div class="wrapper">
-                    <div className='logo-container'>
+                    <div
+                        onClick={() => handleOnclickLogo()}
+                        className='logo-container'>
                         <Swiper
                             direction={'vertical'}
                             modules={[Autoplay]}
@@ -234,6 +246,7 @@ function NavigationHome(props) {
                     <div className='nav-icons'>
                         {/* <FontAwesomeIcon icon={faUser}></FontAwesomeIcon> */}
                         <svg
+                            onClick={() => handleOnclickLogin()}
                             className='icon'
                             viewBox="0 0 177 177"
                             fill="none"

@@ -1,11 +1,11 @@
 import React from 'react';
-
-function register(props) {
+import './Register.scss'
+function Register(props) {
     return (
         <div>
-
+            test reg
         </div>
     );
 }
 
-export default register;
+export default Register;
