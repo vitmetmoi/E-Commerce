@@ -202,13 +202,19 @@ function Register(props) {
                                 />
                             </FormControl>
                         </div>
+
                         <div className='form-row'>
                             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                                 <Button
                                     onClick={() => handleSubmit()}
                                     sx={{ marginTop: 2 }}
-                                    variant="contained">Sign up
+                                    variant="outlined">Sign up
                                 </Button>
+                            </FormControl>
+                        </div>
+                        <div className='form-row'>
+                            <FormControl fullWidth sx={{}} variant="standard">
+                                <Alert severity="info">After submit, make sure that all information is validated !</Alert>
                             </FormControl>
                         </div>
                     </Box>
