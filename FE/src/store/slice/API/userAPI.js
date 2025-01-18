@@ -24,14 +24,17 @@ export const userAPI = createApi({
         baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({
-
+        login: build.query({ query: (query) => ({ url: `/api/user/login?loginAcc=${query.loginAcc}&password=${query.password}`, method: 'get' }) }),
         getUserData: build.query({ query: (type, id) => ({ url: `/api/user/get?type=${type}&id=${id}`, method: 'get' }) }),
         createUser: build.mutation({
             query: (userData) => ({ url: '/api/user/create', method: 'post', data: userData }),
         }),
+        register: build.mutation({
+            query: (userData) => ({ url: '/api/user/register', method: 'post', data: userData })
+        })
 
     }),
 })
 
 
-export const { useGetUserDataQuery, useCreateUserMutation } = userAPI
+export const { useRegisterMutation, useLazyLoginQuery, useGetUserDataQuery, useCreateUserMutation } = userAPI
