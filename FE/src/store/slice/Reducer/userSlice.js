@@ -10,7 +10,8 @@ const defaultUserData = {
     address: '',
     avatar: '',
     gender: '',
-    groupId: ''
+    groupId: 3,
+    authenticated: false
 }
 
 const initialState = {

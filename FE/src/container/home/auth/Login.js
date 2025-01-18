@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.scss'
 import Checkbox from '@mui/material/Checkbox';
 import { AppProvider } from '@toolpad/core/AppProvider';
@@ -15,10 +15,9 @@ import {
     InputAdornment,
     Link,
     Alert,
-    IconButton,
+    IconButton, Backdrop, CircularProgress
 } from '@mui/material';
 import NavigationHome from '../NavigationHome';
-import Footer from '../Footer';
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserData } from '../../../store/slice/Reducer/userSlice';
 import { useNavigate } from 'react-router';
@@ -45,9 +44,17 @@ function Login(props) {
     const userData = useSelector((state) => state.user.userData);
     const theme = useTheme();
     const [loginSerivce, { data, error, isLoading }] = useLazyLoginQuery('', '');
+    const [isOpenBackDrop, setIsOpenBackDrop] = useState(false);
     const navigate = useNavigate();
     return (
         <>
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                open={isOpenBackDrop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <NavigationHome></NavigationHome>
 
             <div className='login-container'>
@@ -62,25 +69,32 @@ function Login(props) {
                                     loginAcc: formData.get('email'),
                                     password: formData.get('password')
                                 }
-                                let res = await loginSerivce(query);
-                                if (res && res.data.EC === 0) {
-                                    let resData = res.data.DT;
-                                    let data = {
-                                        firstName: resData.firstName ? resData.firstName : '',
-                                        lastName: resData.lastName ? resData.lastName : '',
-                                        email: resData.email ? resData.email : '',
-                                        phoneNumber: resData.phoneNumber ? resData.phoneNumber : '',
-                                        address: resData.address ? resData.address : '',
-                                        gender: resData.gender ? resData.gender : '',
-                                        groupId: resData.groupId ? resData.groupId : ''
+                                setIsOpenBackDrop(true);
+                                setTimeout(async () => {
+                                    let res = await loginSerivce(query);
+                                    if (res && res.data.EC === 0) {
+                                        let resData = res.data.DT;
+                                        let data = {
+                                            firstName: resData.firstName ? resData.firstName : '',
+                                            lastName: resData.lastName ? resData.lastName : '',
+                                            email: resData.email ? resData.email : '',
+                                            phoneNumber: resData.phoneNumber ? resData.phoneNumber : '',
+                                            address: resData.address ? resData.address : '',
+                                            gender: resData.gender ? resData.gender : '',
+                                            groupId: resData.groupId ? resData.groupId : '',
+                                            avatar: resData.avatar ? resData.avatar : '',
+                                            authenticated: true
+                                        }
+                                        dispatch(setUserData(data))
+                                        // toast.success('Login completed!')
+                                        navigate('/');
                                     }
-                                    dispatch(setUserData(data))
-                                    // toast.success('Login completed!')
-                                    navigate('/');
-                                }
-                                else {
-                                    toast(res.data.EM)
-                                }
+                                    else {
+                                        toast(res.data.EM)
+                                    }
+                                    setIsOpenBackDrop(false);
+                                }, 3000);
+
                             }
                             else {
                                 toast('Please read and confirm our T&C!')

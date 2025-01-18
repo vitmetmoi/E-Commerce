@@ -105,6 +105,7 @@ const loginService = async (loginAcc, password) => {
                         phoneNumber: user.phoneNumber,
                         address: user.address,
                         gender: user.gender,
+                        avatar: user.avatar,
                         groupId: user.groupId ? user.groupId : 3,
                     }
 
@@ -226,7 +227,8 @@ const registerService = async (data) => {
                     address: data.address,
                     gender: data.gender,
                     groupId: data.groupId ? data.groupId : 3,
-                    password: hashPassword
+                    password: hashPassword,
+                    avatar: data.avatar
                 }
                 await db.User.create(user);
                 return {

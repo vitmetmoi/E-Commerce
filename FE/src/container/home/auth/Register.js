@@ -3,6 +3,7 @@ import './Register.scss';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
+import { useRegisterMutation } from '../../../store/slice/API/userAPI';
 import {
     Button,
     FormControl,
@@ -19,7 +20,7 @@ import {
     Typography,
     Box,
     FilledInput,
-    Input, Select, MenuItem, Avatar
+    Input, Select, MenuItem, Avatar, Backdrop, CircularProgress
 } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -27,8 +28,22 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import NavigationHome from '../NavigationHome';
 import _ from 'lodash';
+import { styled } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { ToastContainer, toast } from 'react-toastify';
+import { Navigate, useNavigate } from 'react-router';
 
-
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 function Register(props) {
     const defaultInputValue = {
@@ -39,12 +54,16 @@ function Register(props) {
         password: '',
         gender: '',
         avatar: '',
-        address: ''
+        address: '',
+        groupId: 3
     }
     const [showPassword, setShowPassword] = useState(false)
     const [inputValue, setInputValue] = useState(defaultInputValue);
-
+    const [img, setImg] = useState('');
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const [registerService, { data, isLoading }] = useRegisterMutation('');
+    const [isOpenBackDrop, setIsOpenBackDrop] = useState(false);
+    const navigate = useNavigate();
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -61,15 +80,58 @@ function Register(props) {
 
     }
 
-    const handleSubmit = () => {
-        console.log('submit', inputValue);
+    const handleSubmit = async () => {
+
+
+        let data = {
+            firstName: inputValue.firstName ? inputValue.firstName : '',
+            lastName: inputValue.lastName ? inputValue.lastName : '',
+            email: inputValue.email ? inputValue.email : '',
+            phoneNumber: inputValue.phoneNumber ? inputValue.phoneNumber : '',
+            address: inputValue.address ? inputValue.address : '',
+            gender: inputValue.gender ? inputValue.gender : '',
+            groupId: inputValue.groupId ? inputValue.groupId : 3,
+            password: inputValue.password ? inputValue.password : '',
+            avatar: img ? img : ''
+        }
+
+        setIsOpenBackDrop(true);
+
+
+        setTimeout(async () => {
+            let res = await registerService(data);
+            console.log('res', res);
+            if (res && res.data && res.data.EC === 0) {
+                toast.success(res.data.EM);
+                navigate('/login')
+            }
+            else {
+                toast.error(res.data.EM);
+            }
+            setIsOpenBackDrop(false);
+        }, 3000);
+
+        registerService()
     }
 
+    const handleOnChangeImg = (img) => {
+        let urlImg = URL.createObjectURL(img[0]);
+        setImg(urlImg);
+
+    }
 
     const theme = useTheme();
     return (
         <>
             <NavigationHome></NavigationHome>
+
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                open={isOpenBackDrop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <div className='register-container'>
                 <Card className='register-content' variant="outlined">
 
@@ -175,18 +237,29 @@ function Register(props) {
                                 </Select>
                             </FormControl>
 
-                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                                <IconButton>
-                                    <Avatar
-                                        src="/images/example.jpg"
-                                        style={{
-                                            margin: "10px",
-                                            width: "30px",
-                                            height: "30px",
-                                        }}
-                                    >
-                                    </Avatar>
-                                </IconButton>
+                            <FormControl style={{ border: '1px solid rgba(0,0,0,0.1)', marginTop: '10%' }} fullWidth sx={{ m: 1 }} variant="standard">
+                                {img ? <img
+                                    src={img}
+                                    alt={'avatar'}
+                                    loading="lazy"
+                                    onClick={() => { setImg('') }}
+                                    style={{ cursor: 'pointer' }}
+                                /> : <Button
+                                    component="label"
+                                    role={undefined}
+                                    variant="outlined"
+                                    tabIndex={-1}
+                                    endIcon={<AccountCircleIcon
+                                        style={{ fontSize: '38px' }}
+                                    ></AccountCircleIcon>}
+                                >
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        onChange={(event) => handleOnChangeImg(event.target.files)}
+                                        multiple
+                                    />
+                                </Button>}
+
                             </FormControl>
                         </div>
 
@@ -220,6 +293,7 @@ function Register(props) {
                     </Box>
                 </Card>
             </div>
+
         </>
     );
 }
