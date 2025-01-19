@@ -11,7 +11,8 @@ const router = express.Router();
 
 
 const initWebRoutes = (app) => {
-    // router.all('*', JWTservice.checkUserJWT, JWTservice.checkUserPermission);
+    // router.all('*', JWTservice.checkCookieService, JWTservice.authenticateCookieService);
+
     router.get("/", homeController.handleHelloWorld)
     return app.use("/", router)
 }

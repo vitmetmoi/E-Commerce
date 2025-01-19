@@ -1,8 +1,8 @@
 import { raw } from "body-parser";
 import db from "../models"
-import _, { has } from 'lodash'
+import _, { has, includes } from 'lodash'
 import bcrypt from 'bcryptjs';
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import JWTservice from '../middleware/JWTservice';
 
 const saltRounds = 10;
@@ -110,7 +110,8 @@ const loginService = async (loginAcc, password) => {
                         avatar: user.avatar,
                         groupId: user.groupId ? user.groupId : 3,
                     }
-                    let token = JWTservice.createJwtTokenService(data);
+
+                    console.log(JWTservice.createJwtTokenService(data));
 
                     return {
                         DT: { data: data, token: token },
@@ -188,6 +189,18 @@ const checkValidateEmail = async (email) => {
     }
 }
 
+const checkUserPermission = (user, path) => {
+    try {
+        let result = db.Group.findAll({
+            include: [{ model: db.Role, attributes: ['id', 'url', 'description'] }]
+        })
+        console.log('result', result);
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 const hashPasswordService = async (password) => {
     let hashPassword = '';
 
@@ -254,5 +267,5 @@ const registerService = async (data) => {
 }
 
 module.exports = {
-    createUserService, getUserService, registerService, loginService
+    createUserService, getUserService, registerService, loginService, checkUserPermission
 }

@@ -24,11 +24,12 @@ app.use(bodyParser.json())
 
 //cookie parse
 app.use(cookieParser())
-//init web routes
-initWebRoutes(app);
 
 //init api routes
 initApiRoutes(app);
+//init web routes
+initWebRoutes(app);
+
 const PORT = process.env.PORT || 8080;
 connectToDataBase();
 
