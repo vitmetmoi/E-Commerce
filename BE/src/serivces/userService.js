@@ -3,6 +3,8 @@ import db from "../models"
 import _, { has } from 'lodash'
 import bcrypt from 'bcryptjs';
 import { Op } from "sequelize";
+import JWTservice from '../middleware/JWTservice';
+
 const saltRounds = 10;
 const createUserService = async (data) => {
     try {
@@ -108,9 +110,10 @@ const loginService = async (loginAcc, password) => {
                         avatar: user.avatar,
                         groupId: user.groupId ? user.groupId : 3,
                     }
+                    let token = JWTservice.createJwtTokenService(data);
 
                     return {
-                        DT: data,
+                        DT: { data: data, token: token },
                         EC: 0,
                         EM: 'Login completed!'
                     }

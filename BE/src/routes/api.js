@@ -12,11 +12,15 @@ const router = express.Router();
 
 
 const initApiRoutes = (app) => {
+
+
+
     router.get("/user/login", userController.handleLogin)
     router.post("/user/register", userController.handleRegister)
     router.post("/user/create", userController.handleCreateUser)
     router.get("/user/get", userController.handleGetUser)
     return app.use("/api", router)
+
 }
 
 export default initApiRoutes;
