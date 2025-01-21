@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'RelevantImage',
     });
-    RelevantImage.sync();
+
     return RelevantImage;
 };

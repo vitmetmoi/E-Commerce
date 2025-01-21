@@ -21,6 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Group',
     });
-    Group.sync();
+
     return Group;
 };

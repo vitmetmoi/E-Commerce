@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Size',
     });
-    Size.sync();
+
     return Size;
 };

@@ -21,6 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Markdown',
     });
-    Markdown.sync();
+
     return Markdown;
 };

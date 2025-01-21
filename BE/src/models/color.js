@@ -19,6 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Color',
     });
-    Color.sync();
+
     return Color;
 };

@@ -28,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Clothes',
     });
-    Clothes.sync();
+
     return Clothes;
 };
