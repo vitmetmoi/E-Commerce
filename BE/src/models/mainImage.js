@@ -21,6 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'MainImage',
     });
-    MainImage.sync();
+
     return MainImage;
 };

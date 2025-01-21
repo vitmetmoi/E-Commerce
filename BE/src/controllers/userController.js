@@ -12,7 +12,7 @@ const handleCreateUser = async (req, res) => {
             })
         }
         else {
-            return req.status(200).json({
+            return res.status(200).json({
                 DT: '',
                 EC: -1,
                 EM: "err from sever controller..."
@@ -21,7 +21,7 @@ const handleCreateUser = async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return req.status(200).json({
+        return res.status(200).json({
             DT: '',
             EC: -1,
             EM: "err from sever..."
@@ -42,7 +42,7 @@ const handleGetUser = async (req, res) => {
             })
         }
         else {
-            return req.status(200).json({
+            return res.status(200).json({
                 DT: '',
                 EC: -1,
                 EM: "err from sever controller..."
@@ -51,7 +51,7 @@ const handleGetUser = async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return req.status(200).json({
+        return res.status(200).json({
             DT: '',
             EC: -1,
             EM: "err from sever..."
@@ -71,7 +71,7 @@ const handleRegister = async (req, res) => {
             })
         }
         else {
-            return req.status(200).json({
+            return res.status(200).json({
                 DT: '',
                 EC: -1,
                 EM: "err from sever controller..."
@@ -80,7 +80,7 @@ const handleRegister = async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return req.status(200).json({
+        return res.status(200).json({
             DT: '',
             EC: -1,
             EM: "err from sever..."
@@ -95,6 +95,7 @@ const handleLogin = async (req, res) => {
 
         let response = await userService.loginService(loginAcc, password);
         if (response) {
+            //    res.clearCookie("user");
             res.cookie('user', response.DT.token);
             return res.status(200).json({
                 DT: response.DT.data,
@@ -103,7 +104,7 @@ const handleLogin = async (req, res) => {
             })
         }
         else {
-            return req.status(200).json({
+            return res.status(200).json({
                 DT: '',
                 EC: -1,
                 EM: "err from sever controller..."
@@ -112,7 +113,27 @@ const handleLogin = async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        return req.status(200).json({
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+}
+
+const handleCreateItem = async (req, res) => {
+    try {
+        console.log('create completed');
+        return res.status(200).json({
+            DT: '',
+            EC: -0,
+            EM: "Create conpleted..."
+        })
+
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
             DT: '',
             EC: -1,
             EM: "err from sever..."
@@ -121,5 +142,5 @@ const handleLogin = async (req, res) => {
 }
 
 module.exports = {
-    handleCreateUser, handleGetUser, handleRegister, handleLogin
+    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem
 }

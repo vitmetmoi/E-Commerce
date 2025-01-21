@@ -3,8 +3,8 @@ import db from "../models"
 import _, { has, includes } from 'lodash'
 import bcrypt from 'bcryptjs';
 import { Op, where } from "sequelize";
-import JWTservice from '../middleware/JWTservice';
-
+import JWTservice from '../middleware/JWTservice.js'
+import jwt from 'jsonwebtoken'
 const saltRounds = 10;
 const createUserService = async (data) => {
     try {
@@ -111,7 +111,8 @@ const loginService = async (loginAcc, password) => {
                         groupId: user.groupId ? user.groupId : 3,
                     }
 
-                    console.log(JWTservice.createJwtTokenService(data));
+
+                    let token = JWTservice.createJwtTokenService(data);
 
                     return {
                         DT: { data: data, token: token },
@@ -123,7 +124,7 @@ const loginService = async (loginAcc, password) => {
                     return {
                         DT: '',
                         EC: -1,
-                        EM: 'Your password doesnt correct!'
+                        EM: 'Your password isnt correct!'
                     }
                 }
 
@@ -189,17 +190,7 @@ const checkValidateEmail = async (email) => {
     }
 }
 
-const checkUserPermission = (user, path) => {
-    try {
-        let result = db.Group.findAll({
-            include: [{ model: db.Role, attributes: ['id', 'url', 'description'] }]
-        })
-        console.log('result', result);
-    }
-    catch (e) {
-        console.log(e)
-    }
-}
+
 
 const hashPasswordService = async (password) => {
     let hashPassword = '';
@@ -267,5 +258,5 @@ const registerService = async (data) => {
 }
 
 module.exports = {
-    createUserService, getUserService, registerService, loginService, checkUserPermission
+    createUserService, getUserService, registerService, loginService
 }

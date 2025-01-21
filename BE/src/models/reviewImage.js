@@ -2,7 +2,6 @@
 const {
     Model
 } = require('sequelize');
-const Review = require('./Review');
 module.exports = (sequelize, DataTypes) => {
     class ReviewImage extends Model {
         /**
@@ -21,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'ReviewImage',
     });
-    ReviewImage.sync();
+
     return ReviewImage;
 };

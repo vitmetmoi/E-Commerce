@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Group_Role',
     });
-    Group_Role.sync();
+
     return Group_Role;
 };

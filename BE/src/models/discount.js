@@ -24,6 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Discount',
     });
-    Discount.sync();
+
     return Discount;
 };
