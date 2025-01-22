@@ -43,7 +43,12 @@ const verifyTokenService = (token) => {
 const checkCookieService = (req, res, next) => {
     try {
         let path = req.path;
+
         let isValid = exceptionPath.includes(path)
+
+        if (path === '/api/account') {
+            isValid = false;
+        }
 
         if (isValid === true) {
             next();

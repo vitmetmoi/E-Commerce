@@ -15,6 +15,7 @@ const initApiRoutes = (app) => {
 
     app.use(JWTservice.checkCookieService, JWTservice.authenticateCookieService);
 
+    router.get("/account", userController.handleAccount)
     router.post("/item/create", userController.handleCreateItem)
     router.get("/user/login", userController.handleLogin)
     router.post("/user/register", userController.handleRegister)
