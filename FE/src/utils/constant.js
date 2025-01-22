@@ -18,3 +18,14 @@ export const GROUPID = {
     DEVELOPER: '2',
     USER: '3'
 }
+
+export const SYSTEM_NAV = {
+    DASH_BOARD: 'dashboard',
+    ORDERS: 'orders',
+    CLOTHES: 'clothes',
+    GROUPS: 'groups',
+    CREATE: 'create',
+    MENU: 'menu',
+    MANAGE: 'manage',
+
+} 

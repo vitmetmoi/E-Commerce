@@ -1,0 +1,111 @@
+.create-clothes-container {
+    //  border : 1px solid red;
+    width  : 100%;
+    height : 300px;
+    padding: 0 3%;
+
+    .create-clothes-content {
+        width    : 100%;
+        // border: 1px solid green;
+        height   : 100%;
+
+        .header-content {
+            // border         : 1px solid green;
+            width          : 100%;
+            display        : flex;
+            flex-direction : row;
+            justify-content: space-between;
+            align-items    : center;
+
+            .content-left {
+
+                .title-box {
+                    display        : flex;
+                    flex-direction : row;
+                    gap            : 10px;
+                    justify-content: center;
+                    align-items    : center;
+
+
+                    .icon {
+                        font-size: 130%;
+                    }
+
+                    .title {
+                        font-size  : 110%;
+                        font-weight: 400;
+                    }
+                }
+            }
+
+            .content-right {
+                display       : flex;
+                flex-direction: row;
+                gap           : 20px;
+
+                .button-container {
+                    display         : flex;
+                    flex-direction  : row;
+                    border          : none;
+                    justify-content : center;
+                    align-items     : center;
+                    gap             : 5px;
+                    background-color: rgba(25, 118, 210, 0.08);
+                    width           : 150px;
+                    height          : 50px;
+                    border-radius   : 20px;
+                    padding         : 0 10px;
+
+                    &.btn1 {
+                        background-color: white;
+                        border          : 1px solid rgba(0, 0, 0, 0.1);
+                    }
+                }
+            }
+        }
+
+        .body-content {
+            width         : 100%;
+            display       : flex;
+            flex-direction: row;
+            flex-wrap     : wrap;
+            gap           : 1.3%;
+
+            .title {
+                font-weight: 480;
+                font-size  : 105%;
+            }
+
+            .section {
+                display       : flex;
+                flex-direction: column;
+            }
+
+            .section-title {}
+
+            .box-left {
+                border-radius      : 7px;
+                width              : 63.7%;
+                // border          : 1px solid gray;
+                margin-top         : 1.3%;
+                text-align         : left;
+                padding            : 1.3%;
+                display            : flex;
+                flex-direction     : column;
+                gap                : 15px;
+                background-color   : rgba(0, 0, 0, 0.04);
+
+            }
+
+            .box-right {
+                border-radius      : 7px;
+                width              : 33.7%;
+                margin-top         : 1.3%;
+                // border          : 1px solid black;
+                padding            : 1.3%;
+                text-align         : left;
+                background-color   : rgba(0, 0, 0, 0.04);
+            }
+        }
+    }
+}

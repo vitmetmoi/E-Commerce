@@ -1,11 +1,11 @@
 import React from 'react';
 
-function orderSystem(props) {
+function ManageClothes(props) {
     return (
         <div>
-
+            test
         </div>
     );
 }
 
-export default orderSystem;
+export default ManageClothes;
