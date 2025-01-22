@@ -29,12 +29,15 @@ export const counterSlice = createSlice({
         createUser: (state, action) => {
             let userData = action.payload;
         },
+        clearUserData: (state, action) => {
+            state.userData = defaultUserData;
+        },
         test: (state) => {
             console.log("run test...");
         }
     },
 })
 
-export const { setUserData, test } = counterSlice.actions
+export const { setUserData, clearUserData, test } = counterSlice.actions
 
 export default counterSlice.reducer

@@ -141,6 +141,26 @@ const handleCreateItem = async (req, res) => {
     }
 }
 
+const handleAccount = async (req, res) => {
+    try {
+
+        return res.status(200).json({
+            DT: '',
+            EC: 0,
+            EM: "Check account completed!"
+        })
+
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+}
+
 module.exports = {
-    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem
+    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem, handleAccount
 }
