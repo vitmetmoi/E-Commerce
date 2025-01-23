@@ -13,8 +13,19 @@ export const GENDERS = {
     FEMALE: 'F'
 }
 
-export const ROLEID = {
-    ADMIN: 'R1',
-    DOCTOR: 'R2',
-    PATIENT: 'R3'
+export const GROUPID = {
+    ADMIN: '1',
+    DEVELOPER: '2',
+    USER: '3'
 }
+
+export const SYSTEM_NAV = {
+    DASH_BOARD: 'dashboard',
+    ORDERS: 'orders',
+    CLOTHES: 'clothes',
+    GROUPS: 'groups',
+    CREATE: 'create',
+    MENU: 'menu',
+    MANAGE: 'manage',
+
+} 
