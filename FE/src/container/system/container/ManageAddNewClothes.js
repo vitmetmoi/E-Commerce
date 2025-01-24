@@ -6,46 +6,15 @@ import Radio from '@mui/material/Radio';
 import { blue, green, pink, red, yellow } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import _, { size } from 'lodash'
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, renderActionsCell } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import DoneIcon from '@mui/icons-material/Done';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { ToastContainer, toast } from 'react-toastify';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
 
 
-const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-        field: 'size',
-        headerName: 'Size',
-        width: 185,
-        editable: true,
-    },
-    {
-        field: 'color',
-        headerName: 'Color',
-        width: 185,
-        editable: true,
-    },
-
-    {
-        field: 'stock',
-        headerName: 'Stock',
-        description: 'This column has a value getter and is not sortable.',
-        width: 100,
-    },
-    {
-        field: 'action',
-        headerName: 'Action',
-        description: 'This column has a value getter and is not sortable.',
-        width: 100,
-    },
-];
-
-
-const rows = [
-    // { id: 0, size: '', color: '', stock: 0 },
-];
 
 function ManageAddNewClothes(props) {
     const defaultSizeValue = [
@@ -64,18 +33,52 @@ function ManageAddNewClothes(props) {
         { label: 'Green', isSelected: false }
     ]
 
-    const defaultStockValue = [
-        // { id: 0, size: '', color: '', stock: 0 },
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 90 },
+        {
+            field: 'size',
+            headerName: 'Size',
+            width: 185,
+            editable: true,
+        },
+        {
+            field: 'color',
+            headerName: 'Color',
+            width: 185,
+            editable: true,
+        },
+
+        {
+            field: 'stock',
+            headerName: 'Stock',
+            width: 100,
+        },
+        {
+            field: 'actions',
+            headerName: '',
+            type: 'actions',
+            renderCell: (params) => {
+                return (
+                    <IconButton
+                        onClick={() => handleDeleteRow(params.id)}
+                        aria-label="delete">
+                        <DeleteIcon />
+                    </IconButton>
+                )
+            },
+            width: 100,
+        },
     ];
 
     const [selectedValue, setSelectedValue] = useState('a');
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
-    const [stockArray, setStockArray] = useState('')
+    const [stockValue, setStockValue] = useState('');
+    const [stockArray, setStockArray] = useState([])
+
 
     const handleChange = (name, order) => {
-        console.log('name', name);
-        console.log('order', order);
+
         if (name === 'size') {
             let _sizeArray = _.cloneDeep(defaultSizeValue);
             _sizeArray[order].isSelected = !_sizeArray[order].isSelected
@@ -91,8 +94,56 @@ function ManageAddNewClothes(props) {
     }
 
     const handleAddStockRow = () => {
+        let isValid = true;
+        let size, color, stock = '';
+
+        sizeArray.map((item) => {
+            if (item.isSelected === true) {
+                size = item.label;
+            }
+        })
+
+        colorArray.map((item) => {
+            if (item.isSelected === true) {
+                color = item.label;
+            }
+        })
+        if (!size || size === '') {
+            toast('Missing size value!')
+            isValid = false
+        }
+        if (!color || color === '') {
+            toast('Missing color value!')
+            isValid = false
+        }
+        if (!stockValue || stockValue === '') {
+            toast('Missing stock value!')
+            isValid = false
+        }
+        else {
+            stock = stockValue;
+        }
+        if (isValid === true) {
+            let _stockArray = _.cloneDeep(stockArray);
+            let obj = { id: _stockArray.length + 1, size: size, color: color, stock: stockValue }
+            _stockArray.push(obj);
+            setStockArray(_stockArray);
+        }
+        else { }
 
     }
+
+    const handleDeleteRow = (id) => {
+        let _stockArray = _.cloneDeep(stockArray);
+        stockArray.map((item, index) => {
+            if (item.id === id) {
+                _stockArray.splice(index, 1)
+            }
+        })
+        setStockArray(_stockArray)
+    }
+
+
 
 
     return (
@@ -287,7 +338,8 @@ function ManageAddNewClothes(props) {
                                             required
                                             id="outlined-required"
                                             label="Amount"
-
+                                            value={stockValue}
+                                            onChange={(event) => setStockValue(event.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -300,6 +352,7 @@ function ManageAddNewClothes(props) {
                                         variant="outlined"
                                         loading={false}
                                         loadingPosition="start"
+                                        onClick={() => handleAddStockRow()}
                                         startIcon={<KeyboardDoubleArrowDownIcon />}>
                                         Save
                                     </Button>
@@ -322,6 +375,7 @@ function ManageAddNewClothes(props) {
                                     // checkboxSelection
                                     disableRowSelectionOnClick
                                     sx={{ marginTop: 2 }}
+
                                 />
                             </div>
 
@@ -341,5 +395,7 @@ function ManageAddNewClothes(props) {
         </>
     );
 }
+
+
 
 export default ManageAddNewClothes;
