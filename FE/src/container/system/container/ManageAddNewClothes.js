@@ -1,12 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import './ManageAddNewClothes.scss'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import DoneIcon from '@mui/icons-material/Done';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { blue, green, pink, red, yellow } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import _, { size } from 'lodash'
+import { DataGrid } from '@mui/x-data-grid';
+import Button from '@mui/material/Button';
+import DoneIcon from '@mui/icons-material/Done';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+        field: 'size',
+        headerName: 'Size',
+        width: 185,
+        editable: true,
+    },
+    {
+        field: 'color',
+        headerName: 'Color',
+        width: 185,
+        editable: true,
+    },
+
+    {
+        field: 'stock',
+        headerName: 'Stock',
+        description: 'This column has a value getter and is not sortable.',
+        width: 100,
+    },
+    {
+        field: 'action',
+        headerName: 'Action',
+        description: 'This column has a value getter and is not sortable.',
+        width: 100,
+    },
+];
+
+
+const rows = [
+    // { id: 0, size: '', color: '', stock: 0 },
+];
+
 function ManageAddNewClothes(props) {
     const defaultSizeValue = [
         { label: 'S', isSelected: false },
@@ -24,20 +64,25 @@ function ManageAddNewClothes(props) {
         { label: 'Green', isSelected: false }
     ]
 
+    const defaultStockValue = [
+        // { id: 0, size: '', color: '', stock: 0 },
+    ];
+
     const [selectedValue, setSelectedValue] = useState('a');
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
+    const [stockArray, setStockArray] = useState('')
 
     const handleChange = (name, order) => {
         console.log('name', name);
         console.log('order', order);
         if (name === 'size') {
-            let _sizeArray = _.cloneDeep(sizeArray);
+            let _sizeArray = _.cloneDeep(defaultSizeValue);
             _sizeArray[order].isSelected = !_sizeArray[order].isSelected
             setSizeArray(_sizeArray)
         }
         else if (name === 'color') {
-            let _colorArray = _.cloneDeep(colorArray);
+            let _colorArray = _.cloneDeep(defaultColorValue);
             _colorArray[order].isSelected = !_colorArray[order].isSelected
             console.log('arr', _colorArray);
             setColorArray(_colorArray)
@@ -45,14 +90,9 @@ function ManageAddNewClothes(props) {
 
     }
 
+    const handleAddStockRow = () => {
 
-    // const controlProps = (item) => ({
-    //     checked: true,
-    //     onChange: handleChange,
-    //     value: item,
-    //     name: 'color-radio-button-demo',
-    //     inputProps: { 'aria-label': item },
-    // });
+    }
 
 
     return (
@@ -236,13 +276,64 @@ function ManageAddNewClothes(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className='section'>
 
+                            <div className='section'>
+                                <div className='stock-group'>
+                                    <span className='title'>Stock</span>
+                                    <span className='description'>Create stock for product</span>
+                                    <div className='stock-input'>
+                                        <TextField
+                                            sx={{ marginTop: 2 }}
+                                            required
+                                            id="outlined-required"
+                                            label="Amount"
+
+                                        />
+                                    </div>
+                                </div>
+                                <div className='submit-group'>
+                                    <span className='title'>Submit stock</span>
+                                    <span className='description'>Push product stock to store</span>
+
+                                    <Button
+                                        sx={{ marginTop: 3 }}
+                                        variant="outlined"
+                                        loading={false}
+                                        loadingPosition="start"
+                                        startIcon={<KeyboardDoubleArrowDownIcon />}>
+                                        Save
+                                    </Button>
+
+                                </div>
                             </div>
+
+                            <div className='section'>
+                                <DataGrid
+                                    rows={stockArray}
+                                    columns={columns}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: {
+                                                pageSize: 5,
+                                            },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5]}
+                                    // checkboxSelection
+                                    disableRowSelectionOnClick
+                                    sx={{ marginTop: 2 }}
+                                />
+                            </div>
+
+
+
                         </div>
-                        <div className='box-right'>box2</div>
-                        <div className='box-left'>box3</div>
-                        <div className='box-right'>box4</div>
+                        <div className='box-right'>
+                            <div className='box-top'></div>
+                            <div className='box-child'></div>
+                            <div className='box-child'></div>
+                        </div>
+
                     </div>
 
                 </div>
