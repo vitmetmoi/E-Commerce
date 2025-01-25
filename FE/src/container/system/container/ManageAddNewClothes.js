@@ -83,7 +83,7 @@ function ManageAddNewClothes(props) {
     const [stockValue, setStockValue] = useState('');
     const [stockArray, setStockArray] = useState([])
     const [imgArray, setImgArray] = useState([]);
-    const [prevImg, setPrevImg] = useState('');
+    const [prevImg, setPrevImg] = useState(imgArray[0]);
 
     const handleChange = (name, order) => {
 
@@ -156,8 +156,12 @@ function ManageAddNewClothes(props) {
         if (img) {
             let _imgArray = _.cloneDeep(imgArray);
             _imgArray.push(img);
+            setImgArray(_imgArray)
         }
+        console.log('img', imgArray)
     }
+
+
 
 
     return (
@@ -432,6 +436,7 @@ function ManageAddNewClothes(props) {
                                                 <input
                                                     type='file'
                                                     className='img-input'
+                                                    onChange={(event) => handleAddImage(event.target.files[0])}
                                                 >
                                                 </input>
                                                 <AddPhotoAlternateIcon
