@@ -22,6 +22,14 @@ import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/module
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import ListSubheader from '@mui/material/ListSubheader';
+import Select from '@mui/material/Select';
+import Input from '@mui/material/Input';
+import FormControl from '@mui/material/FormControl';
+
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -414,11 +422,7 @@ function ManageAddNewClothes(props) {
                         <div className='box-right'>
                             <div className='box-top'>
                                 <span className='title'>Upload Img</span>
-                                {/* <PhotoView src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"}>
-                                    <img
-                                        className='prev-image'
-                                        src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"} style={{ objectFit: 'cover' }} alt="" />
-                                </PhotoView> */}
+
                                 <PhotoProvider>
                                     <PhotoView src={`${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}`}>
                                         <div
@@ -427,12 +431,7 @@ function ManageAddNewClothes(props) {
                                         ></div>
                                     </PhotoView>
                                 </PhotoProvider>
-                                {/* <div
 
-                                    style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")", }}
-                                    className='prev-image'
-
-                                ></div> */}
                                 <div className='img-swiper'>
                                     <Swiper
                                         modules={[Navigation, A11y, Autoplay]}
@@ -477,8 +476,65 @@ function ManageAddNewClothes(props) {
 
                                 </div>
                             </div>
-                            <div className='box-child'></div>
-                            <div className='box-child'></div>
+                            <div className='box-child'>
+                                <span className='title'>Price & Discount</span>
+                                <div className='price-discount-container'>
+                                    <div className='price'>
+                                        <InputLabel htmlFor="standard-adornment-amount">Base pricing</InputLabel>
+                                        <Input
+                                            id="standard-adornment-amount"
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                        />
+                                    </div>
+                                    <div className='discount'>
+                                        <InputLabel htmlFor="standard-adornment-amount">Discount</InputLabel>
+                                        <Input
+                                            id="standard-adornment-amount"
+                                            startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='box-child'>
+                                <span className='title'>Category & Type</span>
+                                <div className='category-type-container'>
+                                    <div className='category'>
+
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="grouped-select">Category</InputLabel>
+                                            <Select defaultValue="" id="grouped-select" label="Grouping">
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <ListSubheader>Category 1</ListSubheader>
+                                                <MenuItem value={1}>Option 1</MenuItem>
+                                                <MenuItem value={2}>Option 2</MenuItem>
+                                                <ListSubheader>Category 2</ListSubheader>
+                                                <MenuItem value={3}>Option 3</MenuItem>
+                                                <MenuItem value={4}>Option 4</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                    </div>
+                                    <div className='type'>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={''}
+                                                label="Age"
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value={10}>Men</MenuItem>
+                                                <MenuItem value={20}>Women</MenuItem>
+                                                <MenuItem value={30}>Unisex</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
