@@ -13,10 +13,17 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import { ToastContainer, toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 
 function ManageAddNewClothes(props) {
+
     const defaultSizeValue = [
         { label: 'S', isSelected: false },
         { label: 'M', isSelected: false },
@@ -75,7 +82,8 @@ function ManageAddNewClothes(props) {
     const [colorArray, setColorArray] = useState(defaultColorValue)
     const [stockValue, setStockValue] = useState('');
     const [stockArray, setStockArray] = useState([])
-
+    const [imgArray, setImgArray] = useState([]);
+    const [prevImg, setPrevImg] = useState('');
 
     const handleChange = (name, order) => {
 
@@ -133,6 +141,7 @@ function ManageAddNewClothes(props) {
 
     }
 
+
     const handleDeleteRow = (id) => {
         let _stockArray = _.cloneDeep(stockArray);
         stockArray.map((item, index) => {
@@ -143,7 +152,12 @@ function ManageAddNewClothes(props) {
         setStockArray(_stockArray)
     }
 
-
+    const handleAddImage = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            _imgArray.push(img);
+        }
+    }
 
 
     return (
@@ -383,7 +397,56 @@ function ManageAddNewClothes(props) {
 
                         </div>
                         <div className='box-right'>
-                            <div className='box-top'></div>
+                            <div className='box-top'>
+                                <span className='title'>Upload Img</span>
+                                <div className='prev-image'></div>
+                                <div className='img-swiper'>
+                                    <Swiper
+                                        modules={[Navigation, A11y, Autoplay]}
+                                        spaceBetween={12}
+                                        slidesPerView={4}
+                                        navigation
+                                    >
+                                        <SwiperSlide>
+                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/87496334b7dc7a8af96ccc29c342ebf6.jpg` + ")", }}
+                                                className='relevant-img'>
+
+                                            </div>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/589909a02d5dd0ec1a5e9a24a14b3635.jpg` + ")", }}
+                                                className='relevant-img'>
+
+                                            </div>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/9ec1d015dcf6c67a90662cc49bb92164.jpg` + ")", }}
+                                                className='relevant-img'>
+
+                                            </div>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+
+
+                                            <div className='add-new-img'>
+                                                <input
+                                                    type='file'
+                                                    className='img-input'
+                                                >
+                                                </input>
+                                                <AddPhotoAlternateIcon
+                                                    color='primary'
+                                                    className='img-icon'
+                                                >
+                                                </AddPhotoAlternateIcon>
+
+
+                                            </div>
+                                        </SwiperSlide>
+                                    </Swiper>
+
+                                </div>
+                            </div>
                             <div className='box-child'></div>
                             <div className='box-child'></div>
                         </div>
