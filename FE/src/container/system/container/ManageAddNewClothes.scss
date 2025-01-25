@@ -228,11 +228,14 @@
                     gap             : 15px;
 
                     .prev-image {
-                        width       : 96%;
-                        height      : 330px;
-                        border      : 1px solid red;
-                        margin-left : auto;
-                        margin-right: auto;
+                        width                 : 96%;
+                        height                : 330px;
+                        // border             : 1px solid red;
+                        margin-left           : auto;
+                        margin-right          : auto;
+                        background-size       : cover;
+                        background-position   : center;
+                        border-radius         : 10px;
                     }
 
                     .add-new-img {
@@ -260,16 +263,15 @@
                     }
 
                     .img-swiper {
-                        width       : 96%;
-                        height      : 65px;
-                        border      : 1px solid red;
-                        margin-left : auto;
-                        margin-right: auto;
-                        z-index     : 1;
-                        border-top  : 1px solid rgba(0, 0, 0, 0.1);
-                        border-left : 1px solid rgba(0, 0, 0, 0.1);
-                        border-right: 1px solid rgba(0, 0, 0, 0.1);
-                        transition  : all 0.5s ease;
+                        margin-top     : 10px;
+                        width          : 96%;
+                        height         : 65px;
+                        // border      : 1px solid red;
+                        margin-left    : auto;
+                        margin-right   : auto;
+                        z-index        : 1;
+
+                        transition: all 0.5s ease;
 
                         .swiper {
                             width : 100%;
@@ -283,6 +285,12 @@
                             background-size      : cover;
                             background-position-x: center;
                             background-position-y: center;
+                            cursor               : pointer;
+                            border-radius        : 10px;
+
+                            &.active {
+                                border: 2px solid black;
+                            }
                         }
 
 
@@ -299,7 +307,7 @@
 
                         .swiper-button-next:after,
                         .swiper-rtl .swiper-button-prev:after {
-                            font-size: 25px;
+                            font-size: 15px;
                             fill     : #1a1a1a;
                         }
 

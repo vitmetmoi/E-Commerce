@@ -20,8 +20,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-
-
+import 'react-photo-view/dist/react-photo-view.css';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -161,7 +161,18 @@ function ManageAddNewClothes(props) {
         console.log('img', imgArray)
     }
 
+    const handleSetPrevImg = (item) => {
+        let img = '';
+        if (item) {
+            img = URL.createObjectURL(item);
+        }
 
+        if (img) {
+            setPrevImg(img)
+        }
+        console.log('img', prevImg)
+
+    }
 
 
     return (
@@ -403,35 +414,49 @@ function ManageAddNewClothes(props) {
                         <div className='box-right'>
                             <div className='box-top'>
                                 <span className='title'>Upload Img</span>
-                                <div className='prev-image'></div>
+                                {/* <PhotoView src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"}>
+                                    <img
+                                        className='prev-image'
+                                        src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"} style={{ objectFit: 'cover' }} alt="" />
+                                </PhotoView> */}
+                                <PhotoProvider>
+                                    <PhotoView src={`${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}`}>
+                                        <div
+                                            style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")" }}
+                                            className='prev-image'
+                                        ></div>
+                                    </PhotoView>
+                                </PhotoProvider>
+                                {/* <div
+
+                                    style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")", }}
+                                    className='prev-image'
+
+                                ></div> */}
                                 <div className='img-swiper'>
                                     <Swiper
                                         modules={[Navigation, A11y, Autoplay]}
                                         spaceBetween={12}
                                         slidesPerView={4}
                                         navigation
+
                                     >
+                                        {
+                                            imgArray && imgArray.length > 0 && imgArray.map(item => {
+
+                                                return (
+                                                    <SwiperSlide>
+                                                        <div
+                                                            onClick={() => handleSetPrevImg(item)}
+                                                            style={{ backgroundImage: "url(" + `${URL.createObjectURL(item)}` + ")", }}
+                                                            className='relevant-img'>
+                                                        </div>
+                                                    </SwiperSlide>)
+                                            })
+                                        }
+
+
                                         <SwiperSlide>
-                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/87496334b7dc7a8af96ccc29c342ebf6.jpg` + ")", }}
-                                                className='relevant-img'>
-
-                                            </div>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/589909a02d5dd0ec1a5e9a24a14b3635.jpg` + ")", }}
-                                                className='relevant-img'>
-
-                                            </div>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/9ec1d015dcf6c67a90662cc49bb92164.jpg` + ")", }}
-                                                className='relevant-img'>
-
-                                            </div>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-
-
                                             <div className='add-new-img'>
                                                 <input
                                                     type='file'
@@ -459,7 +484,7 @@ function ManageAddNewClothes(props) {
                     </div>
 
                 </div>
-            </div>
+            </div >
         </>
     );
 }
