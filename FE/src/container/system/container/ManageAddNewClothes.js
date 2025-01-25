@@ -13,10 +13,17 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import { ToastContainer, toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
-
-
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import 'react-photo-view/dist/react-photo-view.css';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 function ManageAddNewClothes(props) {
+
     const defaultSizeValue = [
         { label: 'S', isSelected: false },
         { label: 'M', isSelected: false },
@@ -75,7 +82,8 @@ function ManageAddNewClothes(props) {
     const [colorArray, setColorArray] = useState(defaultColorValue)
     const [stockValue, setStockValue] = useState('');
     const [stockArray, setStockArray] = useState([])
-
+    const [imgArray, setImgArray] = useState([]);
+    const [prevImg, setPrevImg] = useState(imgArray[0]);
 
     const handleChange = (name, order) => {
 
@@ -133,6 +141,7 @@ function ManageAddNewClothes(props) {
 
     }
 
+
     const handleDeleteRow = (id) => {
         let _stockArray = _.cloneDeep(stockArray);
         stockArray.map((item, index) => {
@@ -143,7 +152,27 @@ function ManageAddNewClothes(props) {
         setStockArray(_stockArray)
     }
 
+    const handleAddImage = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            _imgArray.push(img);
+            setImgArray(_imgArray)
+        }
+        console.log('img', imgArray)
+    }
 
+    const handleSetPrevImg = (item) => {
+        let img = '';
+        if (item) {
+            img = URL.createObjectURL(item);
+        }
+
+        if (img) {
+            setPrevImg(img)
+        }
+        console.log('img', prevImg)
+
+    }
 
 
     return (
@@ -383,7 +412,71 @@ function ManageAddNewClothes(props) {
 
                         </div>
                         <div className='box-right'>
-                            <div className='box-top'></div>
+                            <div className='box-top'>
+                                <span className='title'>Upload Img</span>
+                                {/* <PhotoView src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"}>
+                                    <img
+                                        className='prev-image'
+                                        src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"} style={{ objectFit: 'cover' }} alt="" />
+                                </PhotoView> */}
+                                <PhotoProvider>
+                                    <PhotoView src={`${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}`}>
+                                        <div
+                                            style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")" }}
+                                            className='prev-image'
+                                        ></div>
+                                    </PhotoView>
+                                </PhotoProvider>
+                                {/* <div
+
+                                    style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")", }}
+                                    className='prev-image'
+
+                                ></div> */}
+                                <div className='img-swiper'>
+                                    <Swiper
+                                        modules={[Navigation, A11y, Autoplay]}
+                                        spaceBetween={12}
+                                        slidesPerView={4}
+                                        navigation
+
+                                    >
+                                        {
+                                            imgArray && imgArray.length > 0 && imgArray.map(item => {
+
+                                                return (
+                                                    <SwiperSlide>
+                                                        <div
+                                                            onClick={() => handleSetPrevImg(item)}
+                                                            style={{ backgroundImage: "url(" + `${URL.createObjectURL(item)}` + ")", }}
+                                                            className='relevant-img'>
+                                                        </div>
+                                                    </SwiperSlide>)
+                                            })
+                                        }
+
+
+                                        <SwiperSlide>
+                                            <div className='add-new-img'>
+                                                <input
+                                                    type='file'
+                                                    className='img-input'
+                                                    onChange={(event) => handleAddImage(event.target.files[0])}
+                                                >
+                                                </input>
+                                                <AddPhotoAlternateIcon
+                                                    color='primary'
+                                                    className='img-icon'
+                                                >
+                                                </AddPhotoAlternateIcon>
+
+
+                                            </div>
+                                        </SwiperSlide>
+                                    </Swiper>
+
+                                </div>
+                            </div>
                             <div className='box-child'></div>
                             <div className='box-child'></div>
                         </div>
@@ -391,7 +484,7 @@ function ManageAddNewClothes(props) {
                     </div>
 
                 </div>
-            </div>
+            </div >
         </>
     );
 }

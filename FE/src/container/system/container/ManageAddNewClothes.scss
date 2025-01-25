@@ -211,25 +211,120 @@
             .box-right {
                 border-radius: 7px;
                 width        : 33.7%;
+                padding      : 1.3%;
+                text-align   : left;
 
-                // border          : 1px solid black;
-                padding               : 1.3%;
-                text-align            : left;
-                // background-color   : rgba(0, 0, 0, 0.023);
+
 
                 .box-top {
                     width           : 100%;
                     height          : 500px;
-                    padding         : 1.3%;
+                    padding         : 3.3%;
                     text-align      : left;
                     background-color: rgba(0, 0, 0, 0.023);
                     border-radius   : 7px;
+                    display         : flex;
+                    flex-direction  : column;
+                    gap             : 15px;
+
+                    .prev-image {
+                        width                 : 96%;
+                        height                : 330px;
+                        // border             : 1px solid red;
+                        margin-left           : auto;
+                        margin-right          : auto;
+                        background-size       : cover;
+                        background-position   : center;
+                        border-radius         : 10px;
+                    }
+
+                    .add-new-img {
+                        width          : 60px;
+                        height         : 100%;
+                        border         : 1px solid rgba(0, 0, 0, 0.1);
+                        display        : flex;
+                        align-items    : center;
+                        justify-content: center;
+                        position       : relative;
+
+                        .img-input {
+                            position: absolute;
+                            width   : 60px;
+                            height  : 330px;
+                            opacity : 0;
+                            cursor  : pointer;
+                            z-index : 2;
+                        }
+
+                        .img-icon {
+                            position: absolute;
+                            z-index : 1;
+                        }
+                    }
+
+                    .img-swiper {
+                        margin-top     : 10px;
+                        width          : 96%;
+                        height         : 65px;
+                        // border      : 1px solid red;
+                        margin-left    : auto;
+                        margin-right   : auto;
+                        z-index        : 1;
+
+                        transition: all 0.5s ease;
+
+                        .swiper {
+                            width : 100%;
+                            height: 100%;
+                        }
+
+                        .relevant-img {
+                            width                : 60px;
+                            height               : 100%;
+                            background-repeat    : no-repeat;
+                            background-size      : cover;
+                            background-position-x: center;
+                            background-position-y: center;
+                            cursor               : pointer;
+                            border-radius        : 10px;
+
+                            &.active {
+                                border: 2px solid black;
+                            }
+                        }
+
+
+
+                        .swiper-button-prev,
+                        .swiper-button-next {
+                            color: white
+                        }
+
+
+                        .swiper-wrapper {
+                            transition-duration: 0.8s !important;
+                        }
+
+                        .swiper-button-next:after,
+                        .swiper-rtl .swiper-button-prev:after {
+                            font-size: 15px;
+                            fill     : #1a1a1a;
+                        }
+
+                        .swiper-button-prev:after,
+                        .swiper-button-next:after {
+                            font-size: 25px;
+                            fill     : #1a1a1a;
+                            color    : black;
+                            opacity  : 0.5;
+                        }
+                    }
                 }
 
                 .box-child {
                     width           : 100%;
                     height          : 300px;
-                    padding         : 1.3%;
+                    padding         : 3.3%;
                     text-align      : left;
                     background-color: rgba(0, 0, 0, 0.023);
                     border-radius   : 7px;
