@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             Clothes.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
             Clothes.hasMany(models.Color_Size, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.Discount, { foreignKey: 'clothesId' });
-            Clothes.hasMany(models.MainImage, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.RelevantImage, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.Markdown, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.Bill, { foreignKey: 'clothesId' });
@@ -23,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     Clothes.init({
         name: DataTypes.STRING,
         type: DataTypes.STRING,
+        category: DataTypes.STRING,
         price: DataTypes.STRING,
     }, {
         sequelize,

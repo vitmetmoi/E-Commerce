@@ -3,7 +3,7 @@
     width        : 100%;
     height       : 300px;
     padding      : 0 3%;
-    margin-bottom: 700px;
+    margin-bottom: 900px;
 
     .create-clothes-content {
         width    : 100%;
@@ -229,19 +229,19 @@
                     gap             : 15px;
 
                     .prev-image {
-                        width                 : 96%;
-                        height                : 330px;
-                        // border             : 1px solid red;
-                        margin-left           : auto;
-                        margin-right          : auto;
-                        background-size       : cover;
-                        background-position   : center;
-                        border-radius         : 10px;
+                        width              : 96%;
+                        height             : 330px;
+                        border             : 1px solid rgba(0, 0, 0, 0.1);
+                        margin-left        : auto;
+                        margin-right       : auto;
+                        background-size    : cover;
+                        background-position: center;
+                        border-radius      : 10px;
                     }
 
                     .add-new-img {
                         width          : 60px;
-                        height         : 100%;
+                        height         : 97%;
                         border         : 1px solid rgba(0, 0, 0, 0.1);
                         display        : flex;
                         align-items    : center;

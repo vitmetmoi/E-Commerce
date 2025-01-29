@@ -7,21 +7,18 @@ function App() {
 
   return (
     <div className="App">
-      <Scrollbar style={{ width: '100%', height: '100vh' }}>
-        <RouteIndex></RouteIndex>
-
-        <ToastContainer position="bottom-right"
-          autoClose={3000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-      </Scrollbar>
+      <RouteIndex></RouteIndex>
+      <ToastContainer position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

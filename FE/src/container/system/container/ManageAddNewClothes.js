@@ -84,14 +84,22 @@ function ManageAddNewClothes(props) {
             width: 100,
         },
     ];
-
-    const [selectedValue, setSelectedValue] = useState('a');
+    const [nameProduct, setNameProduct] = useState('')
+    const [description, setDescription] = useState('');
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
-    const [stockValue, setStockValue] = useState('');
     const [stockArray, setStockArray] = useState([])
     const [imgArray, setImgArray] = useState([]);
+    const [price, setPrice] = useState('');
+    const [discount, setDiscount] = useState('');
+    const [category, setCategory] = useState('');
+    const [type, setType] = useState('');
+
+
+    const [stockValue, setStockValue] = useState('');
     const [prevImg, setPrevImg] = useState(imgArray[0]);
+
+
 
     const handleChange = (name, order) => {
 
@@ -182,6 +190,12 @@ function ManageAddNewClothes(props) {
 
     }
 
+    const handleSubmit = () => {
+        let data = {
+
+        }
+    }
+
 
     return (
         <>
@@ -202,7 +216,9 @@ function ManageAddNewClothes(props) {
                                 <span>Save draft</span>
                             </button>
 
-                            <button className='button-container'>
+                            <button
+                                onClick={() => handleSubmit()}
+                                className='button-container'>
                                 <DoneIcon style={{ fontSize: "130%" }}></DoneIcon>
                                 <span>Add product</span>
                             </button>
@@ -216,13 +232,24 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        id="exampleInputEmail1"
+                                        ria-describedby="emailHelp"
+                                        onChange={(event) => setNameProduct(event.target.value)}
+                                    ></input>
                                 </div>
                             </div>
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea
+                                        class="form-control"
+                                        id="exampleFormControlTextarea1"
+                                        rows="3"
+                                        onChange={(event) => setDescription(event.target.value)}
+                                    ></textarea>
                                 </div>
                             </div>
                             <div className='section'>
@@ -482,6 +509,7 @@ function ManageAddNewClothes(props) {
                                     <div className='price'>
                                         <InputLabel htmlFor="standard-adornment-amount">Base pricing</InputLabel>
                                         <Input
+                                            onChange={(event) => setPrice(event.target.value)}
                                             id="standard-adornment-amount"
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                         />
@@ -489,6 +517,7 @@ function ManageAddNewClothes(props) {
                                     <div className='discount'>
                                         <InputLabel htmlFor="standard-adornment-amount">Discount</InputLabel>
                                         <Input
+                                            onChange={(event) => setDiscount(event.target.value)}
                                             id="standard-adornment-amount"
                                             startAdornment={<InputAdornment position="start">%</InputAdornment>}
                                         />
@@ -502,16 +531,24 @@ function ManageAddNewClothes(props) {
 
                                         <FormControl fullWidth>
                                             <InputLabel htmlFor="grouped-select">Category</InputLabel>
-                                            <Select defaultValue="" id="grouped-select" label="Grouping">
+                                            <Select
+                                                value={category}
+                                                onChange={(event) => setCategory(event.target.value)}
+                                                id="grouped-select"
+                                                label="Grouping">
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
                                                 <ListSubheader>Category 1</ListSubheader>
-                                                <MenuItem value={1}>Option 1</MenuItem>
-                                                <MenuItem value={2}>Option 2</MenuItem>
+                                                <MenuItem value={'Out-Wear'}>Out-Wear</MenuItem>
+                                                <MenuItem value={'Hoodie'}>Hoodie</MenuItem>
+                                                <MenuItem value={'Sweater'}>Sweater</MenuItem>
                                                 <ListSubheader>Category 2</ListSubheader>
-                                                <MenuItem value={3}>Option 3</MenuItem>
-                                                <MenuItem value={4}>Option 4</MenuItem>
+                                                <MenuItem value={'T-shirt'}>T-shirt</MenuItem>
+                                                <ListSubheader>Category 3</ListSubheader>
+                                                <MenuItem value={'Bottom'}>Bottom</MenuItem>
+                                                <ListSubheader>Category 4</ListSubheader>
+                                                <MenuItem value={'Accessory'}>Accessory</MenuItem>
                                             </Select>
                                         </FormControl>
 
@@ -522,13 +559,13 @@ function ManageAddNewClothes(props) {
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={''}
                                                 label="Age"
-                                                onChange={handleChange}
+                                                value={type}
+                                                onChange={(event) => setType(event.target.value)}
                                             >
-                                                <MenuItem value={10}>Men</MenuItem>
-                                                <MenuItem value={20}>Women</MenuItem>
-                                                <MenuItem value={30}>Unisex</MenuItem>
+                                                <MenuItem value={'Men'}>Men</MenuItem>
+                                                <MenuItem value={'Women'}>Women</MenuItem>
+                                                <MenuItem value={'Unisex'}>Unisex</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>
