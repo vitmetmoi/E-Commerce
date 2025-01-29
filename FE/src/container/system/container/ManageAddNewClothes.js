@@ -29,6 +29,8 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Select from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
+import markdownit from 'markdown-it'
+import MDEditor from '@uiw/react-md-editor';
 
 function ManageAddNewClothes(props) {
 
@@ -85,7 +87,7 @@ function ManageAddNewClothes(props) {
         },
     ];
     const [nameProduct, setNameProduct] = useState('')
-    const [description, setDescription] = useState('');
+    const [contentMarkdown, setContentMarkDown] = React.useState("**Hello world!!!**");
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
     const [stockArray, setStockArray] = useState([])
@@ -191,9 +193,19 @@ function ManageAddNewClothes(props) {
     }
 
     const handleSubmit = () => {
-        let data = {
 
+        let data = {
+            name: nameProduct,
+            contentMarkdown: contentMarkdown,
+            stockData: stockArray,
+            imgArray: imgArray,
+            price: price,
+            discount: discount,
+            category: category,
+            type: type
         }
+
+        console.log("row", data)
     }
 
 
@@ -244,12 +256,11 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <textarea
-                                        class="form-control"
-                                        id="exampleFormControlTextarea1"
-                                        rows="3"
-                                        onChange={(event) => setDescription(event.target.value)}
-                                    ></textarea>
+                                    <MDEditor
+                                        value={contentMarkdown}
+                                        onChange={setContentMarkDown}
+                                    />
+                                    <MDEditor.Markdown source={contentMarkdown} style={{ whiteSpace: 'pre-wrap' }} />
                                 </div>
                             </div>
                             <div className='section'>
@@ -578,6 +589,7 @@ function ManageAddNewClothes(props) {
 
                 </div>
             </div >
+
         </>
     );
 }

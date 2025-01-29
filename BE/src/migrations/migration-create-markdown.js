@@ -14,10 +14,6 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.STRING
             },
-            contentHTML: {
-                allowNull: true,
-                type: Sequelize.STRING
-            },
             contentMarkdown: {
                 allowNull: true,
                 type: Sequelize.STRING
