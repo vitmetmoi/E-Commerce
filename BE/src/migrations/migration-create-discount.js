@@ -18,14 +18,6 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.STRING
             },
-            startTime: {
-                allowNull: true,
-                type: Sequelize.STRING
-            },
-            endTime: {
-                allowNull: true,
-                type: Sequelize.STRING
-            },
             note: {
                 allowNull: true,
                 type: Sequelize.STRING

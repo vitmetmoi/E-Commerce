@@ -25,7 +25,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import { SYSTEM_NAV } from '../../utils/constant';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import ManageAddNewClothes from './container/ManageAddNewClothes';
-
+import { Scrollbar } from 'react-scrollbars-custom';
 function SystemHome(props) {
 
     const navigate = useNavigate();
@@ -152,9 +152,11 @@ function SystemHome(props) {
             router={router}
             branding={BRANDING}
         >
+
             <DashboardLayout>
                 <PageContent pathname={router.pathname} />
             </DashboardLayout>
+
         </AppProvider>
     );
 }

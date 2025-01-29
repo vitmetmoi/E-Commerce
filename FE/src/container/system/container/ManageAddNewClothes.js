@@ -22,6 +22,14 @@ import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/module
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import 'react-photo-view/dist/react-photo-view.css';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import ListSubheader from '@mui/material/ListSubheader';
+import Select from '@mui/material/Select';
+import Input from '@mui/material/Input';
+import FormControl from '@mui/material/FormControl';
+
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -76,14 +84,22 @@ function ManageAddNewClothes(props) {
             width: 100,
         },
     ];
-
-    const [selectedValue, setSelectedValue] = useState('a');
+    const [nameProduct, setNameProduct] = useState('')
+    const [description, setDescription] = useState('');
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
-    const [stockValue, setStockValue] = useState('');
     const [stockArray, setStockArray] = useState([])
     const [imgArray, setImgArray] = useState([]);
+    const [price, setPrice] = useState('');
+    const [discount, setDiscount] = useState('');
+    const [category, setCategory] = useState('');
+    const [type, setType] = useState('');
+
+
+    const [stockValue, setStockValue] = useState('');
     const [prevImg, setPrevImg] = useState(imgArray[0]);
+
+
 
     const handleChange = (name, order) => {
 
@@ -174,6 +190,12 @@ function ManageAddNewClothes(props) {
 
     }
 
+    const handleSubmit = () => {
+        let data = {
+
+        }
+    }
+
 
     return (
         <>
@@ -194,7 +216,9 @@ function ManageAddNewClothes(props) {
                                 <span>Save draft</span>
                             </button>
 
-                            <button className='button-container'>
+                            <button
+                                onClick={() => handleSubmit()}
+                                className='button-container'>
                                 <DoneIcon style={{ fontSize: "130%" }}></DoneIcon>
                                 <span>Add product</span>
                             </button>
@@ -208,13 +232,24 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></input>
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        id="exampleInputEmail1"
+                                        ria-describedby="emailHelp"
+                                        onChange={(event) => setNameProduct(event.target.value)}
+                                    ></input>
                                 </div>
                             </div>
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea
+                                        class="form-control"
+                                        id="exampleFormControlTextarea1"
+                                        rows="3"
+                                        onChange={(event) => setDescription(event.target.value)}
+                                    ></textarea>
                                 </div>
                             </div>
                             <div className='section'>
@@ -414,11 +449,7 @@ function ManageAddNewClothes(props) {
                         <div className='box-right'>
                             <div className='box-top'>
                                 <span className='title'>Upload Img</span>
-                                {/* <PhotoView src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"}>
-                                    <img
-                                        className='prev-image'
-                                        src={"url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")"} style={{ objectFit: 'cover' }} alt="" />
-                                </PhotoView> */}
+
                                 <PhotoProvider>
                                     <PhotoView src={`${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}`}>
                                         <div
@@ -427,12 +458,7 @@ function ManageAddNewClothes(props) {
                                         ></div>
                                     </PhotoView>
                                 </PhotoProvider>
-                                {/* <div
 
-                                    style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")", }}
-                                    className='prev-image'
-
-                                ></div> */}
                                 <div className='img-swiper'>
                                     <Swiper
                                         modules={[Navigation, A11y, Autoplay]}
@@ -477,8 +503,75 @@ function ManageAddNewClothes(props) {
 
                                 </div>
                             </div>
-                            <div className='box-child'></div>
-                            <div className='box-child'></div>
+                            <div className='box-child'>
+                                <span className='title'>Price & Discount</span>
+                                <div className='price-discount-container'>
+                                    <div className='price'>
+                                        <InputLabel htmlFor="standard-adornment-amount">Base pricing</InputLabel>
+                                        <Input
+                                            onChange={(event) => setPrice(event.target.value)}
+                                            id="standard-adornment-amount"
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                        />
+                                    </div>
+                                    <div className='discount'>
+                                        <InputLabel htmlFor="standard-adornment-amount">Discount</InputLabel>
+                                        <Input
+                                            onChange={(event) => setDiscount(event.target.value)}
+                                            id="standard-adornment-amount"
+                                            startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='box-child'>
+                                <span className='title'>Category & Type</span>
+                                <div className='category-type-container'>
+                                    <div className='category'>
+
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="grouped-select">Category</InputLabel>
+                                            <Select
+                                                value={category}
+                                                onChange={(event) => setCategory(event.target.value)}
+                                                id="grouped-select"
+                                                label="Grouping">
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <ListSubheader>Category 1</ListSubheader>
+                                                <MenuItem value={'Out-Wear'}>Out-Wear</MenuItem>
+                                                <MenuItem value={'Hoodie'}>Hoodie</MenuItem>
+                                                <MenuItem value={'Sweater'}>Sweater</MenuItem>
+                                                <ListSubheader>Category 2</ListSubheader>
+                                                <MenuItem value={'T-shirt'}>T-shirt</MenuItem>
+                                                <ListSubheader>Category 3</ListSubheader>
+                                                <MenuItem value={'Bottom'}>Bottom</MenuItem>
+                                                <ListSubheader>Category 4</ListSubheader>
+                                                <MenuItem value={'Accessory'}>Accessory</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                    </div>
+                                    <div className='type'>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                label="Age"
+                                                value={type}
+                                                onChange={(event) => setType(event.target.value)}
+                                            >
+                                                <MenuItem value={'Men'}>Men</MenuItem>
+                                                <MenuItem value={'Women'}>Women</MenuItem>
+                                                <MenuItem value={'Unisex'}>Unisex</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
