@@ -5,13 +5,13 @@ import NavigationHome from '../NavigationHome';
 
 function UserProfile(props) {
     const userData = useSelector((state) => state.user.userData);
-    const base64String = btoa(String.fromCharCode(...new Uint8Array(userData.avatar)));
+    // const base64String = btoa(String.fromCharCode(...new Uint8Array(userData.avatar)));
     console.log('rener2', userData);
     return (
         <>
             <NavigationHome></NavigationHome>
             <div>user : {userData.email}</div>
-            <img src={`data:image/png;base64,${base64String}`} alt="" />
+            <img width={100} height={100} src={`data:image/png;base64,${userData && userData.avatar}`} alt="" />
         </>
     );
 }

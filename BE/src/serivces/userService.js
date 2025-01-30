@@ -100,8 +100,13 @@ const loginService = async (loginAcc, password) => {
             if (!_.isEmpty(user)) {
                 let checkPassword = bcrypt.compareSync(password, user.password);
                 if (checkPassword === true) {
-                    const base64String = Buffer.from(user.avatar).toString('base64')
 
+                    const base64String = btoa(
+                        new Uint8Array(user.avatar)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
+
+                    console.log(base64String.length)
                     let data = {
                         firstName: user.firstName,
                         lastName: user.lastName,
@@ -230,6 +235,7 @@ const registerService = async (data) => {
             else {
                 let hashPassword = '';
                 hashPassword = await hashPasswordService(data.password);
+
                 let user = {
                     firstName: data.firstName,
                     lastName: data.lastName,

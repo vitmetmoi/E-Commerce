@@ -28,17 +28,33 @@ export const userAPI = createApi({
             query: (query) => ({
                 url: `/api/user/login?loginAcc=${query.loginAcc}&password=${query.password}`,
                 method: 'get',
-                maxContentLength: 100000000,
-                maxBodyLength: 1000000000
             })
         }),
-        account: build.query({ query: () => ({ url: `/api/account`, method: 'get' }) }),
-        getUserData: build.query({ query: (type, id) => ({ url: `/api/user/get?type=${type}&id=${id}`, method: 'get' }) }),
+        account: build.query({
+            query: () => ({
+                url: `/api/account`,
+                method: 'get'
+            })
+        }),
+        getUserData: build.query({
+            query: (type, id) => ({
+                url: `/api/user/get?type=${type}&id=${id}`,
+                method: 'get'
+            })
+        }),
         createUser: build.mutation({
-            query: (userData) => ({ url: '/api/user/create', method: 'post', data: userData }),
+            query: (userData) => ({
+                url: '/api/user/create',
+                method: 'post',
+                data: userData
+            }),
         }),
         register: build.mutation({
-            query: (userData) => ({ url: '/api/user/register', method: 'post', data: userData })
+            query: (userData) => ({
+                url: '/api/user/register',
+                method: 'post', data:
+                    userData
+            })
         })
 
     }),
