@@ -145,12 +145,18 @@ function SystemHome(props) {
 
         return router;
     }
+    // const darkTheme = createTheme({
+    //     palette: {
+    //         mode: 'dark',
+    //     },
+    // });
 
     return (
         <AppProvider
             navigation={NAVIGATION}
             router={router}
             branding={BRANDING}
+            defaultMode='dark'
         >
 
             <DashboardLayout>

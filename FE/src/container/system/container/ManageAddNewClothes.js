@@ -87,7 +87,7 @@ function ManageAddNewClothes(props) {
         },
     ];
     const [nameProduct, setNameProduct] = useState('')
-    const [contentMarkdown, setContentMarkDown] = React.useState("**Hello world!!!**");
+    const [contentMarkdown, setContentMarkDown] = useState("");
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
     const [stockArray, setStockArray] = useState([])
@@ -245,6 +245,7 @@ function ManageAddNewClothes(props) {
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
                                     <input
+                                        // data-bs-theme="dark"
                                         type="email"
                                         class="form-control"
                                         id="exampleInputEmail1"
@@ -256,11 +257,16 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <MDEditor
-                                        value={contentMarkdown}
-                                        onChange={setContentMarkDown}
-                                    />
-                                    <MDEditor.Markdown source={contentMarkdown} style={{ whiteSpace: 'pre-wrap' }} />
+                                    <div
+                                    // data-color-mode="dark"  
+                                    >
+                                        <MDEditor
+                                            value={contentMarkdown}
+                                            onChange={setContentMarkDown}
+                                        />
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div className='section'>
