@@ -6,6 +6,7 @@ import { Op, where } from "sequelize";
 import JWTservice from '../middleware/JWTservice.js'
 import jwt from 'jsonwebtoken'
 const saltRounds = 10;
+
 const createUserService = async (data) => {
     try {
         if (!data || !data.email || !data.firstName || !data.lastName) {
@@ -99,6 +100,7 @@ const loginService = async (loginAcc, password) => {
             if (!_.isEmpty(user)) {
                 let checkPassword = bcrypt.compareSync(password, user.password);
                 if (checkPassword === true) {
+                    const base64String = Buffer.from(user.avatar).toString('base64')
 
                     let data = {
                         firstName: user.firstName,
@@ -107,7 +109,7 @@ const loginService = async (loginAcc, password) => {
                         phoneNumber: user.phoneNumber,
                         address: user.address,
                         gender: user.gender,
-                        avatar: user.avatar,
+                        avatar: base64String,
                         groupId: user.groupId ? user.groupId : 3,
                     }
 
@@ -119,6 +121,8 @@ const loginService = async (loginAcc, password) => {
                         EC: 0,
                         EM: 'Login completed!'
                     }
+
+
                 }
                 else {
                     return {

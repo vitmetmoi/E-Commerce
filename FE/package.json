@@ -28,6 +28,7 @@
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.7",
     "dotenv-webpack": "^8.1.0",
+    "form-data": "^4.0.1",
     "i": "^0.3.7",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",

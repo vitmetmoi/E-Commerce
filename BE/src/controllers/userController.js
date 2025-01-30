@@ -62,7 +62,10 @@ const handleGetUser = async (req, res) => {
 const handleRegister = async (req, res) => {
     try {
         let data = req.body;
-        let response = await userService.registerService(data);
+        let response;
+
+        response = await userService.registerService(data);
+
         if (response) {
             return res.status(200).json({
                 DT: response.DT,
@@ -77,6 +80,8 @@ const handleRegister = async (req, res) => {
                 EM: "err from sever controller..."
             })
         }
+
+
     }
     catch (e) {
         console.log(e);

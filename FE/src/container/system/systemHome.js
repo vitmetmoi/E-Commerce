@@ -26,6 +26,7 @@ import { SYSTEM_NAV } from '../../utils/constant';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import ManageAddNewClothes from './container/ManageAddNewClothes';
 import { Scrollbar } from 'react-scrollbars-custom';
+import { createTheme } from '@mui/material/styles';
 function SystemHome(props) {
 
     const navigate = useNavigate();
@@ -150,13 +151,28 @@ function SystemHome(props) {
     //         mode: 'dark',
     //     },
     // });
+    const demoTheme = createTheme({
+        cssVariables: {
+            colorSchemeSelector: 'data-toolpad-color-scheme',
+        },
+        colorSchemes: { light: true, dark: true },
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 600,
+                md: 600,
+                lg: 1200,
+                xl: 1536,
+            },
+        },
+    });
 
     return (
         <AppProvider
             navigation={NAVIGATION}
             router={router}
             branding={BRANDING}
-            defaultMode='dark'
+            theme={demoTheme}
         >
 
             <DashboardLayout>

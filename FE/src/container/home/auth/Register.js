@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import './Register.scss';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 import { useRegisterMutation } from '../../../store/slice/API/userAPI';
 import {
@@ -22,8 +20,6 @@ import {
     FilledInput,
     Input, Select, MenuItem, Avatar, Backdrop, CircularProgress
 } from '@mui/material';
-import FolderIcon from '@mui/icons-material/Folder';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import NavigationHome from '../NavigationHome';
@@ -60,6 +56,7 @@ function Register(props) {
     const [showPassword, setShowPassword] = useState(false)
     const [inputValue, setInputValue] = useState(defaultInputValue);
     const [img, setImg] = useState('');
+    const [imgBase64, setImgBase64] = useState('');
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const [registerService, { data, isLoading }] = useRegisterMutation('');
     const [isOpenBackDrop, setIsOpenBackDrop] = useState(false);
@@ -92,15 +89,13 @@ function Register(props) {
             gender: inputValue.gender ? inputValue.gender : '',
             groupId: inputValue.groupId ? inputValue.groupId : 3,
             password: inputValue.password ? inputValue.password : '',
-            avatar: img ? img : ''
+            avatar: imgBase64 ? imgBase64 : ''
         }
 
         setIsOpenBackDrop(true);
 
-
         setTimeout(async () => {
             let res = await registerService(data);
-            console.log('res', res);
             if (res && res.data && res.data.EC === 0) {
                 toast.success(res.data.EM);
                 navigate('/login')
@@ -111,10 +106,19 @@ function Register(props) {
             setIsOpenBackDrop(false);
         }, 3000);
 
-        registerService()
+
     }
 
     const handleOnChangeImg = (img) => {
+
+        let reader = new FileReader();
+        reader.readAsDataURL(img[0]);
+        setTimeout(() => {
+            if (reader && reader.result) {
+                console.log("test file:", reader.result)
+                setImgBase64(reader.result);
+            }
+        }, 1000);
         let urlImg = URL.createObjectURL(img[0]);
         setImg(urlImg);
 

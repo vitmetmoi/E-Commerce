@@ -29,9 +29,9 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Select from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
-import markdownit from 'markdown-it'
 import MDEditor from '@uiw/react-md-editor';
-
+import { useCreateClothesMutation } from '../../../store/slice/API/systemAPI';
+let FormData = require('form-data');
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -101,6 +101,8 @@ function ManageAddNewClothes(props) {
     const [stockValue, setStockValue] = useState('');
     const [prevImg, setPrevImg] = useState(imgArray[0]);
 
+    //mutation
+    const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
 
 
     const handleChange = (name, order) => {
@@ -192,20 +194,33 @@ function ManageAddNewClothes(props) {
 
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+
+        let imgDataArray = [];
+
+        imgArray.map(item => {
+            let img = URL.createObjectURL(item);
+            // let reader = new FileReader();
+            // reader.readAsDataURL(item);
+            // console.log('imgBase64', reader);
+            imgDataArray.push(img)
+        })
 
         let data = {
             name: nameProduct,
             contentMarkdown: contentMarkdown,
             stockData: stockArray,
-            imgArray: imgArray,
+            imgArray: imgDataArray,
             price: price,
             discount: discount,
             category: category,
             type: type
         }
+        let res = await createClothesService(data);
+        if (res && res.data && res.data.EC === 0) {
 
-        console.log("row", data)
+        }
+        console.log('data', data)
     }
 
 
