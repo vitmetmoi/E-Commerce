@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Clothes.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
+            // Clothes.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
             Clothes.hasMany(models.Color_Size, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.Discount, { foreignKey: 'clothesId' });
             Clothes.hasMany(models.RelevantImage, { foreignKey: 'clothesId' });
@@ -28,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Clothes',
     });
-
+    Clothes.sync()
     return Clothes;
 };

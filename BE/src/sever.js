@@ -8,7 +8,9 @@ require('dotenv').config();
 const app = express();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-import JWTservice from './middleware/JWTservice'
+
+
+// configFormidable(app);
 
 //configCors
 configCors(app);
@@ -17,10 +19,10 @@ configCors(app);
 configViewEngine(app);
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '50mb' }))
 
 //cookie parse
 app.use(cookieParser())

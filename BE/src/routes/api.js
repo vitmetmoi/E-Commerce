@@ -1,6 +1,7 @@
 import express from "express";
 import homeController from "../controllers/homeController"
 import userController from '../controllers/userController'
+import clothesController from "../controllers/clothesController"
 import JWTservice from '../middleware/JWTservice'
 const router = express.Router();
 
@@ -21,6 +22,10 @@ const initApiRoutes = (app) => {
     router.post("/user/register", userController.handleRegister)
     router.post("/user/create", userController.handleCreateUser)
     router.get("/user/get", userController.handleGetUser)
+
+    //clothes
+
+    router.post('/clothes/create', clothesController.handleCreateClothes)
     return app.use("/api", router)
 
 }

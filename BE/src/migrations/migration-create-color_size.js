@@ -14,15 +14,15 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            colorId: {
+            color: {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            sizeId: {
+            size: {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            amount: {
+            stock: {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },

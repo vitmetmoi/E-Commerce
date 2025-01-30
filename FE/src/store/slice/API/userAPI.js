@@ -24,7 +24,14 @@ export const userAPI = createApi({
         baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({
-        login: build.query({ query: (query) => ({ url: `/api/user/login?loginAcc=${query.loginAcc}&password=${query.password}`, method: 'get' }) }),
+        login: build.query({
+            query: (query) => ({
+                url: `/api/user/login?loginAcc=${query.loginAcc}&password=${query.password}`,
+                method: 'get',
+                maxContentLength: 100000000,
+                maxBodyLength: 1000000000
+            })
+        }),
         account: build.query({ query: () => ({ url: `/api/account`, method: 'get' }) }),
         getUserData: build.query({ query: (type, id) => ({ url: `/api/user/get?type=${type}&id=${id}`, method: 'get' }) }),
         createUser: build.mutation({

@@ -63,7 +63,7 @@ function Login(props) {
 
                         signIn={async (provider, formData) => {
                             let checkValid = formData.get('tandc')
-                            console.log('va', checkValid)
+
                             if (checkValid === true || checkValid === 'true') {
                                 let query = {
                                     loginAcc: formData.get('email'),
@@ -72,8 +72,9 @@ function Login(props) {
                                 setIsOpenBackDrop(true);
                                 setTimeout(async () => {
                                     let res = await loginSerivce(query);
-                                    if (res && res.data.EC === 0) {
+                                    if (res && res.data && res.data.EC === 0) {
                                         let resData = res.data.DT;
+
                                         let data = {
                                             firstName: resData.firstName ? resData.firstName : '',
                                             lastName: resData.lastName ? resData.lastName : '',
@@ -86,11 +87,11 @@ function Login(props) {
                                             authenticated: true
                                         }
                                         dispatch(setUserData(data))
-                                        // toast.success('Login completed!')
+
                                         navigate('/');
                                     }
                                     else {
-                                        toast(res.data.EM)
+                                        toast('Err from sever!')
                                     }
                                     setIsOpenBackDrop(false);
                                 }, 3000);

@@ -29,7 +29,9 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Select from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
-
+import MDEditor from '@uiw/react-md-editor';
+import { useCreateClothesMutation } from '../../../store/slice/API/systemAPI';
+let FormData = require('form-data');
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -85,7 +87,7 @@ function ManageAddNewClothes(props) {
         },
     ];
     const [nameProduct, setNameProduct] = useState('')
-    const [description, setDescription] = useState('');
+    const [contentMarkdown, setContentMarkDown] = useState("");
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
     const [colorArray, setColorArray] = useState(defaultColorValue)
     const [stockArray, setStockArray] = useState([])
@@ -99,6 +101,8 @@ function ManageAddNewClothes(props) {
     const [stockValue, setStockValue] = useState('');
     const [prevImg, setPrevImg] = useState(imgArray[0]);
 
+    //mutation
+    const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
 
 
     const handleChange = (name, order) => {
@@ -190,10 +194,33 @@ function ManageAddNewClothes(props) {
 
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+
+        let imgDataArray = [];
+
+        imgArray.map(item => {
+            let img = URL.createObjectURL(item);
+            // let reader = new FileReader();
+            // reader.readAsDataURL(item);
+            // console.log('imgBase64', reader);
+            imgDataArray.push(img)
+        })
+
         let data = {
+            name: nameProduct,
+            contentMarkdown: contentMarkdown,
+            stockData: stockArray,
+            imgArray: imgDataArray,
+            price: price,
+            discount: discount,
+            category: category,
+            type: type
+        }
+        let res = await createClothesService(data);
+        if (res && res.data && res.data.EC === 0) {
 
         }
+        console.log('data', data)
     }
 
 
@@ -233,6 +260,7 @@ function ManageAddNewClothes(props) {
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
                                     <input
+                                        // data-bs-theme="dark"
                                         type="email"
                                         class="form-control"
                                         id="exampleInputEmail1"
@@ -244,12 +272,16 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <textarea
-                                        class="form-control"
-                                        id="exampleFormControlTextarea1"
-                                        rows="3"
-                                        onChange={(event) => setDescription(event.target.value)}
-                                    ></textarea>
+                                    <div
+                                    // data-color-mode="dark"  
+                                    >
+                                        <MDEditor
+                                            value={contentMarkdown}
+                                            onChange={setContentMarkDown}
+                                        />
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div className='section'>
@@ -578,6 +610,7 @@ function ManageAddNewClothes(props) {
 
                 </div>
             </div >
+
         </>
     );
 }
