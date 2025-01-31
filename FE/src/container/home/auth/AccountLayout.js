@@ -8,17 +8,24 @@ function AccountLayout(props) {
     const [accountService, { data, isLoading }] = useLazyAccountQuery()
     const dispatch = useDispatch();
 
-    useEffect(async () => {
-        let res = await accountService();
-        console.log('res', res);
-        if (res && res.data && res.data.EC === 0) {
-            console.log('check user account!')
-        }
-        else {
-            console.log('clear user data!')
-            dispatch(clearUserData())
-        }
+    useEffect(() => {
+        checkAccount();
     }, [])
+
+    const checkAccount = async () => {
+        return new Promise(async (resolve, reject) => {
+            let res = await accountService();
+            console.log('res', res);
+            if (res && res.data && res.data.EC === 0 && res.status !== 'pending') {
+                console.log('check user account!')
+            }
+            else if (res && res.data && res.data.EC !== 0) {
+                console.log('clear user data!')
+                dispatch(clearUserData())
+            }
+
+        })
+    }
 
     return (
         <>

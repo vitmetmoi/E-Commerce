@@ -10,8 +10,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
 
-// configFormidable(app);
-
 //configCors
 configCors(app);
 
