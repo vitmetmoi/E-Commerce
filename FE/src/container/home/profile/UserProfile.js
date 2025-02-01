@@ -11,7 +11,7 @@ function UserProfile(props) {
         <>
             <NavigationHome></NavigationHome>
             <div>user : {userData.email}</div>
-            <img width={100} height={100} src={`data:image/png;base64,${userData && userData.avatar}`} alt="" />
+            <img style={{ marginTop: "50px" }} width={300} height={300} src={userData && userData.avatar} alt="" />
         </>
     );
 }

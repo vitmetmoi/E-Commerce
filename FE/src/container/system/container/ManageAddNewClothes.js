@@ -199,11 +199,16 @@ function ManageAddNewClothes(props) {
         let imgDataArray = [];
 
         imgArray.map(item => {
-            let img = URL.createObjectURL(item);
-            // let reader = new FileReader();
-            // reader.readAsDataURL(item);
-            // console.log('imgBase64', reader);
-            imgDataArray.push(img)
+
+            let reader = new FileReader();
+            reader.readAsDataURL(item);
+
+            setTimeout(() => {
+                if (reader && reader.result) {
+                    imgDataArray.push(reader.result)
+                }
+            }, 2000);
+
         })
 
         let data = {
@@ -216,11 +221,15 @@ function ManageAddNewClothes(props) {
             category: category,
             type: type
         }
-        let res = await createClothesService(data);
+
+        const formData = new FormData();
+        formData.append('data', data);
+        console.log('imgarr', formData.getAll())
+        let res = await createClothesService(formData);
         if (res && res.data && res.data.EC === 0) {
 
         }
-        console.log('data', data)
+
     }
 
 
