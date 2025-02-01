@@ -199,36 +199,49 @@ function ManageAddNewClothes(props) {
         let imgDataArray = [];
 
         imgArray.map(item => {
-
             let reader = new FileReader();
             reader.readAsDataURL(item);
-
             setTimeout(() => {
                 if (reader && reader.result) {
                     imgDataArray.push(reader.result)
                 }
-            }, 2000);
+            }, 500);
 
         })
 
-        let data = {
-            name: nameProduct,
-            contentMarkdown: contentMarkdown,
-            stockData: stockArray,
-            imgArray: imgDataArray,
-            price: price,
-            discount: discount,
-            category: category,
-            type: type
-        }
 
-        const formData = new FormData();
-        formData.append('data', data);
-        console.log('imgarr', formData.getAll())
-        let res = await createClothesService(formData);
-        if (res && res.data && res.data.EC === 0) {
+        console.log('imgarr', imgDataArray[0])
 
-        }
+
+        setTimeout(async () => {
+            let data = {
+                name: nameProduct,
+                contentMarkdown: contentMarkdown,
+                stockData: stockArray,
+                imgArray: imgDataArray,
+                price: price,
+                discount: discount,
+                category: category,
+                type: type
+            }
+
+
+
+            // const formData = new FormData();
+            console.log('data', data)
+            // for (let key in data) {
+            //     setTimeout(() => {
+            //         formData.append(key, data[key]);
+            //     }, 1000);
+            // }
+
+            // console.log('imgarr', formData.getAll('imgArray'))
+            let res = await createClothesService(data);
+            if (res && res.data && res.data.EC === 0) {
+
+            }
+        }, 5000);
+
 
     }
 

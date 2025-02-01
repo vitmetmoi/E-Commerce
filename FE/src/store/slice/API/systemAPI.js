@@ -30,11 +30,7 @@ export const clothesAPI = createApi({
                 {
                     url: '/api/clothes/create',
                     method: 'post',
-                    body: clothesData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data;'
-                    },
-                    formData: true
+                    data: clothesData,
                 })
         }),
 
