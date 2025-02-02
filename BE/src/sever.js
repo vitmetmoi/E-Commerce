@@ -10,8 +10,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
 
-// configFormidable(app);
-
 //configCors
 configCors(app);
 
@@ -19,10 +17,10 @@ configCors(app);
 configViewEngine(app);
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
+app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }))
 
 // parse application/json
-app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.json({ limit: '100mb' }))
 
 //cookie parse
 app.use(cookieParser())

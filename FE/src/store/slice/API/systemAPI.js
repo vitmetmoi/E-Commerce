@@ -27,12 +27,24 @@ export const clothesAPI = createApi({
 
         createClothes: build.mutation({
             query: (clothesData) => (
-                { url: '/api/clothes/create', method: 'post', data: clothesData })
+                {
+                    url: '/api/clothes/create',
+                    method: 'post',
+                    data: clothesData,
+                })
         }),
 
-
+        getClothesData: build.mutation({
+            query: (params) => {
+                console.log('type', params);
+                return {
+                    url: `/api/clothes/get?type=${params.type}&id=${params.id}`,
+                    method: 'get',
+                }
+            }
+        })
     }),
 })
 
 
-export const { useCreateClothesMutation } = clothesAPI
+export const { useCreateClothesMutation, useGetClothesDataMutation } = clothesAPI

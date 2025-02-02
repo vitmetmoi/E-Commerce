@@ -16,7 +16,7 @@ module.exports = {
             },
             contentMarkdown: {
                 allowNull: true,
-                type: Sequelize.STRING
+                type: Sequelize.TEXT('long')
             },
             createdAt: {
                 allowNull: false,

@@ -26,6 +26,7 @@ const initApiRoutes = (app) => {
     //clothes
 
     router.post('/clothes/create', clothesController.handleCreateClothes)
+    router.get('/clothes/get', clothesController.handleGetClothes)
     return app.use("/api", router)
 
 }

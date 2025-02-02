@@ -16,15 +16,15 @@ module.exports = {
             },
             color: {
                 allowNull: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             size: {
                 allowNull: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             stock: {
                 allowNull: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             createdAt: {
                 allowNull: false,

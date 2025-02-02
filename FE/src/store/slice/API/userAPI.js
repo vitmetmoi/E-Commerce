@@ -27,12 +27,10 @@ export const userAPI = createApi({
         login: build.query({
             query: (query) => ({
                 url: `/api/user/login?loginAcc=${query.loginAcc}&password=${query.password}`,
-                method: 'get',
-                maxContentLength: 100000000,
-                maxBodyLength: 1000000000
+                method: 'get'
             })
         }),
-        account: build.query({ query: () => ({ url: `/api/account`, method: 'get' }) }),
+        checkUserAccount: build.query({ query: () => ({ url: `/api/account`, method: 'get' }) }),
         getUserData: build.query({ query: (type, id) => ({ url: `/api/user/get?type=${type}&id=${id}`, method: 'get' }) }),
         createUser: build.mutation({
             query: (userData) => ({ url: '/api/user/create', method: 'post', data: userData }),
@@ -45,4 +43,4 @@ export const userAPI = createApi({
 })
 
 
-export const { useRegisterMutation, useLazyLoginQuery, useGetUserDataQuery, useCreateUserMutation, useLazyAccountQuery } = userAPI
+export const { useRegisterMutation, useLazyLoginQuery, useGetUserDataQuery, useCreateUserMutation, useLazyCheckUserAccountQuery } = userAPI

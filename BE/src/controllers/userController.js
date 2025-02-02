@@ -100,13 +100,23 @@ const handleLogin = async (req, res) => {
 
         let response = await userService.loginService(loginAcc, password);
         if (response) {
-            //    res.clearCookie("user");
+
+
             res.cookie('user', response.DT.token);
+
+
             return res.status(200).json({
                 DT: response.DT.data,
                 EC: response.EC,
                 EM: response.EM
             })
+
+
+
+
+
+
+
         }
         else {
             return res.status(200).json({

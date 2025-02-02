@@ -15,12 +15,13 @@ module.exports = (sequelize, DataTypes) => {
     }
     Color_Size.init({
         clothesId: DataTypes.INTEGER,
-        color: DataTypes.INTEGER,
-        size: DataTypes.INTEGER,
-        stock: DataTypes.INTEGER,
+        color: DataTypes.STRING,
+        size: DataTypes.STRING,
+        stock: DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'Color_Size',
     });
+    Color_Size.sync();
     return Color_Size;
 };

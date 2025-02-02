@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs';
 import { Op, where } from "sequelize";
 import JWTservice from '../middleware/JWTservice.js'
 import jwt from 'jsonwebtoken'
+const fs = require('fs');
+
 const saltRounds = 10;
 
 const createUserService = async (data) => {
@@ -100,8 +102,10 @@ const loginService = async (loginAcc, password) => {
             if (!_.isEmpty(user)) {
                 let checkPassword = bcrypt.compareSync(password, user.password);
                 if (checkPassword === true) {
-                    const base64String = Buffer.from(user.avatar).toString('base64')
-
+                    let test;
+                    // let base64 = new Buffer(user.avatar, 'binary').toString('base64');
+                    let base64String = new Buffer(user.avatar, 'base64').toString('binary');
+                    // console.log('image', base64String);
                     let data = {
                         firstName: user.firstName,
                         lastName: user.lastName,
@@ -112,9 +116,17 @@ const loginService = async (loginAcc, password) => {
                         avatar: base64String,
                         groupId: user.groupId ? user.groupId : 3,
                     }
+                    let dataForVertify = {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        phoneNumber: user.phoneNumber,
+                        address: user.address,
+                        gender: user.gender,
+                        groupId: user.groupId ? user.groupId : 3,
+                    }
 
-
-                    let token = JWTservice.createJwtTokenService(data);
+                    let token = JWTservice.createJwtTokenService(dataForVertify);
 
                     return {
                         DT: { data: data, token: token },
@@ -230,6 +242,7 @@ const registerService = async (data) => {
             else {
                 let hashPassword = '';
                 hashPassword = await hashPasswordService(data.password);
+
                 let user = {
                     firstName: data.firstName,
                     lastName: data.lastName,
