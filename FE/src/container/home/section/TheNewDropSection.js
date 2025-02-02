@@ -91,7 +91,7 @@ function TheNewDropSection(props) {
                         },
                         1024: {
                             slidesPerView: 5,
-                            spaceBetween: 50,
+                            spaceBetween: 0,
                         },
                     }}
 

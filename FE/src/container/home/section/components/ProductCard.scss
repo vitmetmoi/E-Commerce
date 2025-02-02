@@ -93,6 +93,8 @@
                 color    : black;
                 opacity  : 0.5;
             }
+
+
         }
 
         .group-color {
@@ -136,13 +138,26 @@
         padding-bottom    : 23px;
         padding-left      : 3px;
 
-        .name-product {
-            width      : 100%;
-            text-align : left;
-            font-size  : 13px;
-            font-weight: 500;
-            white-space: nowrap;
+        .name-container {
+            display        : flex;
+            flex-direction : row;
+            justify-content: space-between;
+
+            .name-product {
+                width      : 90%;
+                text-align : left;
+                font-size  : 13px;
+                font-weight: 500;
+                white-space: nowrap;
+                color      : #221f1f;
+                overflow   : hidden;
+            }
+
+            .icon-save {
+                width: 8%;
+            }
         }
+
 
         .price-inf {
             width: 100%;

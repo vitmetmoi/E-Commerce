@@ -124,7 +124,7 @@ const convertClothesImgArray = (clothesArr) => {
         let data = [];
         clothesArr.map((item) => {
             let child = item;
-            child.RelevantImages.map((item) => {
+            child.RelevantImages && child.RelevantImages.map((item) => {
                 let base64String = new Buffer(item.image, 'base64').toString('binary');
                 item.image = base64String;
                 return item;
@@ -180,7 +180,7 @@ const getClothesService = async (type, id) => {
                 data = await db.Clothes.findAll({
                     limit: 8,
                     order: [['createdAt', 'DESC']],
-                    raw: true,
+
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -204,7 +204,7 @@ const getClothesService = async (type, id) => {
                     ]
 
                 })
-                data.reverse();
+
             }
             else {
                 data = db.Clothes.findOne({

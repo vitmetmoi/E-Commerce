@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 function ProductCard(props) {
     let priceAfterDiscouted = 0;
 
@@ -55,10 +55,13 @@ function ProductCard(props) {
 
             </div>
             <div className='content-bottom noselect'>
-                <span className='name-product noselect'>{props.name}</span>
+                <div className='name-container'>
+                    <span className='name-product noselect'>{props.name}</span>
+                    <div className='icon-save'><BookmarkBorderIcon></BookmarkBorderIcon></div>
+                </div>
                 <div className='price-inf noselect'>
                     <span className='discount noselect'>{props.discount}%</span>
-                    <span className='price noselect'>{priceAfterDiscouted}</span>
+                    <span className='price noselect'>{Number((priceAfterDiscouted).toFixed(3))}</span>
                     <span className='primary-price noselect'>{props.price}</span>
                 </div>
             </div>
