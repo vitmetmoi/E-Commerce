@@ -10,7 +10,7 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
 
-            clothes_Id: {
+            clothesId: {
                 allowNull: true,
                 type: Sequelize.STRING
             },

@@ -3,7 +3,7 @@ import './ManageAddNewClothes.scss'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
-import { blue, green, pink, red, yellow } from '@mui/material/colors';
+import { amber, blue, green, grey, pink, red, yellow } from '@mui/material/colors';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import _, { size } from 'lodash'
 import { DataGrid, renderActionsCell } from '@mui/x-data-grid';
@@ -31,7 +31,7 @@ import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import MDEditor from '@uiw/react-md-editor';
 import { useCreateClothesMutation } from '../../../store/slice/API/systemAPI';
-let FormData = require('form-data');
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -47,7 +47,10 @@ function ManageAddNewClothes(props) {
         { label: 'Yellow', isSelected: false },
         { label: 'Red', isSelected: false },
         { label: 'Blue', isSelected: false },
-        { label: 'Green', isSelected: false }
+        { label: 'Green', isSelected: false },
+        { label: 'Grey', isSelected: false },
+        { label: 'Pink', isSelected: false },
+        { label: 'Beige', isSelected: false },
     ]
 
     const columns = [
@@ -178,7 +181,7 @@ function ManageAddNewClothes(props) {
             _imgArray.push(img);
             setImgArray(_imgArray)
         }
-        console.log('img', imgArray)
+
     }
 
     const handleSetPrevImg = (item) => {
@@ -190,8 +193,22 @@ function ManageAddNewClothes(props) {
         if (img) {
             setPrevImg(img)
         }
-        console.log('img', prevImg)
 
+    }
+
+    const handleClearData = () => {
+        setNameProduct('');
+        setContentMarkDown('');
+        setStockArray('');
+        setImgArray([]);
+        setPrevImg('');
+        setPrice('');
+        setDiscount('');
+        setCategory('')
+        setType('');
+        setStockValue('');
+        setColorArray(defaultColorValue);
+        setSizeArray(defaultSizeValue);
     }
 
     const handleSubmit = async () => {
@@ -209,10 +226,6 @@ function ManageAddNewClothes(props) {
 
         })
 
-
-        console.log('imgarr', imgDataArray[0])
-
-
         setTimeout(async () => {
             let data = {
                 name: nameProduct,
@@ -225,20 +238,12 @@ function ManageAddNewClothes(props) {
                 type: type
             }
 
-
-
-            // const formData = new FormData();
-            console.log('data', data)
-            // for (let key in data) {
-            //     setTimeout(() => {
-            //         formData.append(key, data[key]);
-            //     }, 1000);
-            // }
-
-            // console.log('imgarr', formData.getAll('imgArray'))
             let res = await createClothesService(data);
             if (res && res.data && res.data.EC === 0) {
-
+                toast.success(res.data.EM)
+            }
+            else {
+                toast(res && res.data && res.data.EM ? res.data.EM : "error!")
             }
         }, 5000);
 
@@ -260,9 +265,11 @@ function ManageAddNewClothes(props) {
                         </div>
                         <div className='content-right'>
 
-                            <button className='button-container btn1'>
-                                <DoneIcon style={{ fontSize: "130%" }}></DoneIcon>
-                                <span>Save draft</span>
+                            <button
+                                onClick={() => handleClearData()}
+                                className='button-container btn1'>
+                                <AutorenewIcon style={{ fontSize: "130%" }}></AutorenewIcon>
+                                <span>Resest</span>
                             </button>
 
                             <button
@@ -283,6 +290,7 @@ function ManageAddNewClothes(props) {
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
                                     <input
                                         // data-bs-theme="dark"
+                                        value={nameProduct}
                                         type="email"
                                         class="form-control"
                                         id="exampleInputEmail1"
@@ -442,11 +450,63 @@ function ManageAddNewClothes(props) {
                                                 label="Green" />
                                         </div>
 
+                                        <div className='color'>
+                                            <FormControlLabel
+                                                value="female"
+                                                control={<Radio
+                                                    onClick={() => handleChange('color', 6)}
+                                                    checked={colorArray[6].isSelected}
+                                                    value={''}
+                                                    sx={{
+                                                        color: grey[800],
+                                                        '&.Mui-checked': {
+                                                            color: grey[600],
+                                                        },
+                                                    }}
+                                                />}
+                                                label="Grey" />
+                                        </div>
+
+                                        <div className='color'>
+                                            <FormControlLabel
+                                                value="female"
+                                                control={<Radio
+                                                    onClick={() => handleChange('color', 7)}
+                                                    checked={colorArray[7].isSelected}
+                                                    value={''}
+                                                    sx={{
+                                                        color: pink[800],
+                                                        '&.Mui-checked': {
+                                                            color: pink[600],
+                                                        },
+                                                    }}
+                                                />}
+                                                label="Pink" />
+                                        </div>
+
+                                        <div className='color'>
+                                            <FormControlLabel
+                                                value="female"
+                                                control={<Radio
+                                                    onClick={() => handleChange('color', 8)}
+                                                    checked={colorArray[8].isSelected}
+                                                    value={''}
+                                                    sx={{
+                                                        color: amber[100],
+                                                        '&.Mui-checked': {
+                                                            color: amber[200],
+                                                        },
+                                                    }}
+                                                />}
+                                                label="Beige" />
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
 
-                            <div className='section'>
+                            <div className='section' style={{ marginTop: '50px' }}>
                                 <div className='stock-group'>
                                     <span className='title'>Stock</span>
                                     <span className='description'>Create stock for product</span>
@@ -477,6 +537,7 @@ function ManageAddNewClothes(props) {
 
                                 </div>
                             </div>
+
 
                             <div className='section'>
                                 <DataGrid
@@ -563,6 +624,7 @@ function ManageAddNewClothes(props) {
                                     <div className='price'>
                                         <InputLabel htmlFor="standard-adornment-amount">Base pricing</InputLabel>
                                         <Input
+                                            value={price}
                                             onChange={(event) => setPrice(event.target.value)}
                                             id="standard-adornment-amount"
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -571,6 +633,7 @@ function ManageAddNewClothes(props) {
                                     <div className='discount'>
                                         <InputLabel htmlFor="standard-adornment-amount">Discount</InputLabel>
                                         <Input
+                                            value={discount}
                                             onChange={(event) => setDiscount(event.target.value)}
                                             id="standard-adornment-amount"
                                             startAdornment={<InputAdornment position="start">%</InputAdornment>}
