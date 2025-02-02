@@ -8,12 +8,18 @@ import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductCard(props) {
+    let priceAfterDiscouted = 0;
+
+    if (props.price || props.discount || props.price) {
+        priceAfterDiscouted = props.price - ((props.discount / 100) * props.price)
+    }
+    console.log('props.', props)
     return (
         <div className='product-card-container'>
             <div className='content-top'>
 
                 <div
-                    style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/medium/202501/ecc445f768b75a186df24fe1ee31d8dd.jpg` + ")", }}
+                    style={{ backgroundImage: "url(" + `${props.mainImage}` + ")", }}
                     className='main-img'
                 >
                 </div>
@@ -24,39 +30,36 @@ function ProductCard(props) {
                         slidesPerView={1}
                         navigation
                     >
-                        <SwiperSlide>
-                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/87496334b7dc7a8af96ccc29c342ebf6.jpg` + ")", }}
-                                className='relevant-img'>
+                        {props.imageArr && props.imageArr.map(item => {
+                            return (
+                                <SwiperSlide>
+                                    <div style={{ backgroundImage: "url(" + `${item}` + ")", }}
+                                        className='relevant-img'>
+                                    </div>
+                                </SwiperSlide>
+                            )
 
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/589909a02d5dd0ec1a5e9a24a14b3635.jpg` + ")", }}
-                                className='relevant-img'>
+                        })}
 
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div style={{ backgroundImage: "url(" + `https://cafe24.poxo.com/ec01/whoaukr/p1p7L96QYgpvk7KwZPVnP5cEfrFcGc5MyqaBC8AvzxS2n0w3odzprmZjCtz9mWqtuQgo4heOnmBk9oXP9ZZcSA==/_/web/product/extra/big/202412/9ec1d015dcf6c67a90662cc49bb92164.jpg` + ")", }}
-                                className='relevant-img'>
-
-                            </div>
-                        </SwiperSlide>
                     </Swiper>
                 </div>
                 <div className='group-color'>
-                    <div className='color'></div>
-                    <div className='color'></div>
-                    <div className='color'></div>
+                    {props.colorArr && props.colorArr.map(item => {
+                        return (
+                            <div className='color' style={{ backgroundColor: `${item}` }}></div>
+                        )
+                    })}
+
+
                 </div>
 
             </div>
             <div className='content-bottom noselect'>
-                <span className='name-product noselect'>[WAU X SQUID GAME] ○△□ Graphic T-Shirt</span>
+                <span className='name-product noselect'>{props.name}</span>
                 <div className='price-inf noselect'>
-                    <span className='discount noselect'>5%</span>
-                    <span className='price noselect'>28,400</span>
-                    <span className='primary-price noselect'>29,900</span>
+                    <span className='discount noselect'>{props.discount}%</span>
+                    <span className='price noselect'>{priceAfterDiscouted}</span>
+                    <span className='primary-price noselect'>{props.price}</span>
                 </div>
             </div>
         </div>

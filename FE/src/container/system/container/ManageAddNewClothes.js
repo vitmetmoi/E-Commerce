@@ -157,6 +157,7 @@ function ManageAddNewClothes(props) {
         if (isValid === true) {
             let _stockArray = _.cloneDeep(stockArray);
             let obj = { id: _stockArray.length + 1, size: size, color: color, stock: stockValue }
+            console.log(_stockArray);
             _stockArray.push(obj);
             setStockArray(_stockArray);
         }
@@ -199,7 +200,7 @@ function ManageAddNewClothes(props) {
     const handleClearData = () => {
         setNameProduct('');
         setContentMarkDown('');
-        setStockArray('');
+        setStockArray([]);
         setImgArray([]);
         setPrevImg('');
         setPrice('');

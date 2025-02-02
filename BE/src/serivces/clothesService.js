@@ -179,6 +179,8 @@ const getClothesService = async (type, id) => {
             else if (type === 'NEW') {
                 data = await db.Clothes.findAll({
                     limit: 8,
+                    order: [['createdAt', 'DESC']],
+                    raw: true,
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -202,6 +204,7 @@ const getClothesService = async (type, id) => {
                     ]
 
                 })
+                data.reverse();
             }
             else {
                 data = db.Clothes.findOne({

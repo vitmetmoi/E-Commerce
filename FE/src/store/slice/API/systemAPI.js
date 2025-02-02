@@ -34,14 +34,17 @@ export const clothesAPI = createApi({
                 })
         }),
 
-        getClothes: build.query({
-            query: (params) => ({
-                url: `/api/clothes/get?type=${params[0]}&id=${params[1]}`,
-                method: 'get'
-            })
-        }),
+        getClothesData: build.mutation({
+            query: (params) => {
+                console.log('type', params);
+                return {
+                    url: `/api/clothes/get?type=${params.type}&id=${params.id}`,
+                    method: 'get',
+                }
+            }
+        })
     }),
 })
 
 
-export const { useCreateClothesMutation, useLazyGetClothesQuery, useGetClothesQuery } = clothesAPI
+export const { useCreateClothesMutation, useGetClothesDataMutation } = clothesAPI

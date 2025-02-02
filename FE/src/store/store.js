@@ -12,7 +12,7 @@ import { combineReducers } from "redux";
 const reducers = combineReducers({
     user: userReducer,
     [userAPI.reducerPath]: userAPI.reducer,
-    [clothesAPI]: clothesAPI.reducer
+    [clothesAPI.reducerPath]: clothesAPI.reducer
 });
 
 const persistConfig = {
@@ -24,8 +24,10 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(userAPI.middleware, clothesAPI.middleware)
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware().concat(userAPI.middleware, clothesAPI.middleware)
+    },
+
 })
 
 
