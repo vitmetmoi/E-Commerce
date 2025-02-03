@@ -8,19 +8,29 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { useGetClothesDataMutation } from '../../../store/slice/API/systemAPI';
+import Skeleton from '@mui/material/Skeleton';
+import { useSelector, useDispatch } from 'react-redux'
+import { setClothesDataSlice } from '../../../store/slice/Reducer/systemSlice';
 function TheNewDropSection(props) {
-
+    const dispatch = useDispatch()
     const [getClothesData, {
         data,
         isFetching,
         isLoading,
     }] = useGetClothesDataMutation({ type: 'NEW', id: 0 });
-
+    const clothes = useSelector((state) => state.system)
     const [clothesData, setClothesData] = useState('');
 
     useEffect(() => {
         getClothes();
     }, [])
+
+    useEffect(() => {
+        if (isLoading === false && data) {
+            dispatch(setClothesDataSlice(data.DT))
+            console.log('clothes', clothes)
+        }
+    }, [isLoading])
 
     const getClothes = async () => {
         let params = { type: 'NEW', id: 0 }
@@ -91,40 +101,64 @@ function TheNewDropSection(props) {
                         },
                         1024: {
                             slidesPerView: 5,
-                            spaceBetween: 50,
+                            spaceBetween: 0,
                         },
                     }}
 
                 >
-                    {clothesData && clothesData.map(item => {
-                        console.log('item', item);
-                        let swiperImg = [];
-                        item.RelevantImages.map((item, index) => {
-                            index !== 0 && swiperImg.push(item.image)
-                        })
-                        let colorArr = [];
+                    {isLoading === true ?
+                        <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>{
 
-                        item.Color_Sizes.map(item => {
-                            let color = item.color;
-                            let colorRgb = asignColor(color);
-                            if (!colorArr.includes(colorRgb)) {
-                                colorArr.push(colorRgb);
+                            [...Array(5)].map((x, i) => {
+                                return (
+                                    <div className='skeleton-container'>
+                                        <Skeleton variant="rectangular" width={'100%'} height={310} />
+                                        <Skeleton height={40} />
+                                        <Skeleton width="60%" height={40} />
+                                    </div>
+                                )
                             }
 
-                        })
-                        return (
-                            <SwiperSlide>
-                                <ProductCard
-                                    mainImage={item.RelevantImages[0].image}
-                                    discount={item.Discounts[0].value}
-                                    name={item.name}
-                                    price={item.price}
-                                    imageArr={swiperImg}
-                                    colorArr={colorArr}
-                                ></ProductCard>
-                            </SwiperSlide>
-                        )
-                    })}
+                            )
+
+                        }
+
+
+                        </div>
+                        :
+                        <>
+                            {clothesData && clothesData.map(item => {
+                                console.log('item', item);
+                                let swiperImg = [];
+                                item.RelevantImages.map((item, index) => {
+                                    index !== 0 && swiperImg.push(item.image)
+                                })
+                                let colorArr = [];
+
+                                item.Color_Sizes.map(item => {
+                                    let color = item.color;
+                                    let colorRgb = asignColor(color);
+                                    if (!colorArr.includes(colorRgb)) {
+                                        colorArr.push(colorRgb);
+                                    }
+
+                                })
+                                return (
+                                    <SwiperSlide>
+                                        <ProductCard
+                                            mainImage={item.RelevantImages[0].image}
+                                            discount={item.Discounts[0].value}
+                                            name={item.name}
+                                            price={item.price}
+                                            imageArr={swiperImg}
+                                            colorArr={colorArr}
+                                        ></ProductCard>
+                                    </SwiperSlide>
+                                )
+                            })}
+                        </>
+                    }
+
 
 
                 </Swiper>

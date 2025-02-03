@@ -124,7 +124,7 @@ const convertClothesImgArray = (clothesArr) => {
         let data = [];
         clothesArr.map((item) => {
             let child = item;
-            child.RelevantImages.map((item) => {
+            child.RelevantImages && child.RelevantImages.map((item) => {
                 let base64String = new Buffer(item.image, 'base64').toString('binary');
                 item.image = base64String;
                 return item;
@@ -180,7 +180,7 @@ const getClothesService = async (type, id) => {
                 data = await db.Clothes.findAll({
                     limit: 8,
                     order: [['createdAt', 'DESC']],
-                    raw: true,
+
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -204,7 +204,7 @@ const getClothesService = async (type, id) => {
                     ]
 
                 })
-                data.reverse();
+
             }
             else {
                 data = db.Clothes.findOne({
@@ -240,6 +240,155 @@ const getClothesService = async (type, id) => {
     }
 }
 
+const updateClothesService = async (type, data) => {
+    try {
+        if (!data || !type || !data.id
+            // || !data.id || !data.category || !data.contentMarkdown || !data.discount
+            // || !data.stockData || !data.imgArray || !data.name || !data.type
+            // || !data.price
+        ) {
+            return {
+                DT: "",
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+            if (type === 'OTHER') {
+                let clothes = db.Clothes.findOne({
+                    where: { id: data.id }
+                })
+
+                if (clothes && clothes.id) {
+                    await clothes.set({
+                        name: data.name,
+                        type: data.type,
+                        category: data.category,
+                        price: data.price
+                    })
+
+                    await clothes.save();
+
+                    await db.Color_Size.destroy({ where: { id: data.id } })
+
+                    await db.Color_Size.bulkCreate(data.color_size);
+
+                    let discount = await db.Discount.findOne({ where: { clothesId: data.id } })
+
+                    if (discount && discount.id) {
+
+                        discount.value = data.discount;
+                        await discount.save();
+
+                        let markdown = await db.Markdown.findOne({ where: { clothesId: data.id } });
+
+                        if (markdown && markdown.id) {
+                            markdown.contentMarkdown = data.contentMarkdown;
+                            await markdown.save();
+
+                            return {
+                                DT: "",
+                                EC: 0,
+                                EM: 'Completed!'
+                            }
+
+                        }
+                        else {
+                            return {
+                                DT: "",
+                                EC: -1,
+                                EM: 'Cant not find markdown value!'
+                            }
+                        }
+                    }
+                    else {
+                        return {
+                            DT: "",
+                            EC: -1,
+                            EM: 'Cant not find discount value!'
+                        }
+                    }
+
+
+
+                }
+                else {
+                    return {
+                        DT: "",
+                        EC: -1,
+                        EM: 'Can not find clothes!'
+                    }
+                }
+            }
+            else if (type === 'IMG') {
+
+                await db.RelevantImage.destroy({ where: { id: data.id } })
+
+                await db.RelevantImage.bulkCreate(data.imageArr);
+
+                return {
+                    DT: "",
+                    EC: 0,
+                    EM: 'Completed!'
+                }
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            DT: "",
+            EC: -1,
+            EM: 'Err from sever service...'
+        }
+    }
+}
+
+const deleteClothesService = async (id) => {
+    try {
+        if (!id) {
+            return {
+                DT: "",
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+
+            let clothes = await db.Clothes.findOne({ where: { id: id } });
+            console.log('cl', clothes);
+            if (clothes && clothes.id) {
+                await db.Clothes.destroy({ where: { id: id } })
+                await db.Discount.destroy({ where: { id: id } })
+                await db.RelevantImage.destroy({ where: { id: id } })
+                await db.Color_Size.destroy({ where: { id: id } })
+
+                return {
+                    DT: "",
+                    EC: 0,
+                    EM: 'Delete clothes completed!'
+                }
+            }
+            else {
+                return {
+                    DT: "",
+                    EC: -1,
+                    EM: 'Can not find clothes!'
+                }
+            }
+
+
+        }
+
+    } catch (e) {
+        console.log(e);
+        return {
+            DT: "",
+            EC: -1,
+            EM: 'Err from sever service...'
+        }
+    }
+}
+
 module.exports = {
-    createClothesService, getClothesService
+    createClothesService, getClothesService, updateClothesService, deleteClothesService
 }

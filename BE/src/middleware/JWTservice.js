@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import db from '../models';
 import { RAW } from 'sequelize/lib/query-types';
 
-const exceptionPath = ['/', '/api/user/login', '/api/user/register', '/api/account'];
+const exceptionPath = ['/', '/api/user/login', '/api/user/register', '/api/account', '/api/clothes/get'];
 
 const createJwtTokenService = (data) => {
 

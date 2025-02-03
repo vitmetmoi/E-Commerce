@@ -32,6 +32,7 @@ import FormControl from '@mui/material/FormControl';
 import MDEditor from '@uiw/react-md-editor';
 import { useCreateClothesMutation } from '../../../store/slice/API/systemAPI';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import CircularProgress from '@mui/material/CircularProgress';
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -107,6 +108,8 @@ function ManageAddNewClothes(props) {
     //mutation
     const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
 
+    //Loading 
+    const [submitIsLoading, setSubmitIsLoading] = useState(false);
 
     const handleChange = (name, order) => {
 
@@ -227,6 +230,8 @@ function ManageAddNewClothes(props) {
 
         })
 
+        setSubmitIsLoading(true);
+
         setTimeout(async () => {
             let data = {
                 name: nameProduct,
@@ -246,10 +251,16 @@ function ManageAddNewClothes(props) {
             else {
                 toast(res && res.data && res.data.EM ? res.data.EM : "error!")
             }
+
+        }, 4000);
+
+        setTimeout(() => {
+            setSubmitIsLoading(false);
         }, 5000);
 
-
     }
+
+
 
 
     return (
@@ -266,19 +277,32 @@ function ManageAddNewClothes(props) {
                         </div>
                         <div className='content-right'>
 
-                            <button
-                                onClick={() => handleClearData()}
-                                className='button-container btn1'>
-                                <AutorenewIcon style={{ fontSize: "130%" }}></AutorenewIcon>
-                                <span>Resest</span>
-                            </button>
+                            <div className='button'>
+                                <button
+                                    onClick={() => handleClearData()}
+                                    className='button-container btn1'>
+                                    <AutorenewIcon style={{ fontSize: "130%" }}></AutorenewIcon>
+                                    <span>Resest</span>
+                                </button>
+                            </div>
 
-                            <button
-                                onClick={() => handleSubmit()}
-                                className='button-container'>
-                                <DoneIcon style={{ fontSize: "130%" }}></DoneIcon>
-                                <span>Add product</span>
-                            </button>
+                            <div className='button'>
+                                <button
+                                    onClick={() => handleSubmit()}
+                                    className='button-container'>
+                                    {
+                                        submitIsLoading === false ?
+                                            <>
+                                                <DoneIcon style={{ fontSize: "130%" }}></DoneIcon>
+                                                <span>Add product</span>
+                                            </>
+                                            :
+                                            <CircularProgress style={{ height: "30px", width: "30px" }}></CircularProgress>
+                                    }
+
+
+                                </button>
+                            </div>
                         </div>
                     </div>
 
