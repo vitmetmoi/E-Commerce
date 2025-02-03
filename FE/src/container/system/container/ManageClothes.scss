@@ -1,0 +1,25 @@
+.manage-clothes-container {
+
+    .color-group {
+        // width          : 50px;
+        // height         : 50px;
+        // display        : flex;
+        // flex-direction : row;
+        // justify-content: center;
+        // align-items    : center;
+        // margin-top     : 25%;
+    }
+
+    .css-4zu5p1-MuiAvatarGroup-root .MuiAvatar-root {
+        border     : 2px solid var(--mui-palette-background-default);
+        box-sizing : content-box;
+        margin-left: var(--AvatarGroup-spacing, -8px);
+        height     : 31px;
+        width      : 32px;
+        font-size  : 96%;
+    }
+}
+
+.css-11cfq65-MuiTablePagination-displayedRows {
+    margin-top: auto;
+}

@@ -261,6 +261,8 @@ function ManageAddNewClothes(props) {
     }
 
 
+
+
     return (
         <>
             <div className='create-clothes-container'>
