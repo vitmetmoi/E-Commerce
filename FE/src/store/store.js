@@ -11,6 +11,7 @@ import { combineReducers } from "redux";
 
 const reducers = combineReducers({
     user: userReducer,
+    system: systemReducer,
     [userAPI.reducerPath]: userAPI.reducer,
     [clothesAPI.reducerPath]: clothesAPI.reducer
 });

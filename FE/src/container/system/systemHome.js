@@ -27,6 +27,7 @@ import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import ManageAddNewClothes from './container/ManageAddNewClothes';
 import { Scrollbar } from 'react-scrollbars-custom';
 import { createTheme } from '@mui/material/styles';
+import ManageClothes from './container/ManageClothes';
 function SystemHome(props) {
 
     const navigate = useNavigate();
@@ -117,6 +118,7 @@ function SystemHome(props) {
                 {pathname === `/${SYSTEM_NAV.DASH_BOARD}` && <DashBoard></DashBoard>}
                 {pathname === `/${SYSTEM_NAV.ORDERS}` && <ManageOrder></ManageOrder>}
                 {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.CREATE}` && <ManageAddNewClothes></ManageAddNewClothes>}
+                {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.MENU}` && <ManageClothes></ManageClothes>}
             </Box>
         );
     }
