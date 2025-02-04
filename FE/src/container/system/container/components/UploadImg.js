@@ -13,9 +13,9 @@ function UploadImg(props) {
     return (
         <div className='upload-img-container'>
             <PhotoProvider>
-                <PhotoView src={`${props.prevImg && props.prevImg !== '' ? props.prevImg : (props && props.imgArray && props.imgArray && props && props.imgArray && props.imgArray[0] && URL.createObjectURL(props && props.imgArray && props.imgArray[0]))}`}>
+                <PhotoView src={`${props && props.prevImg && props.prevImg !== '' ? props.prevImg : (props && props.imgArray && props.imgArray[0])}`}>
                     <div
-                        style={{ backgroundImage: "url(" + `${props.prevImg && props.prevImg !== '' ? props.prevImg : (props && props.imgArray && props.imgArray && props && props.imgArray && props.imgArray[0] && URL.createObjectURL(props && props.imgArray && props.imgArray[0]))}` + ")" }}
+                        style={{ backgroundImage: "url('" + `${props && props.prevImg && props.prevImg !== '' ? props.prevImg : props && props.imgArray && props.imgArray[0]}` + "')" }}
                         className='prev-image'
                     ></div>
                 </PhotoView>
@@ -30,16 +30,19 @@ function UploadImg(props) {
 
                 >
                     {
-                        props && props.imgArray && props.imgArray && props && props.imgArray && props.imgArray.length > 0 && props && props.imgArray && props.imgArray.map(item => {
+                        props && props.imgArray && props.imgArray.length > 0 && props.imgArray.map(item => {
+                            let objURL = "";
 
                             return (
                                 <SwiperSlide>
                                     <div
                                         onClick={() => props.handleSetPrevImg(item)}
-                                        style={{ backgroundImage: "url(" + `${URL.createObjectURL(item)}` + ")", }}
+                                        style={{ backgroundImage: "url('" + item + "')" }}
                                         className='relevant-img'>
                                     </div>
                                 </SwiperSlide>)
+
+
                         })
                     }
 

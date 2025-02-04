@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ManageClothes.scss'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { useGetClothesDataMutation } from '../../../store/slice/API/systemAPI';
 import { useSelector, useDispatch } from 'react-redux'
 import { setClothesDataSlice } from '../../../store/slice/Reducer/systemSlice';
@@ -25,7 +25,18 @@ import ArtTrackIcon from '@mui/icons-material/ArtTrack';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import { useUpdateClothesMutation, useDeleteClothesMutation } from '../../../store/slice/API/systemAPI';
 import { toast } from 'react-toastify';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Backdrop from '@mui/material/Backdrop';
+import UploadImg from './components/UploadImg';
+import Stock from './components/Stock';
+import MarkdownEditor from './components/MarkdownEditor';
+
 function ManageClothes(props) {
+
+
+
+
     const clothes = useSelector((state) => state.system.clothesData)
     const dispatch = useDispatch()
     const [getClothesService, { data, isLoading, isSuccess }] = useGetClothesDataMutation();
@@ -33,6 +44,59 @@ function ManageClothes(props) {
     const [deleteClothesService, { isLoading: deleteIsLoading }] = useDeleteClothesMutation();
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
+    const [isOpenImgModal, setIsOpenImgModal] = useState(false);
+    const [isOpenMardownModal, setIsOpenMarkdownModal] = useState(false);
+    const [imgArray, setImgArray] = useState([]);
+    const [prevImg, setPrevImg] = useState(imgArray[0]);
+
+
+    const handleOpenImgModal = (id) => {
+        let arrImgModal = [];
+        if (isOpenImgModal === false) {
+            rows.map((item) => {
+                if (item.id === id) {
+
+                    item.relevantImages.map((item) => {
+                        arrImgModal.push(item.image)
+                    })
+                }
+            })
+            if (arrImgModal) { setImgArray(arrImgModal) }
+        }
+        else {
+            setPrevImg('');
+        }
+        setIsOpenImgModal(!isOpenImgModal);
+    }
+
+    const handleOpenMarkdownModal = () => {
+        setIsOpenMarkdownModal(!isOpenMardownModal)
+    }
+
+    const handleSubmit = () => {
+
+    }
+
+    const handleAddImage = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            var reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                _imgArray.push(reader.result);
+                setImgArray(_imgArray)
+            }, 500);
+
+        }
+
+    }
+
+    const handleSetPrevImg = (item) => {
+        if (item) {
+            setPrevImg(item)
+        }
+    }
+
 
     useEffect(() => {
         console.log("clothes data", clothes)
@@ -58,7 +122,7 @@ function ManageClothes(props) {
                     price: item.price,
                     discount: item.Discounts[0].value,
                     stock: item.Color_Sizes,
-                    relevantImage: '',
+                    relevantImages: item.RelevantImages,
                     description: ''
                 }
                 arrRows.push(obj);
@@ -69,7 +133,6 @@ function ManageClothes(props) {
 
     const getClothes = async () => {
         let res = await getClothesService({ type: 'ALL', id: 12 });
-        console.log('res clothes', res)
     }
 
     const handleRowEditStop = (params, event) => {
@@ -135,7 +198,7 @@ function ManageClothes(props) {
             }
         })
 
-        console.log('row to mutate', rowToMutate)
+
         setRows(rowToMutate);
         return updatedRow;
     };
@@ -202,10 +265,12 @@ function ManageClothes(props) {
             headerName: 'Relevant Image',
             type: 'actions',
             width: 150,
-            renderCell: () => {
+            renderCell: (dataRow) => {
                 return (
                     <div style={{ width: "100%", textAlign: 'center' }}>
-                        <IconButton>
+                        <IconButton
+                            onClick={() => handleOpenImgModal(dataRow.id)}
+                        >
                             <ArtTrackIcon style={{ width: "35px", height: '35px' }}></ArtTrackIcon>
                         </IconButton>
 
@@ -278,6 +343,8 @@ function ManageClothes(props) {
     ];
 
 
+
+
     const asignColor = (color) => {
         let colorRgb = '';
         if (color === 'White') {
@@ -342,7 +409,44 @@ function ManageClothes(props) {
                 sx={{ marginTop: 2 }}
                 rowHeight={100}
             />
+
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={isOpenImgModal}
+                onClose={handleOpenImgModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+
+            >
+                <Fade in={isOpenImgModal}>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                        <UploadImg
+                            prevImg={prevImg}
+                            imgArray={imgArray}
+                            handleSetPrevImg={handleSetPrevImg}
+                            handleAddImage={handleAddImage}
+                        ></UploadImg>
+                    </Box>
+                </Fade>
+            </Modal>
         </div>
+
+
     );
 }
 

@@ -1,27 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ManageAddNewClothes.scss'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import TextField from '@mui/material/TextField';
-import Radio from '@mui/material/Radio';
-import { amber, blue, green, grey, pink, red, yellow } from '@mui/material/colors';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import _, { size } from 'lodash'
-import { DataGrid, renderActionsCell } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
 import DoneIcon from '@mui/icons-material/Done';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { ToastContainer, toast } from 'react-toastify';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import 'react-photo-view/dist/react-photo-view.css';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
@@ -76,6 +58,7 @@ function ManageAddNewClothes(props) {
 
     //Loading 
     const [submitIsLoading, setSubmitIsLoading] = useState(false);
+
 
     const handleChange = (name, order) => {
 
@@ -147,22 +130,21 @@ function ManageAddNewClothes(props) {
     const handleAddImage = (img) => {
         if (img) {
             let _imgArray = _.cloneDeep(imgArray);
-            _imgArray.push(img);
-            setImgArray(_imgArray)
+            var reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                _imgArray.push(reader.result);
+                setImgArray(_imgArray)
+            }, 500);
+
         }
 
     }
 
     const handleSetPrevImg = (item) => {
-        let img = '';
         if (item) {
-            img = URL.createObjectURL(item);
+            setPrevImg(item)
         }
-
-        if (img) {
-            setPrevImg(img)
-        }
-
     }
 
     const handleClearData = () => {
@@ -225,6 +207,13 @@ function ManageAddNewClothes(props) {
 
     }
 
+    window.dispatchEvent(new Event("storage"));
+
+    window.addEventListener('storage', () => {
+        console.log("Change to local storage!");
+        // ...
+    })
+
     return (
         <>
             <div className='create-clothes-container'>
@@ -276,7 +265,7 @@ function ManageAddNewClothes(props) {
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
                                     <input
-                                        // data-bs-theme="dark"
+                                        data-bs-theme={localStorage.getItem('toolpad-mode')}
                                         value={nameProduct}
                                         type="email"
                                         class="form-control"

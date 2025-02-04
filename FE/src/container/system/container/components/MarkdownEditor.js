@@ -4,7 +4,7 @@ import MDEditor from '@uiw/react-md-editor';
 function MarkdownEditor(props) {
     return (
         <div
-        // data-color-mode="dark"  
+            data-color-mode={localStorage.getItem('toolpad-mode')}
         >
             <MDEditor
                 value={props.contentMarkdown}
