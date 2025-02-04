@@ -23,11 +23,14 @@ import Avatar from '@mui/material/Avatar';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import ArtTrackIcon from '@mui/icons-material/ArtTrack';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-
+import { useUpdateClothesMutation, useDeleteClothesMutation } from '../../../store/slice/API/systemAPI';
+import { toast } from 'react-toastify';
 function ManageClothes(props) {
     const clothes = useSelector((state) => state.system.clothesData)
     const dispatch = useDispatch()
     const [getClothesService, { data, isLoading, isSuccess }] = useGetClothesDataMutation();
+    const [updateClothesService, { isLoading: updateIsLoading }] = useUpdateClothesMutation();
+    const [deleteClothesService, { isLoading: deleteIsLoading }] = useDeleteClothesMutation();
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
 
@@ -99,9 +102,41 @@ function ManageClothes(props) {
         }
     };
 
-    const processRowUpdate = (newRow) => {
+    const processRowUpdate = async (newRow) => {
+        let isValid = false;
         const updatedRow = { ...newRow, isNew: false };
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+
+        let rowToMutate = rows.map((row) => {
+            if (row.id === updatedRow.id) {
+                if (_.isEqual(updatedRow, row) === false) {
+                    isValid = true;
+                    let data = {
+                        id: updatedRow.id,
+                        name: updatedRow.name,
+                        price: updatedRow.price,
+                        discount: updatedRow.discount,
+                        contentMarkdown: updatedRow.description,
+                        color_size: updatedRow.stock,
+                    }
+                    let payload = {
+                        type: 'OTHER',
+                        data: data,
+                    }
+                    toast('Loading...');
+                    updateClothesService(payload);
+                    return updatedRow
+                }
+                else {
+                    return row;
+                }
+            }
+            else {
+                return row;
+            }
+        })
+
+        console.log('row to mutate', rowToMutate)
+        setRows(rowToMutate);
         return updatedRow;
     };
 
@@ -279,7 +314,6 @@ function ManageClothes(props) {
     }
 
     return (
-        // <div className='manage-clothes-container'>
 
         <div className='manage-clothes-container' style={{ width: '100%' }}>
             <DataGrid
@@ -296,14 +330,12 @@ function ManageClothes(props) {
                     },
                 }}
                 pageSizeOptions={[5]}
-                // checkboxSelection
                 disableRowSelectionOnClick
                 editMode="row"
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
-                // slots={{ toolbar: EditToolbar }}
                 slotProps={{
                     toolbar: { setRows, setRowModesModel },
                 }}
@@ -311,7 +343,6 @@ function ManageClothes(props) {
                 rowHeight={100}
             />
         </div>
-        // </div>
     );
 }
 

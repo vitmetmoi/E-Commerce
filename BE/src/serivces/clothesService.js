@@ -255,7 +255,7 @@ const updateClothesService = async (type, data) => {
         }
         else {
             if (type === 'OTHER') {
-                let clothes = db.Clothes.findOne({
+                let clothes = await db.Clothes.findOne({
                     where: { id: data.id }
                 })
 
@@ -269,12 +269,16 @@ const updateClothesService = async (type, data) => {
 
                     await clothes.save();
 
-                    await db.Color_Size.destroy({ where: { id: data.id } })
+                    await db.Color_Size.destroy({ where: { clothesId: data.id } })
 
-                    await db.Color_Size.bulkCreate(data.color_size);
+                    let stockData = data.color_size.map(item => {
+                        item.clothesId = data.id;
+                        return item;
+                    })
+
+                    await db.Color_Size.bulkCreate(stockData);
 
                     let discount = await db.Discount.findOne({ where: { clothesId: data.id } })
-
                     if (discount && discount.id) {
 
                         discount.value = data.discount;
