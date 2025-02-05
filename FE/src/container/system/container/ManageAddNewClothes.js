@@ -51,7 +51,7 @@ function ManageAddNewClothes(props) {
 
 
     const [stockValue, setStockValue] = useState('');
-    const [prevImg, setPrevImg] = useState(0);
+    const [prevImg, setPrevImg] = useState();
 
     //mutation
     const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
@@ -61,11 +61,14 @@ function ManageAddNewClothes(props) {
 
 
     const handleDeleteImg = () => {
-        console.log('delete')
-        let _imgArray = _.cloneDeep(imgArray);
-        _imgArray.splice(prevImg, 1);
-        setImgArray(_imgArray)
-
+        if (prevImg !== 0 && prevImg) {
+            let _imgArray = _.cloneDeep(imgArray);
+            _imgArray.splice(prevImg, 1);
+            setImgArray(_imgArray)
+        }
+        else {
+            toast('Missing Image!')
+        }
 
     }
 
