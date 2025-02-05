@@ -1,4 +1,5 @@
 .manage-clothes-container {
+    width: 100%;
 
     .color-group {
         // width          : 50px;
@@ -17,6 +18,43 @@
         height     : 31px;
         width      : 32px;
         font-size  : 96%;
+    }
+}
+
+
+
+.upload-image-container {
+    display       : flex;
+    flex-direction: row;
+    width         : 100%;
+    gap           : 10px;
+
+    .content-left {
+        width  : 325px;
+        border : 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    .content-right {
+        display       : flex;
+        flex-direction: column;
+
+        .text-information {
+            width : 500px;
+            height: 330px;
+
+        }
+
+        .group-button {
+            width          : 500px;
+            height         : 90px;
+            display        : flex;
+            flex-direction : row;
+            justify-content: center;
+            align-items    : center;
+            gap            : 30px;
+            padding-top    : 30px;
+        }
     }
 }
 

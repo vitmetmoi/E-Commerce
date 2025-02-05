@@ -1,27 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ManageAddNewClothes.scss'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import TextField from '@mui/material/TextField';
-import Radio from '@mui/material/Radio';
-import { amber, blue, green, grey, pink, red, yellow } from '@mui/material/colors';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import _, { size } from 'lodash'
-import { DataGrid, renderActionsCell } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
 import DoneIcon from '@mui/icons-material/Done';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { ToastContainer, toast } from 'react-toastify';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import 'react-photo-view/dist/react-photo-view.css';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
@@ -29,10 +11,12 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Select from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
-import MDEditor from '@uiw/react-md-editor';
 import { useCreateClothesMutation } from '../../../store/slice/API/systemAPI';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import CircularProgress from '@mui/material/CircularProgress';
+import MarkdownEditor from './components/MarkdownEditor';
+import Stock from './components/Stock';
+import UploadImg from './components/UploadImg';
 function ManageAddNewClothes(props) {
 
     const defaultSizeValue = [
@@ -54,42 +38,6 @@ function ManageAddNewClothes(props) {
         { label: 'Beige', isSelected: false },
     ]
 
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        {
-            field: 'size',
-            headerName: 'Size',
-            width: 185,
-            editable: true,
-        },
-        {
-            field: 'color',
-            headerName: 'Color',
-            width: 185,
-            editable: true,
-        },
-
-        {
-            field: 'stock',
-            headerName: 'Stock',
-            width: 100,
-        },
-        {
-            field: 'actions',
-            headerName: '',
-            type: 'actions',
-            renderCell: (params) => {
-                return (
-                    <IconButton
-                        onClick={() => handleDeleteRow(params.id)}
-                        aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                )
-            },
-            width: 100,
-        },
-    ];
     const [nameProduct, setNameProduct] = useState('')
     const [contentMarkdown, setContentMarkDown] = useState("");
     const [sizeArray, setSizeArray] = useState(defaultSizeValue);
@@ -103,13 +51,41 @@ function ManageAddNewClothes(props) {
 
 
     const [stockValue, setStockValue] = useState('');
-    const [prevImg, setPrevImg] = useState(imgArray[0]);
+    const [prevImg, setPrevImg] = useState(0);
 
     //mutation
     const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
 
     //Loading 
     const [submitIsLoading, setSubmitIsLoading] = useState(false);
+
+
+    const handleDeleteImg = () => {
+        console.log('delete')
+        let _imgArray = _.cloneDeep(imgArray);
+        _imgArray.splice(prevImg, 1);
+        setImgArray(_imgArray)
+
+
+    }
+
+    const handleReplaceImg = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            let reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                if (reader.result) {
+                    _imgArray[prevImg] = reader.result;
+                }
+                setTimeout(() => {
+                    setImgArray(_imgArray)
+                }, 500);
+            }, 500);
+
+        }
+    }
+
 
     const handleChange = (name, order) => {
 
@@ -121,7 +97,6 @@ function ManageAddNewClothes(props) {
         else if (name === 'color') {
             let _colorArray = _.cloneDeep(defaultColorValue);
             _colorArray[order].isSelected = !_colorArray[order].isSelected
-            console.log('arr', _colorArray);
             setColorArray(_colorArray)
         }
 
@@ -182,22 +157,19 @@ function ManageAddNewClothes(props) {
     const handleAddImage = (img) => {
         if (img) {
             let _imgArray = _.cloneDeep(imgArray);
-            _imgArray.push(img);
-            setImgArray(_imgArray)
+            var reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                _imgArray.push(reader.result);
+                setImgArray(_imgArray)
+            }, 500);
+
         }
 
     }
 
     const handleSetPrevImg = (item) => {
-        let img = '';
-        if (item) {
-            img = URL.createObjectURL(item);
-        }
-
-        if (img) {
-            setPrevImg(img)
-        }
-
+        setPrevImg(item)
     }
 
     const handleClearData = () => {
@@ -217,18 +189,6 @@ function ManageAddNewClothes(props) {
 
     const handleSubmit = async () => {
 
-        let imgDataArray = [];
-
-        imgArray.map(item => {
-            let reader = new FileReader();
-            reader.readAsDataURL(item);
-            setTimeout(() => {
-                if (reader && reader.result) {
-                    imgDataArray.push(reader.result)
-                }
-            }, 500);
-
-        })
 
         setSubmitIsLoading(true);
 
@@ -237,7 +197,7 @@ function ManageAddNewClothes(props) {
                 name: nameProduct,
                 contentMarkdown: contentMarkdown,
                 stockData: stockArray,
-                imgArray: imgDataArray,
+                imgArray: imgArray,
                 price: price,
                 discount: discount,
                 category: category,
@@ -260,8 +220,12 @@ function ManageAddNewClothes(props) {
 
     }
 
+    window.dispatchEvent(new Event("storage"));
 
-
+    window.addEventListener('storage', () => {
+        console.log("Change to local storage!");
+        // ...
+    })
 
     return (
         <>
@@ -314,7 +278,7 @@ function ManageAddNewClothes(props) {
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Name Product</label>
                                     <input
-                                        // data-bs-theme="dark"
+                                        data-bs-theme={localStorage.getItem('toolpad-mode')}
                                         value={nameProduct}
                                         type="email"
                                         class="form-control"
@@ -327,322 +291,45 @@ function ManageAddNewClothes(props) {
                             <div className='section'>
                                 <div className='text-field'>
                                     <label for="exampleInputEmail1" class="form-label section-title">Description Product</label>
-                                    <div
-                                    // data-color-mode="dark"  
-                                    >
-                                        <MDEditor
-                                            value={contentMarkdown}
-                                            onChange={setContentMarkDown}
-                                        />
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div className='section'>
-                                <div className='size-group'>
-                                    <span className='title'>Size</span>
-                                    <span className='description'>Pick avaiable size</span>
-                                    <div className='size-container'>
-                                        <button
-                                            onClick={() => handleChange('size', 0)}
-                                            className={sizeArray[0].isSelected ? 'size active' : 'size'}>
-                                            S
-                                        </button>
-                                        <button
-                                            onClick={() => handleChange('size', 1)}
-                                            className={sizeArray[1].isSelected ? 'size active' : 'size'}>
-                                            M
-                                        </button>
-                                        <button
-                                            onClick={() => handleChange('size', 2)}
-                                            className={sizeArray[2].isSelected ? 'size active' : 'size'}>
-                                            L
-                                        </button>
-                                        <button
-                                            onClick={() => handleChange('size', 3)}
-                                            className={sizeArray[3].isSelected ? 'size active' : 'size'}>
-                                            XL
-                                        </button>
-                                        <button
-                                            onClick={() => handleChange('size', 4)}
-                                            className={sizeArray[4].isSelected ? 'size active' : 'size'}>
-                                            XXL
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className='color-group'>
-                                    <span className='title'>Color</span>
-                                    <span className='description'>Pick avaiable color</span>
-                                    <div className='color-container'>
-                                        <div className='color'>
-                                            <FormControlLabel
-
-                                                control={<Radio
-                                                    checked={colorArray[0].isSelected}
-                                                    onClick={() => handleChange('color', 0)}
-                                                    value={''}
-                                                    sx={{
-                                                        color: 'white',
-                                                        '&.Mui-checked': {
-                                                            color: 'white',
-                                                        },
-                                                    }}
-                                                />}
-                                                label="White" />
-
-                                        </div>
-                                        <div className='color'>
-                                            <FormControlLabel
-
-                                                control={<Radio
-                                                    checked={colorArray[1].isSelected}
-                                                    onClick={() => handleChange('color', 1)}
-                                                    value={''}
-                                                    sx={{
-                                                        color: 'black',
-                                                        '&.Mui-checked': {
-                                                            color: 'black',
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Black" />
-                                        </div>
-                                        <div className='color'>
-                                            <FormControlLabel
-
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 2)}
-                                                    checked={colorArray[2].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: yellow[800],
-                                                        '&.Mui-checked': {
-                                                            color: yellow[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Yellow" />
-                                        </div>
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 3)}
-                                                    checked={colorArray[3].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: red[800],
-                                                        '&.Mui-checked': {
-                                                            color: red[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Red" />
-                                        </div>
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 4)}
-                                                    checked={colorArray[4].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: blue[800],
-                                                        '&.Mui-checked': {
-                                                            color: blue[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Blue" />
-                                        </div>
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 5)}
-                                                    checked={colorArray[5].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: green[800],
-                                                        '&.Mui-checked': {
-                                                            color: green[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Green" />
-                                        </div>
-
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 6)}
-                                                    checked={colorArray[6].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: grey[800],
-                                                        '&.Mui-checked': {
-                                                            color: grey[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Grey" />
-                                        </div>
-
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 7)}
-                                                    checked={colorArray[7].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: pink[800],
-                                                        '&.Mui-checked': {
-                                                            color: pink[600],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Pink" />
-                                        </div>
-
-                                        <div className='color'>
-                                            <FormControlLabel
-                                                value="female"
-                                                control={<Radio
-                                                    onClick={() => handleChange('color', 8)}
-                                                    checked={colorArray[8].isSelected}
-                                                    value={''}
-                                                    sx={{
-                                                        color: amber[100],
-                                                        '&.Mui-checked': {
-                                                            color: amber[200],
-                                                        },
-                                                    }}
-                                                />}
-                                                label="Beige" />
-                                        </div>
-
-
-                                    </div>
+                                    <MarkdownEditor
+                                        contentMarkdown={contentMarkdown}
+                                        setContentMarkDown={setContentMarkDown}
+                                    ></MarkdownEditor>
                                 </div>
                             </div>
 
-                            <div className='section' style={{ marginTop: '50px' }}>
-                                <div className='stock-group'>
-                                    <span className='title'>Stock</span>
-                                    <span className='description'>Create stock for product</span>
-                                    <div className='stock-input'>
-                                        <TextField
-                                            sx={{ marginTop: 2 }}
-                                            required
-                                            id="outlined-required"
-                                            label="Amount"
-                                            value={stockValue}
-                                            onChange={(event) => setStockValue(event.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                                <div className='submit-group'>
-                                    <span className='title'>Submit stock</span>
-                                    <span className='description'>Push product stock to store</span>
-
-                                    <Button
-                                        sx={{ marginTop: 3 }}
-                                        variant="outlined"
-                                        loading={false}
-                                        loadingPosition="start"
-                                        onClick={() => handleAddStockRow()}
-                                        startIcon={<KeyboardDoubleArrowDownIcon />}>
-                                        Save
-                                    </Button>
-
-                                </div>
-                            </div>
-
-
-                            <div className='section'>
-                                <DataGrid
-                                    rows={stockArray}
-                                    columns={columns}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: {
-                                                pageSize: 5,
-                                            },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5]}
-                                    // checkboxSelection
-                                    disableRowSelectionOnClick
-                                    sx={{ marginTop: 2 }}
-
-                                />
-                            </div>
+                            <Stock
+                                handleDeleteRow={handleDeleteRow}
+                                handleChange={handleChange}
+                                colorArray={colorArray ? colorArray : ['']}
+                                sizeArray={sizeArray ? sizeArray : ['']}
+                                stockValue={stockValue}
+                                setStockValue={setStockValue}
+                                handleAddStockRow={handleAddStockRow}
+                                stockArray={stockArray ? stockArray : ['']}
+                            ></Stock>
 
 
 
                         </div>
                         <div className='box-right'>
+
+
                             <div className='box-top'>
                                 <span className='title'>Upload Img</span>
 
-                                <PhotoProvider>
-                                    <PhotoView src={`${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}`}>
-                                        <div
-                                            style={{ backgroundImage: "url(" + `${prevImg && prevImg !== '' ? prevImg : (imgArray && imgArray[0] && URL.createObjectURL(imgArray[0]))}` + ")" }}
-                                            className='prev-image'
-                                        ></div>
-                                    </PhotoView>
-                                </PhotoProvider>
+                                <UploadImg
+                                    prevImg={prevImg}
+                                    imgArray={imgArray}
+                                    handleSetPrevImg={handleSetPrevImg}
+                                    handleAddImage={handleAddImage}
+                                    handleDeleteImg={handleDeleteImg}
+                                    handleReplaceImg={handleReplaceImg}
+                                ></UploadImg>
 
-                                <div className='img-swiper'>
-                                    <Swiper
-                                        modules={[Navigation, A11y, Autoplay]}
-                                        spaceBetween={12}
-                                        slidesPerView={4}
-                                        navigation
-
-                                    >
-                                        {
-                                            imgArray && imgArray.length > 0 && imgArray.map(item => {
-
-                                                return (
-                                                    <SwiperSlide>
-                                                        <div
-                                                            onClick={() => handleSetPrevImg(item)}
-                                                            style={{ backgroundImage: "url(" + `${URL.createObjectURL(item)}` + ")", }}
-                                                            className='relevant-img'>
-                                                        </div>
-                                                    </SwiperSlide>)
-                                            })
-                                        }
-
-
-                                        <SwiperSlide>
-                                            <div className='add-new-img'>
-                                                <input
-                                                    type='file'
-                                                    className='img-input'
-                                                    onChange={(event) => handleAddImage(event.target.files[0])}
-                                                >
-                                                </input>
-                                                <AddPhotoAlternateIcon
-                                                    color='primary'
-                                                    className='img-icon'
-                                                >
-                                                </AddPhotoAlternateIcon>
-
-
-                                            </div>
-                                        </SwiperSlide>
-                                    </Swiper>
-
-                                </div>
                             </div>
+
+
                             <div className='box-child'>
                                 <span className='title'>Price & Discount</span>
                                 <div className='price-discount-container'>

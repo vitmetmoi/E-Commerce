@@ -36,15 +36,35 @@ export const clothesAPI = createApi({
 
         getClothesData: build.mutation({
             query: (params) => {
-                console.log('type', params);
                 return {
                     url: `/api/clothes/get?type=${params.type}&id=${params.id}`,
                     method: 'get',
                 }
             }
-        })
+        }),
+
+        updateClothes: build.mutation({
+            query: (payload) => {
+                return {
+                    url: `/api/clothes/update`,
+                    method: 'put',
+                    data: payload
+                }
+            }
+        }),
+
+        deleteClothes: build.mutation({
+            query: (id) => {
+                return {
+                    url: `/api/clothes/delete`,
+                    method: 'delete',
+                    params: { id: id }
+                }
+            }
+        }),
+
     }),
 })
 
 
-export const { useCreateClothesMutation, useGetClothesDataMutation } = clothesAPI
+export const { useCreateClothesMutation, useGetClothesDataMutation, useUpdateClothesMutation, useDeleteClothesMutation } = clothesAPI

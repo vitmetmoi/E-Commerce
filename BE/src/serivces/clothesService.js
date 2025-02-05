@@ -155,6 +155,7 @@ const getClothesService = async (type, id) => {
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
+                        order: [['createdAt', 'DESC']],
 
                     },
                     {
@@ -255,7 +256,7 @@ const updateClothesService = async (type, data) => {
         }
         else {
             if (type === 'OTHER') {
-                let clothes = db.Clothes.findOne({
+                let clothes = await db.Clothes.findOne({
                     where: { id: data.id }
                 })
 
@@ -269,12 +270,16 @@ const updateClothesService = async (type, data) => {
 
                     await clothes.save();
 
-                    await db.Color_Size.destroy({ where: { id: data.id } })
+                    await db.Color_Size.destroy({ where: { clothesId: data.id } })
 
-                    await db.Color_Size.bulkCreate(data.color_size);
+                    let stockData = data.color_size.map(item => {
+                        item.clothesId = data.id;
+                        return item;
+                    })
+
+                    await db.Color_Size.bulkCreate(stockData);
 
                     let discount = await db.Discount.findOne({ where: { clothesId: data.id } })
-
                     if (discount && discount.id) {
 
                         discount.value = data.discount;
@@ -322,15 +327,29 @@ const updateClothesService = async (type, data) => {
             }
             else if (type === 'IMG') {
 
-                await db.RelevantImage.destroy({ where: { id: data.id } })
+                await db.RelevantImage.destroy({ where: { clothesId: data.id } })
 
-                await db.RelevantImage.bulkCreate(data.imageArr);
+                let imgArrToStore = []
+
+                if (data && data.imageArr) {
+                    data.imageArr.map(item => {
+                        let obj = {
+                            clothesId: data.id,
+                            image: item
+                        }
+                        imgArrToStore.push(obj)
+                    })
+                }
+
+                await db.RelevantImage.bulkCreate(imgArrToStore);
+
 
                 return {
                     DT: "",
                     EC: 0,
                     EM: 'Completed!'
                 }
+
             }
         }
     } catch (e) {
