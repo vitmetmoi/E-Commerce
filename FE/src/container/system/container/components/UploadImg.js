@@ -9,17 +9,49 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import IconButton from '@mui/material/IconButton';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Tooltip from '@mui/material/Tooltip';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 function UploadImg(props) {
     return (
         <div className='upload-img-container'>
             <PhotoProvider>
-                <PhotoView src={`${props && props.prevImg && props.prevImg !== '' ? props.prevImg : (props && props.imgArray && props.imgArray[0])}`}>
+                <PhotoView
+
+                    src={`${props && props.prevImg && props.prevImg !== '' ? props.imgArray[props.prevImg] : (props && props.imgArray && props.imgArray[0])}`}>
                     <div
-                        style={{ backgroundImage: "url('" + `${props && props.prevImg && props.prevImg !== '' ? props.prevImg : props && props.imgArray && props.imgArray[0]}` + "')" }}
+                        style={{ backgroundImage: "url('" + `${props && props.prevImg && props.prevImg !== '' ? props.imgArray[props.prevImg] : (props && props.imgArray && props.imgArray[0])}` + "')" }}
                         className='prev-image'
-                    ></div>
+                    >
+                    </div>
                 </PhotoView>
             </PhotoProvider>
+
+            <div className='group-icon'>
+                <Tooltip title="Delete" arrow>
+                    <IconButton
+                        onClick={() => props.handleDeleteImg()}
+                    >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                    </IconButton>
+                </Tooltip>
+
+                <Tooltip className='reaplace-img-container' title="Replace" arrow>
+                    <input
+                        type='file'
+                        className='img-input'
+                        onChange={(event) => props.handleReplaceImg(event.target.files[0])}
+                    >
+                    </input>
+                    <IconButton>
+                        <CloudUploadIcon></CloudUploadIcon>
+                    </IconButton>
+                </Tooltip>
+
+
+            </div>
 
             <div className='img-swiper'>
                 <Swiper
@@ -30,13 +62,13 @@ function UploadImg(props) {
 
                 >
                     {
-                        props && props.imgArray && props.imgArray.length > 0 && props.imgArray.map(item => {
+                        props && props.imgArray && props.imgArray.length > 0 && props.imgArray.map((item, index) => {
                             let objURL = "";
 
                             return (
                                 <SwiperSlide>
                                     <div
-                                        onClick={() => props.handleSetPrevImg(item)}
+                                        onClick={() => props.handleSetPrevImg(index)}
                                         style={{ backgroundImage: "url('" + item + "')" }}
                                         className='relevant-img'>
                                     </div>

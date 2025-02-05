@@ -51,13 +51,40 @@ function ManageAddNewClothes(props) {
 
 
     const [stockValue, setStockValue] = useState('');
-    const [prevImg, setPrevImg] = useState(imgArray[0]);
+    const [prevImg, setPrevImg] = useState(0);
 
     //mutation
     const [createClothesService, { data, isLoading }] = useCreateClothesMutation();
 
     //Loading 
     const [submitIsLoading, setSubmitIsLoading] = useState(false);
+
+
+    const handleDeleteImg = () => {
+        console.log('delete')
+        let _imgArray = _.cloneDeep(imgArray);
+        _imgArray.splice(prevImg, 1);
+        setImgArray(_imgArray)
+
+
+    }
+
+    const handleReplaceImg = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            let reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                if (reader.result) {
+                    _imgArray[prevImg] = reader.result;
+                }
+                setTimeout(() => {
+                    setImgArray(_imgArray)
+                }, 500);
+            }, 500);
+
+        }
+    }
 
 
     const handleChange = (name, order) => {
@@ -142,9 +169,7 @@ function ManageAddNewClothes(props) {
     }
 
     const handleSetPrevImg = (item) => {
-        if (item) {
-            setPrevImg(item)
-        }
+        setPrevImg(item)
     }
 
     const handleClearData = () => {
@@ -164,18 +189,6 @@ function ManageAddNewClothes(props) {
 
     const handleSubmit = async () => {
 
-        let imgDataArray = [];
-
-        imgArray.map(item => {
-            let reader = new FileReader();
-            reader.readAsDataURL(item);
-            setTimeout(() => {
-                if (reader && reader.result) {
-                    imgDataArray.push(reader.result)
-                }
-            }, 500);
-
-        })
 
         setSubmitIsLoading(true);
 
@@ -184,7 +197,7 @@ function ManageAddNewClothes(props) {
                 name: nameProduct,
                 contentMarkdown: contentMarkdown,
                 stockData: stockArray,
-                imgArray: imgDataArray,
+                imgArray: imgArray,
                 price: price,
                 discount: discount,
                 category: category,
@@ -310,6 +323,8 @@ function ManageAddNewClothes(props) {
                                     imgArray={imgArray}
                                     handleSetPrevImg={handleSetPrevImg}
                                     handleAddImage={handleAddImage}
+                                    handleDeleteImg={handleDeleteImg}
+                                    handleReplaceImg={handleReplaceImg}
                                 ></UploadImg>
 
                             </div>

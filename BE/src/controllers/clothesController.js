@@ -53,16 +53,17 @@ const handleGetClothes = async (req, res) => {
 
 const handleUpdateClothes = async (req, res) => {
     try {
-        console.log(req.body);
         let type = req.body.type;
         let data = req.body.data;
         let response = await clothesService.updateClothesService(type, data);
         if (response) {
-            return res.status(200).json({
-                DT: response.DT,
-                EC: response.EC,
-                EM: response.EM
-            })
+            setTimeout(() => {
+                return res.status(200).json({
+                    DT: response.DT,
+                    EC: response.EC,
+                    EM: response.EM
+                })
+            }, 2000);
         }
 
     }

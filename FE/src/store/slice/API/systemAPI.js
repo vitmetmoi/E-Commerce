@@ -45,7 +45,6 @@ export const clothesAPI = createApi({
 
         updateClothes: build.mutation({
             query: (payload) => {
-                console.log('payload', payload)
                 return {
                     url: `/api/clothes/update`,
                     method: 'put',

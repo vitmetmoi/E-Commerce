@@ -31,6 +31,9 @@ import Backdrop from '@mui/material/Backdrop';
 import UploadImg from './components/UploadImg';
 import Stock from './components/Stock';
 import MarkdownEditor from './components/MarkdownEditor';
+import SendIcon from '@mui/icons-material/Send';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 function ManageClothes(props) {
 
@@ -44,58 +47,13 @@ function ManageClothes(props) {
     const [deleteClothesService, { isLoading: deleteIsLoading }] = useDeleteClothesMutation();
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
+
+    //modal
     const [isOpenImgModal, setIsOpenImgModal] = useState(false);
     const [isOpenMardownModal, setIsOpenMarkdownModal] = useState(false);
     const [imgArray, setImgArray] = useState([]);
-    const [prevImg, setPrevImg] = useState(imgArray[0]);
-
-
-    const handleOpenImgModal = (id) => {
-        let arrImgModal = [];
-        if (isOpenImgModal === false) {
-            rows.map((item) => {
-                if (item.id === id) {
-
-                    item.relevantImages.map((item) => {
-                        arrImgModal.push(item.image)
-                    })
-                }
-            })
-            if (arrImgModal) { setImgArray(arrImgModal) }
-        }
-        else {
-            setPrevImg('');
-        }
-        setIsOpenImgModal(!isOpenImgModal);
-    }
-
-    const handleOpenMarkdownModal = () => {
-        setIsOpenMarkdownModal(!isOpenMardownModal)
-    }
-
-    const handleSubmit = () => {
-
-    }
-
-    const handleAddImage = (img) => {
-        if (img) {
-            let _imgArray = _.cloneDeep(imgArray);
-            var reader = new FileReader();
-            reader.readAsDataURL(img);
-            setTimeout(() => {
-                _imgArray.push(reader.result);
-                setImgArray(_imgArray)
-            }, 500);
-
-        }
-
-    }
-
-    const handleSetPrevImg = (item) => {
-        if (item) {
-            setPrevImg(item)
-        }
-    }
+    const [prevImg, setPrevImg] = useState(0);
+    const [idOfClothesToChange, setIdOfClothesToChange] = useState(0);
 
 
     useEffect(() => {
@@ -105,14 +63,19 @@ function ManageClothes(props) {
         }
     }, [])
 
+    const getClothes = async () => {
+        await getClothesService({ type: 'ALL', id: 12 });
+    }
+
     useEffect(() => {
         if (isLoading === false && data) {
+            console.log('data', data)
             dispatch(setClothesDataSlice(data.DT));
         }
     }, [isLoading])
 
     useEffect(() => {
-        if (clothes && _.isEmpty(rows)) {
+        if (clothes) {
             let arrRows = [];
             clothes.map((item) => {
                 let obj = {
@@ -131,9 +94,82 @@ function ManageClothes(props) {
         }
     }, [clothes])
 
-    const getClothes = async () => {
-        let res = await getClothesService({ type: 'ALL', id: 12 });
+    //My functions
+
+    const handleOpenImgModal = (id) => {
+
+        let arrImgModal = [];
+        if (isOpenImgModal === false) {
+            rows.map((item) => {
+                if (item.id === id) {
+                    setIdOfClothesToChange(item.id);
+                    item.relevantImages.map((item) => {
+                        arrImgModal.push(item.image)
+                    })
+                }
+            })
+            if (arrImgModal) { setImgArray(arrImgModal) }
+        }
+        else {
+            setPrevImg('');
+        }
+        setIsOpenImgModal(!isOpenImgModal);
+
     }
+
+    const handleOpenMarkdownModal = () => {
+        setIsOpenMarkdownModal(!isOpenMardownModal)
+    }
+
+    const handleSubmit = () => {
+
+    }
+
+    const handleDeleteImg = () => {
+        if (prevImg !== 0) {
+            let _imgArray = _.cloneDeep(imgArray);
+            _imgArray.splice(prevImg, 1);
+            setImgArray(_imgArray)
+
+        }
+    }
+
+    const handleReplaceImg = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            let reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                if (reader.result) {
+                    _imgArray[prevImg] = reader.result;
+                }
+                setTimeout(() => {
+                    setImgArray(_imgArray)
+                }, 500);
+            }, 500);
+
+        }
+    }
+
+    const handleAddImage = (img) => {
+        if (img) {
+            let _imgArray = _.cloneDeep(imgArray);
+            let reader = new FileReader();
+            reader.readAsDataURL(img);
+            setTimeout(() => {
+                _imgArray.push(reader.result);
+                setImgArray(_imgArray)
+            }, 500);
+
+        }
+
+    }
+
+    const handleSetPrevImg = (index) => {
+        setPrevImg(index)
+    }
+
+    //MUI material functions
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -165,42 +201,61 @@ function ManageClothes(props) {
         }
     };
 
-    const processRowUpdate = async (newRow) => {
-        let isValid = false;
+    const processRowUpdate = async (newRow, type) => {
         const updatedRow = { ...newRow, isNew: false };
 
-        let rowToMutate = rows.map((row) => {
-            if (row.id === updatedRow.id) {
-                if (_.isEqual(updatedRow, row) === false) {
-                    isValid = true;
-                    let data = {
-                        id: updatedRow.id,
-                        name: updatedRow.name,
-                        price: updatedRow.price,
-                        discount: updatedRow.discount,
-                        contentMarkdown: updatedRow.description,
-                        color_size: updatedRow.stock,
+        if (type === 'IMG') {
+            let data = {
+                id: idOfClothesToChange,
+                imageArr: imgArray
+            }
+            let payload = {
+                type: 'IMG',
+                data: data,
+            }
+
+            let res = await updateClothesService(payload);
+
+            if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
+                let res = await getClothesService({ type: 'ALL', id: 12 });
+                if (res && res.data && res.data.EC === 0 && isLoading === false) {
+                    handleOpenImgModal();
+                }
+
+            }
+
+
+        }
+        else {
+            let rowsToMutate = rows.map((row) => {
+                if (row.id === updatedRow.id) {
+                    if (_.isEqual(updatedRow, row) === false) {
+                        let data = {
+                            id: updatedRow.id,
+                            name: updatedRow.name,
+                            price: updatedRow.price,
+                            discount: updatedRow.discount,
+                            contentMarkdown: updatedRow.description,
+                            color_size: updatedRow.stock,
+                        }
+                        let payload = {
+                            type: 'OTHER',
+                            data: data,
+                        }
+                        updateClothesService(payload);
+                        return updatedRow
                     }
-                    let payload = {
-                        type: 'OTHER',
-                        data: data,
+                    else {
+                        return row;
                     }
-                    toast('Loading...');
-                    updateClothesService(payload);
-                    return updatedRow
                 }
                 else {
                     return row;
                 }
-            }
-            else {
-                return row;
-            }
-        })
-
-
-        setRows(rowToMutate);
-        return updatedRow;
+            })
+            setRows(rowsToMutate);
+            return updatedRow;
+        }
     };
 
     const handleRowModesModelChange = (newRowModesModel) => {
@@ -342,9 +397,6 @@ function ManageClothes(props) {
         },
     ];
 
-
-
-
     const asignColor = (color) => {
         let colorRgb = '';
         if (color === 'White') {
@@ -381,72 +433,116 @@ function ManageClothes(props) {
     }
 
     return (
-
-        <div className='manage-clothes-container' style={{ width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                slots={{
-                    toolbar: GridToolbar,
-                }}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 5,
+        <>
+            <div className='manage-clothes-container'>
+                <DataGrid
+                    style={{ height: 'fit-content' }}
+                    rows={rows}
+                    columns={columns}
+                    slots={{
+                        toolbar: GridToolbar,
+                    }}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                                pageSize: 5,
+                            },
                         },
-                    },
-                }}
-                pageSizeOptions={[5]}
-                disableRowSelectionOnClick
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                slotProps={{
-                    toolbar: { setRows, setRowModesModel },
-                }}
-                sx={{ marginTop: 2 }}
-                rowHeight={100}
-            />
+                    }}
+                    pageSizeOptions={[5]}
+                    disableRowSelectionOnClick
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowModesModelChange={handleRowModesModelChange}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    slotProps={{
+                        toolbar: { setRows, setRowModesModel },
+                    }}
+                    sx={{ marginTop: 2 }}
+                    rowHeight={100}
+                />
 
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={isOpenImgModal}
-                onClose={handleOpenImgModal}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
+                <Modal
+                    style={{ width: "100%" }}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={isOpenImgModal}
+                    onClose={handleOpenImgModal}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
 
-            >
-                <Fade in={isOpenImgModal}>
-                    <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                    }}>
-                        <UploadImg
-                            prevImg={prevImg}
-                            imgArray={imgArray}
-                            handleSetPrevImg={handleSetPrevImg}
-                            handleAddImage={handleAddImage}
-                        ></UploadImg>
-                    </Box>
-                </Fade>
-            </Modal>
-        </div>
+                >
+                    <Fade in={isOpenImgModal}>
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            p: 4,
+                        }}>
+
+                            <div className='upload-image-container'>
+                                <div className='content-left'>
+                                    <UploadImg
+                                        prevImg={prevImg}
+                                        imgArray={imgArray}
+                                        handleSetPrevImg={handleSetPrevImg}
+                                        handleAddImage={handleAddImage}
+                                        handleDeleteImg={handleDeleteImg}
+                                        handleReplaceImg={handleReplaceImg}
+                                    ></UploadImg>
+                                </div>
+                                <div className='content-right'>
+                                    <div className='text-information '>
+                                        <Alert severity="info" style={{ width: "100%", height: "100%" }}>
+                                            <AlertTitle>Important information</AlertTitle>
+                                            <p>
+                                                * Alerts give users brief and potentially time-sensitive information in an unobtrusive manner.
+                                                <br></br>
+                                                <br></br>
+                                                * The Material UI Alert component includes several props for quickly customizing its styles to provide immediate visual cues about its contents.
+                                            </p>
+                                        </Alert>
+                                    </div>
+                                    <div className='group-button'>
+                                        <Button
+                                            onClick={() => handleOpenImgModal()}
+                                            variant="outlined" startIcon={<DeleteIcon />}>
+                                            Cancel
+                                        </Button>
 
 
+                                        <Button
+                                            onClick={() => processRowUpdate('', 'IMG')}
+                                            variant={updateIsLoading === true || isLoading === true ? "outlined" : "contained"}
+                                            endIcon={<SendIcon />}
+                                            loading={updateIsLoading === true || isLoading === true ? true : false}
+                                            loadingPosition="end"
+                                        >
+                                            Submit
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </Box>
+                    </Fade>
+                </Modal>
+
+                <Alert style={{ justifyContent: 'center', alignItems: 'center' }} severity="warning">
+                    <AlertTitle>Warning</AlertTitle>
+                    Dcm fix Stock column after finished manage Orders function!
+                </Alert>
+            </div>
+        </>
     );
 }
 
