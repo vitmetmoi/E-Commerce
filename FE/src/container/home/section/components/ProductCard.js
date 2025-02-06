@@ -7,15 +7,23 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { useNavigate } from 'react-router';
 function ProductCard(props) {
     let priceAfterDiscouted = 0;
+    const navigate = useNavigate();
 
     if (props.price || props.discount || props.price) {
         priceAfterDiscouted = props.price - ((props.discount / 100) * props.price)
     }
-    console.log('props.', props)
+
+    const handleOnclickProductCard = () => {
+        navigate('/product')
+    }
+
     return (
-        <div className='product-card-container'>
+        <div
+            onClick={() => handleOnclickProductCard()}
+            className='product-card-container'>
             <div className='content-top'>
 
                 <div

@@ -35,6 +35,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Skeleton from '@mui/material/Skeleton';
+import DeleteConfirm from './components/DeleteConfirm';
 function ManageClothes(props) {
 
 
@@ -51,6 +52,7 @@ function ManageClothes(props) {
     //modal
     const [isOpenImgModal, setIsOpenImgModal] = useState(false);
     const [isOpenMardownModal, setIsOpenMarkdownModal] = useState(false);
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
     const [imgArray, setImgArray] = useState([]);
     const [prevImg, setPrevImg] = useState(0);
     const [idOfClothesToChange, setIdOfClothesToChange] = useState(0);
@@ -130,6 +132,14 @@ function ManageClothes(props) {
         setIsOpenMarkdownModal(!isOpenMardownModal)
     }
 
+    const handleOpenDeleteModal = (id) => {
+
+        if (isOpenDeleteModal === false) {
+            setIdOfClothesToChange(id);
+        }
+        setIsOpenDeleteModal(!isOpenDeleteModal);
+    }
+
 
     const handleDeleteImg = () => {
         if (prevImg > 0) {
@@ -145,6 +155,14 @@ function ManageClothes(props) {
             toast('Missing Image!')
         }
     }
+    const handleDeleteClick = async () => {
+
+        let res = await deleteClothesService(idOfClothesToChange);
+        if (res && res.data && res.data.EC === 0) {
+            handleOpenDeleteModal();
+            setRows(rows.filter((row) => row.id !== idOfClothesToChange));
+        }
+    };
 
     const handleReplaceImg = (img) => {
         if (img) {
@@ -195,10 +213,6 @@ function ManageClothes(props) {
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
-
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
     };
 
     const handleCancelClick = (id) => () => {
@@ -433,7 +447,7 @@ function ManageClothes(props) {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={handleDeleteClick(id)}
+                        onClick={() => handleOpenDeleteModal(id)}
                         color="inherit"
                     />,
                 ];
@@ -683,6 +697,39 @@ function ManageClothes(props) {
                                     </Button>
                                 </div>
                             </div>
+                        </Box>
+                    </Fade>
+                </Modal>
+
+                <Modal
+                    style={{ width: "100%" }}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={isOpenDeleteModal}
+                    onClose={handleOpenDeleteModal}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
+
+                >
+                    <Fade in={isOpenDeleteModal}>
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+
+                        }}>
+                            <DeleteConfirm
+                                handleDeleteClick={handleDeleteClick}
+                                handleOpenDeleteModal={handleOpenDeleteModal}
+                            ></DeleteConfirm>
                         </Box>
                     </Fade>
                 </Modal>
