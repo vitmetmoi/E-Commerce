@@ -21,9 +21,7 @@ function ProductCard(props) {
     }
 
     return (
-        <div
-            onClick={() => handleOnclickProductCard()}
-            className='product-card-container'>
+        <div className='product-card-container'>
             <div className='content-top'>
 
                 <div
@@ -41,7 +39,9 @@ function ProductCard(props) {
                         {props.imageArr && props.imageArr.map(item => {
                             return (
                                 <SwiperSlide>
-                                    <div style={{ backgroundImage: "url(" + `${item}` + ")", }}
+                                    <div
+                                        onClick={() => handleOnclickProductCard()}
+                                        style={{ backgroundImage: "url(" + `${item}` + ")", }}
                                         className='relevant-img'>
                                     </div>
                                 </SwiperSlide>
@@ -62,7 +62,9 @@ function ProductCard(props) {
                 </div>
 
             </div>
-            <div className='content-bottom noselect'>
+            <div
+                onClick={() => handleOnclickProductCard()}
+                className='content-bottom noselect'>
                 <div className='name-container'>
                     <span className='name-product noselect'>{props.name}</span>
                     <div className='icon-save'><BookmarkBorderIcon></BookmarkBorderIcon></div>

@@ -1,9 +1,13 @@
 import React from 'react';
-
+import './Product.scss';
+import NavigationHome from '../home/NavigationHome';
+import AdsHome from '../home/AdsHome';
 function Product(props) {
     return (
         <div>
-            product
+            <AdsHome></AdsHome>
+            <NavigationHome></NavigationHome>
+
         </div>
     );
 }
