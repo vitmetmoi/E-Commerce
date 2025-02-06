@@ -34,7 +34,8 @@ import MarkdownEditor from './components/MarkdownEditor';
 import SendIcon from '@mui/icons-material/Send';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import Skeleton from '@mui/material/Skeleton';
+import DeleteConfirm from './components/DeleteConfirm';
 function ManageClothes(props) {
 
 
@@ -51,10 +52,13 @@ function ManageClothes(props) {
     //modal
     const [isOpenImgModal, setIsOpenImgModal] = useState(false);
     const [isOpenMardownModal, setIsOpenMarkdownModal] = useState(false);
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
     const [imgArray, setImgArray] = useState([]);
     const [prevImg, setPrevImg] = useState(0);
     const [idOfClothesToChange, setIdOfClothesToChange] = useState(0);
 
+    //Markdown
+    const [contentMarkdown, setContentMarkDown] = useState('')
 
     useEffect(() => {
         console.log("clothes data", clothes)
@@ -69,7 +73,6 @@ function ManageClothes(props) {
 
     useEffect(() => {
         if (isLoading === false && data) {
-            console.log('data', data)
             dispatch(setClothesDataSlice(data.DT));
         }
     }, [isLoading])
@@ -86,7 +89,7 @@ function ManageClothes(props) {
                     discount: item.Discounts[0].value,
                     stock: item.Color_Sizes,
                     relevantImages: item.RelevantImages,
-                    description: ''
+                    description: item.Markdowns[0].contentMarkdown
                 }
                 arrRows.push(obj);
             })
@@ -117,22 +120,49 @@ function ManageClothes(props) {
 
     }
 
-    const handleOpenMarkdownModal = () => {
+    const handleOpenMarkdownModal = (id) => {
+        if (isOpenMardownModal === false) {
+            rows.map((item) => {
+                if (item.id === id) {
+                    setIdOfClothesToChange(item.id);
+                    setContentMarkDown(item.description);
+                }
+            })
+        }
         setIsOpenMarkdownModal(!isOpenMardownModal)
     }
 
-    const handleSubmit = () => {
+    const handleOpenDeleteModal = (id) => {
 
+        if (isOpenDeleteModal === false) {
+            setIdOfClothesToChange(id);
+        }
+        setIsOpenDeleteModal(!isOpenDeleteModal);
     }
 
+
     const handleDeleteImg = () => {
-        if (prevImg !== 0) {
+        if (prevImg > 0) {
             let _imgArray = _.cloneDeep(imgArray);
             _imgArray.splice(prevImg, 1);
             setImgArray(_imgArray)
 
         }
+        else if (prevImg === 0) {
+            toast('Can not delete main image of product!')
+        }
+        else {
+            toast('Missing Image!')
+        }
     }
+    const handleDeleteClick = async () => {
+
+        let res = await deleteClothesService(idOfClothesToChange);
+        if (res && res.data && res.data.EC === 0) {
+            handleOpenDeleteModal();
+            setRows(rows.filter((row) => row.id !== idOfClothesToChange));
+        }
+    };
 
     const handleReplaceImg = (img) => {
         if (img) {
@@ -185,10 +215,6 @@ function ManageClothes(props) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-    };
-
     const handleCancelClick = (id) => () => {
         setRowModesModel({
             ...rowModesModel,
@@ -226,6 +252,36 @@ function ManageClothes(props) {
 
 
         }
+        else if (type === 'MARKDOWN') {
+            rows.map(async (row) => {
+                if (row.id === idOfClothesToChange) {
+                    let data = {
+                        id: idOfClothesToChange,
+                        name: row.name,
+                        price: row.price,
+                        discount: row.discount,
+                        contentMarkdown: contentMarkdown,
+                        color_size: row.stock,
+                    }
+                    let payload = {
+                        type: 'OTHER',
+                        data: data,
+                    }
+                    let res = await updateClothesService(payload);
+
+                    if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
+                        let res = await getClothesService({ type: 'ALL', id: 12 });
+                        console.log('res', res);
+                        if (res && res.data && res.data.EC === 0 && isLoading === false) {
+                            handleOpenMarkdownModal();
+                        }
+
+                    }
+                }
+
+            })
+
+        }
         else {
             let rowsToMutate = rows.map((row) => {
                 if (row.id === updatedRow.id) {
@@ -235,7 +291,7 @@ function ManageClothes(props) {
                             name: updatedRow.name,
                             price: updatedRow.price,
                             discount: updatedRow.discount,
-                            contentMarkdown: updatedRow.description,
+                            contentMarkdown: contentMarkdown,
                             color_size: updatedRow.stock,
                         }
                         let payload = {
@@ -298,7 +354,7 @@ function ManageClothes(props) {
                 let arrColor = params.value;
                 return (
                     <>
-                        <div onClick={() => { console.log('hihi') }} className='color-group'>
+                        <div onClick={() => { console.log('hihi', rowModesModel) }} className='color-group'>
                             <AvatarGroup max={4}>
                                 {arrColor && arrColor.length > 0 && arrColor.map((item) => {
                                     let colorHex = asignColor(item.color);
@@ -321,6 +377,7 @@ function ManageClothes(props) {
             type: 'actions',
             width: 150,
             renderCell: (dataRow) => {
+
                 return (
                     <div style={{ width: "100%", textAlign: 'center' }}>
                         <IconButton
@@ -338,13 +395,14 @@ function ManageClothes(props) {
             type: 'actions',
             headerName: 'Description',
             width: 150,
-            renderCell: () => {
+            renderCell: (dataRow) => {
                 return (
                     <div style={{ width: "100%", textAlign: 'center' }}>
-                        <IconButton>
+                        <IconButton
+                            onClick={() => handleOpenMarkdownModal(dataRow.id)}
+                        >
                             <HistoryEduIcon style={{ width: "30px", height: '30px' }}></HistoryEduIcon>
                         </IconButton>
-
                     </div>
                 )
             }
@@ -389,7 +447,7 @@ function ManageClothes(props) {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={handleDeleteClick(id)}
+                        onClick={() => handleOpenDeleteModal(id)}
                         color="inherit"
                     />,
                 ];
@@ -432,15 +490,42 @@ function ManageClothes(props) {
         return colorRgb;
     }
 
+    const customNoRows = () => {
+        return (
+            <div className='manage-clothes-skeleton'>
+                <div className='row-skeleton'>
+
+                    <Skeleton className='colu-1' width={'80px'} /><Skeleton className='colu-2' width={'90px'} /><Skeleton className='colu-3' width={'190px'} /><Skeleton className='colu-4' width={'40px'} /><Skeleton className='colu-5' width={'30px'} /><Skeleton className='colu-6' width={'120px'} /><Skeleton className='colu-7' width={'100px'} /><Skeleton className='colu-8' width={'120px'} /><Skeleton className='colu-9' width={'80px'} />
+
+                </div>
+
+                <div className='row-skeleton'>
+                    <Skeleton className='colu-1' width={'50px'} /><Skeleton className='colu-2' width={'85px'} /><Skeleton className='colu-3' width={'260px'} /><Skeleton className='colu-4' width={'50px'} /><Skeleton className='colu-5' width={'80px'} /><Skeleton className='colu-6' width={'120px'} /><Skeleton className='colu-7' width={'100px'} /><Skeleton className='colu-8' width={'120px'} /><Skeleton className='colu-9' width={'80px'} />
+
+                </div>
+                <div className='row-skeleton'>
+                    <Skeleton className='colu-1' width={'70px'} /><Skeleton className='colu-2' width={'100px'} /><Skeleton className='colu-3' width={'170px'} /><Skeleton className='colu-4' width={'20px'} /><Skeleton className='colu-5' width={'50px'} /><Skeleton className='colu-6' width={'120px'} /><Skeleton className='colu-7' width={'100px'} /><Skeleton className='colu-8' width={'120px'} /><Skeleton className='colu-9' width={'80px'} />
+
+                </div>
+                <div className='row-skeleton'>
+                    <Skeleton className='colu-1' width={'30px'} /><Skeleton className='colu-2' width={'60px'} /><Skeleton className='colu-3' width={'220px'} /><Skeleton className='colu-4' width={'50px'} /><Skeleton className='colu-5' width={'50px'} /><Skeleton className='colu-6' width={'120px'} /><Skeleton className='colu-7' width={'100px'} /><Skeleton className='colu-8' width={'120px'} /><Skeleton className='colu-9' width={'80px'} />
+
+                </div>
+            </div>
+        )
+    }
+
     return (
         <>
             <div className='manage-clothes-container'>
                 <DataGrid
                     style={{ height: 'fit-content' }}
                     rows={rows}
+
                     columns={columns}
                     slots={{
                         toolbar: GridToolbar,
+                        noRowsOverlay: customNoRows
                     }}
                     initialState={{
                         pagination: {
@@ -458,6 +543,7 @@ function ManageClothes(props) {
                     processRowUpdate={processRowUpdate}
                     slotProps={{
                         toolbar: { setRows, setRowModesModel },
+
                     }}
                     sx={{ marginTop: 2 }}
                     rowHeight={100}
@@ -504,11 +590,23 @@ function ManageClothes(props) {
                                     <div className='text-information '>
                                         <Alert severity="info" style={{ width: "100%", height: "100%" }}>
                                             <AlertTitle>Important information</AlertTitle>
+                                            <p></p>
                                             <p>
-                                                * Alerts give users brief and potentially time-sensitive information in an unobtrusive manner.
-                                                <br></br>
-                                                <br></br>
-                                                * The Material UI Alert component includes several props for quickly customizing its styles to provide immediate visual cues about its contents.
+                                                * You can click to the largest image to open preview-mode (which will open full screen image).
+                                            </p>
+
+                                            <p>
+                                                * You can not delete first image beacause it is the Represent Image of the products. The represent image
+                                                is the first image inside product collection (first element in array image).
+                                            </p>
+                                            <p>
+                                                * In case you willing to delete that product forever, please click to delete button in product's table list.
+                                            </p>
+                                            <p>
+                                                * The system prevents mutating image!
+                                            </p>
+                                            <p>
+                                                For more information please contact : 012 - 345 - 678 - 910
                                             </p>
                                         </Alert>
                                     </div>
@@ -537,8 +635,106 @@ function ManageClothes(props) {
                     </Fade>
                 </Modal>
 
+                <Modal
+                    style={{ width: "100%" }}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={isOpenMardownModal}
+                    onClose={handleOpenMarkdownModal}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
+
+                >
+                    <Fade in={isOpenMardownModal}>
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: 24,
+                            p: 4,
+                            width: '100%',
+                            height: '100%'
+                        }}>
+                            <div className='manage-clothes-mardown'>
+                                <MarkdownEditor
+                                    contentMarkdown={contentMarkdown}
+                                    setContentMarkDown={setContentMarkDown}
+                                ></MarkdownEditor>
+
+                                <Alert
+                                    sx={{ marginTop: 2 }}
+                                    severity="warning">
+
+                                    Enable full screen mode for better performance...
+                                </Alert>
+
+
+                                <div className='mardown-btn-container'>
+                                    <Button
+                                        onClick={() => handleOpenMarkdownModal()}
+                                        variant="outlined" startIcon={<DeleteIcon />}>
+                                        Cancel
+                                    </Button>
+
+                                    <Button
+                                        onClick={() => processRowUpdate('', 'MARKDOWN')}
+                                        variant={updateIsLoading === true || isLoading === true ? "outlined" : "contained"}
+                                        endIcon={<SendIcon />}
+                                        loading={updateIsLoading === true || isLoading === true ? true : false}
+                                        loadingPosition="end"
+                                    >
+                                        Submit
+                                    </Button>
+                                </div>
+                            </div>
+                        </Box>
+                    </Fade>
+                </Modal>
+
+                <Modal
+                    style={{ width: "100%" }}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={isOpenDeleteModal}
+                    onClose={handleOpenDeleteModal}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
+
+                >
+                    <Fade in={isOpenDeleteModal}>
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+
+                        }}>
+                            <DeleteConfirm
+                                handleDeleteClick={handleDeleteClick}
+                                handleOpenDeleteModal={handleOpenDeleteModal}
+                            ></DeleteConfirm>
+                        </Box>
+                    </Fade>
+                </Modal>
+
                 <Alert style={{ justifyContent: 'center', alignItems: 'center' }} severity="warning">
-                    <AlertTitle>Warning</AlertTitle>
                     Dcm fix Stock column after finished manage Orders function!
                 </Alert>
             </div>

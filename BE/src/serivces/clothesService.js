@@ -270,51 +270,59 @@ const updateClothesService = async (type, data) => {
 
                     await clothes.save();
 
-                    await db.Color_Size.destroy({ where: { clothesId: data.id } })
+                    if (data.color_size) {
+                        await db.Color_Size.destroy({ where: { clothesId: data.id } })
 
-                    let stockData = data.color_size.map(item => {
-                        item.clothesId = data.id;
-                        return item;
-                    })
+                        let stockData = data.color_size.map(item => {
+                            item.clothesId = data.id;
+                            return item;
+                        })
 
-                    await db.Color_Size.bulkCreate(stockData);
+                        await db.Color_Size.bulkCreate(stockData);
 
-                    let discount = await db.Discount.findOne({ where: { clothesId: data.id } })
-                    if (discount && discount.id) {
+                        let discount = await db.Discount.findOne({ where: { clothesId: data.id } })
+                        if (discount && discount.id) {
 
-                        discount.value = data.discount;
-                        await discount.save();
+                            discount.value = data.discount;
+                            await discount.save();
 
-                        let markdown = await db.Markdown.findOne({ where: { clothesId: data.id } });
+                            let markdown = await db.Markdown.findOne({ where: { clothesId: data.id } });
 
-                        if (markdown && markdown.id) {
-                            markdown.contentMarkdown = data.contentMarkdown;
-                            await markdown.save();
+                            if (markdown && markdown.id) {
+                                markdown.contentMarkdown = data.contentMarkdown;
+                                await markdown.save();
 
-                            return {
-                                DT: "",
-                                EC: 0,
-                                EM: 'Completed!'
+                                return {
+                                    DT: "",
+                                    EC: 0,
+                                    EM: 'Completed!'
+                                }
+
                             }
-
+                            else {
+                                return {
+                                    DT: "",
+                                    EC: -1,
+                                    EM: 'Cant not find markdown value!'
+                                }
+                            }
                         }
                         else {
                             return {
                                 DT: "",
                                 EC: -1,
-                                EM: 'Cant not find markdown value!'
+                                EM: 'Cant not find discount value!'
                             }
                         }
                     }
+
                     else {
                         return {
                             DT: "",
                             EC: -1,
-                            EM: 'Cant not find discount value!'
+                            EM: 'Cant not find stock data!'
                         }
                     }
-
-
 
                 }
                 else {
@@ -325,6 +333,8 @@ const updateClothesService = async (type, data) => {
                     }
                 }
             }
+
+
             else if (type === 'IMG') {
 
                 await db.RelevantImage.destroy({ where: { clothesId: data.id } })

@@ -7,13 +7,19 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { useNavigate } from 'react-router';
 function ProductCard(props) {
     let priceAfterDiscouted = 0;
+    const navigate = useNavigate();
 
     if (props.price || props.discount || props.price) {
         priceAfterDiscouted = props.price - ((props.discount / 100) * props.price)
     }
-    console.log('props.', props)
+
+    const handleOnclickProductCard = () => {
+        navigate('/product')
+    }
+
     return (
         <div className='product-card-container'>
             <div className='content-top'>
@@ -33,7 +39,9 @@ function ProductCard(props) {
                         {props.imageArr && props.imageArr.map(item => {
                             return (
                                 <SwiperSlide>
-                                    <div style={{ backgroundImage: "url(" + `${item}` + ")", }}
+                                    <div
+                                        onClick={() => handleOnclickProductCard()}
+                                        style={{ backgroundImage: "url(" + `${item}` + ")", }}
                                         className='relevant-img'>
                                     </div>
                                 </SwiperSlide>
@@ -54,7 +62,9 @@ function ProductCard(props) {
                 </div>
 
             </div>
-            <div className='content-bottom noselect'>
+            <div
+                onClick={() => handleOnclickProductCard()}
+                className='content-bottom noselect'>
                 <div className='name-container'>
                     <span className='name-product noselect'>{props.name}</span>
                     <div className='icon-save'><BookmarkBorderIcon></BookmarkBorderIcon></div>

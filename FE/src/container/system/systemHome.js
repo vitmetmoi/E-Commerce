@@ -119,6 +119,7 @@ function SystemHome(props) {
                 {pathname === `/${SYSTEM_NAV.ORDERS}` && <ManageOrder></ManageOrder>}
                 {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.CREATE}` && <ManageAddNewClothes></ManageAddNewClothes>}
                 {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.MENU}` && <ManageClothes></ManageClothes>}
+                {pathname === `/${SYSTEM_NAV.CLOTHES}` && <ManageClothes></ManageClothes>}
             </Box>
         );
     }
