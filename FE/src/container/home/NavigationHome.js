@@ -43,206 +43,201 @@ function NavigationHome(props) {
         <div className='home-nav-container col-12'>
             <nav className={navClass}>
                 <div class="wrapper">
-                    <div
-                        onClick={() => handleOnclickLogo()}
-                        className='logo-container'>
-                        <Swiper
-                            direction={'vertical'}
-                            modules={[Autoplay]}
-                            autoplay={{
-                                delay: 2500,
-                                disableOnInteraction: false,
-                            }}
-                            className="mySwiper"
-                            loop={true}
-                        >
-                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://www.elleman.vn/wp-content/uploads/2018/09/11/logo-thuong-hieu-stussy-3-elle-man.jpg" + ")" }}></div></SwiperSlide>
-                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://pbs.twimg.com/profile_images/509047538691743744/brOoco8P_400x400.png" + ")" }}></div></SwiperSlide>
-                            <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://wellbredstore.com/wp-content/uploads/2021/06/A-FEW-GOOD-KIDS-1200-X-630.jpg" + ")" }}></div></SwiperSlide>
 
-                        </Swiper>
+                    <div className='content-left'>
+                        <div
+                            onClick={() => handleOnclickLogo()}
+                            className='logo-container'>
+                            <Swiper
+                                direction={'vertical'}
+                                modules={[Autoplay]}
+                                autoplay={{
+                                    delay: 2500,
+                                    disableOnInteraction: false,
+                                }}
+                                className="mySwiper"
+                                loop={true}
+                            >
+                                <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://www.elleman.vn/wp-content/uploads/2018/09/11/logo-thuong-hieu-stussy-3-elle-man.jpg" + ")" }}></div></SwiperSlide>
+                                <SwiperSlide><div className="logo" style={{ backgroundSize: '95%', backgroundImage: "url(" + "https://pbs.twimg.com/profile_images/509047538691743744/brOoco8P_400x400.png" + ")" }}></div></SwiperSlide>
+                                <SwiperSlide><div className="logo" style={{ backgroundImage: "url(" + "https://wellbredstore.com/wp-content/uploads/2021/06/A-FEW-GOOD-KIDS-1200-X-630.jpg" + ")" }}></div></SwiperSlide>
+
+                            </Swiper>
+                        </div>
+
+                        <ul class="nav-links ms-4">
+                            <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
+                            <li><a className='hightlight-item' href="#">NEW COLLECTION</a></li>
+                            <li><a className='hightlight-item' href="#">SEASON OFF</a></li>
+
+                            <li className='women'>
+                                <a href="#" class="desktop-item normal-item">WOMEN</a>
+
+                                <div class="mega-box">
+                                    <div className='content'>
+                                        <div className='content-left'>
+                                            <div className='section section1'>
+                                                <ul>
+                                                    <li>Timeless Adventure</li>
+                                                    <li>AFTER SCHOOL IN CALIFORNIA</li>
+                                                    <li>DENIM 1849</li>
+                                                </ul>
+                                            </div>
+                                            <div className='section section2'>
+                                                <ul>
+                                                    <li>SHOP ALL</li>
+                                                    <li>BEST SELLER</li>
+                                                    <li>TOP</li>
+                                                    <li>BOTTOM</li>
+                                                    <li>SHOES</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <div className='content-right'>
+                                            <div className='img img1'>
+                                                <div className='font-img'>Timeless Adventure</div>
+                                            </div>
+                                            <div className='img img2'>
+                                                <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
+                                            </div>
+                                            <div className='img img3'>
+                                                <div className='font-img'>DENIM 1849</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li className='men'>
+                                <a href="#" class="desktop-item normal-item">MEN</a>
+
+                                <div class="mega-box">
+                                    <div className='content'>
+                                        <div className='content-left'>
+                                            <div className='section section1'>
+                                                <ul>
+                                                    <li>Timeless Adventure</li>
+                                                    <li>AFTER SCHOOL IN CALIFORNIA</li>
+                                                    <li>DENIM 1849</li>
+                                                </ul>
+                                            </div>
+                                            <div className='section section2'>
+                                                <ul>
+                                                    <li>SHOP ALL</li>
+                                                    <li>BEST SELLER</li>
+                                                    <li>TOP</li>
+                                                    <li>BOTTOM</li>
+                                                    <li>SHOES</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <div className='content-right'>
+                                            <div className='img img1'>
+                                                <div className='font-img'>Timeless Adventure</div>
+                                            </div>
+                                            <div className='img img2'>
+                                                <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
+                                            </div>
+                                            <div className='img img3'>
+                                                <div className='font-img'>DENIM 1849</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li className='acc'>
+                                <a href="#" class="desktop-item normal-item">ACC</a>
+
+                                <div class="mega-box">
+                                    <div className='content'>
+                                        <div className='content-left'>
+                                            <div className='section section1'>
+
+                                            </div>
+                                            <div className='section section2'>
+                                                <ul>
+                                                    <li>SHOP ALL</li>
+                                                    <li>BEST SELLER</li>
+                                                    <li>HAT</li>
+                                                    <li>CAP</li>
+                                                    <li>BACKPACK</li>
+                                                    <li>SLIDES</li>
+
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <div className='content-right'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li className='lookbook'>
+                                <a href="#" class="desktop-item normal-item">LOOKBOOK</a>
+
+                                <div class="mega-box">
+                                    <div className='content'>
+                                        <div className='content-left'>
+                                            <div className='section section1'>
+
+                                            </div>
+                                            <div className='section section2'>
+                                                <ul>
+                                                    <li>Timeless Adventure</li>
+                                                    <li>AFTER SCHOOL IN CALIFORNIA</li>
+                                                    <li>DENIM 1849</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <div className='content-right'>
+                                            <div className='img img1'>
+                                                <div className='font-img'>Timeless Adventure</div>
+                                            </div>
+                                            <div className='img img2'>
+                                                <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
+                                            </div>
+                                            <div className='img img3'>
+                                                <div className='font-img'>DENIM 1849</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a className='normal-item about'>ABOUT</a></li>
+                            <li className='community'>
+                                <a href="#" class="desktop-item normal-item">COMMUNITY</a>
+
+                                <div class="mega-box">
+                                    <div className='content'>
+                                        <div className='content-left'>
+                                            <div className='section section1'>
+
+                                            </div>
+                                            <div className='section section2'>
+                                                <ul>
+                                                    <li>Facebook</li>
+                                                    <li>Github</li>
+                                                    <li>Instagram</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                        <div className='content-right'>
+                                            <div className='img img-community'>
+                                                <div className='font-img'></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><a className='normal-item magazine' >MAGAZINE</a></li>
+                        </ul>
                     </div>
 
-                    <ul class="nav-links ms-4">
-                        <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-                        <li><a className='hightlight-item' href="#">NEW COLLECTION</a></li>
-                        <li><a className='hightlight-item' href="#">SEASON OFF</a></li>
-
-                        <li className='women'>
-                            <a href="#" class="desktop-item normal-item">WOMEN</a>
-
-                            <div class="mega-box">
-                                <div className='content'>
-                                    <div className='content-left'>
-                                        <div className='section section1'>
-                                            <ul>
-                                                <li>Timeless Adventure</li>
-                                                <li>AFTER SCHOOL IN CALIFORNIA</li>
-                                                <li>DENIM 1849</li>
-                                            </ul>
-                                        </div>
-                                        <div className='section section2'>
-                                            <ul>
-                                                <li>SHOP ALL</li>
-                                                <li>BEST SELLER</li>
-                                                <li>TOP</li>
-                                                <li>BOTTOM</li>
-                                                <li>SHOES</li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div className='content-right'>
-                                        <div className='img img1'>
-                                            <div className='font-img'>Timeless Adventure</div>
-                                        </div>
-                                        <div className='img img2'>
-                                            <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
-                                        </div>
-                                        <div className='img img3'>
-                                            <div className='font-img'>DENIM 1849</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className='men'>
-                            <a href="#" class="desktop-item normal-item">MEN</a>
-
-                            <div class="mega-box">
-                                <div className='content'>
-                                    <div className='content-left'>
-                                        <div className='section section1'>
-                                            <ul>
-                                                <li>Timeless Adventure</li>
-                                                <li>AFTER SCHOOL IN CALIFORNIA</li>
-                                                <li>DENIM 1849</li>
-                                            </ul>
-                                        </div>
-                                        <div className='section section2'>
-                                            <ul>
-                                                <li>SHOP ALL</li>
-                                                <li>BEST SELLER</li>
-                                                <li>TOP</li>
-                                                <li>BOTTOM</li>
-                                                <li>SHOES</li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div className='content-right'>
-                                        <div className='img img1'>
-                                            <div className='font-img'>Timeless Adventure</div>
-                                        </div>
-                                        <div className='img img2'>
-                                            <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
-                                        </div>
-                                        <div className='img img3'>
-                                            <div className='font-img'>DENIM 1849</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li className='acc'>
-                            <a href="#" class="desktop-item normal-item">ACC</a>
-
-                            <div class="mega-box">
-                                <div className='content'>
-                                    <div className='content-left'>
-                                        <div className='section section1'>
-
-                                        </div>
-                                        <div className='section section2'>
-                                            <ul>
-                                                <li>SHOP ALL</li>
-                                                <li>BEST SELLER</li>
-                                                <li>HAT</li>
-                                                <li>CAP</li>
-                                                <li>BACKPACK</li>
-                                                <li>SLIDES</li>
-
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div className='content-right'>
-                                        {/* <div className='img img1'>
-                                            <div className='font-img'>Timeless Adventure</div>
-                                        </div>
-                                        <div className='img img2'>
-                                            <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
-                                        </div>
-                                        <div className='img img3'>
-                                            <div className='font-img'>DENIM 1849</div>
-                                        </div> */}
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className='lookbook'>
-                            <a href="#" class="desktop-item normal-item">LOOKBOOK</a>
-
-                            <div class="mega-box">
-                                <div className='content'>
-                                    <div className='content-left'>
-                                        <div className='section section1'>
-
-                                        </div>
-                                        <div className='section section2'>
-                                            <ul>
-                                                <li>Timeless Adventure</li>
-                                                <li>AFTER SCHOOL IN CALIFORNIA</li>
-                                                <li>DENIM 1849</li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div className='content-right'>
-                                        <div className='img img1'>
-                                            <div className='font-img'>Timeless Adventure</div>
-                                        </div>
-                                        <div className='img img2'>
-                                            <div className='font-img'>AFTER SCHOOL IN CALIFORNIA</div>
-                                        </div>
-                                        <div className='img img3'>
-                                            <div className='font-img'>DENIM 1849</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li><a className='normal-item about'>ABOUT</a></li>
-                        <li className='community'>
-                            <a href="#" class="desktop-item normal-item">COMMUNITY</a>
-
-                            <div class="mega-box">
-                                <div className='content'>
-                                    <div className='content-left'>
-                                        <div className='section section1'>
-
-                                        </div>
-                                        <div className='section section2'>
-                                            <ul>
-                                                <li>Facebook</li>
-                                                <li>Github</li>
-                                                <li>Instagram</li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                    <div className='content-right'>
-                                        <div className='img img-community'>
-                                            <div className='font-img'></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li><a className='normal-item magazine' >MAGAZINE</a></li>
-                    </ul>
 
                     <div className='nav-icons'>
 
@@ -284,6 +279,8 @@ function NavigationHome(props) {
                             </svg>
                         </Tooltip>
                     </div>
+
+
                 </div>
             </nav >
 

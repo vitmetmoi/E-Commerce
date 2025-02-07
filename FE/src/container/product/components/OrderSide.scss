@@ -1,0 +1,135 @@
+.order-side-content {
+    width  : 100%;
+    height : 500px;
+    padding: 10px;
+
+    .content-top {
+        display       : flex;
+        flex-direction: column;
+        gap           : 5px;
+
+        .share-icon {
+            width     : 100%;
+            text-align: right;
+        }
+
+        .product-name {
+            width             : 100%;
+            display           : flex;
+            align-items       : center;
+            justify-content   : space-between;
+            gap               : 0 10px;
+            font-size         : 22px;
+            line-height       : 1.2;
+            color             : #221f1f;
+            font-weight       : 400;
+            position          : relative;
+            text-align        : left;
+            // font           : 0.75em Verdana, Dotum, AppleGothic, sans-serif;
+        }
+
+        .price-group {
+            width          : 100%;
+            display        : flex;
+            flex-direction : row;
+            justify-content: space-between;
+
+            .price-inf {
+                margin     : 0px 0;
+                position   : relative;
+                display    : flex;
+                align-items: center;
+
+
+                .discount {
+                    margin-right: 10px;
+                    color       : #f06e00;
+                    font-size   : 23px;
+                    font-weight : 600;
+                    line-height : 1.5;
+                }
+
+                .price {
+                    color      : #221f1f;
+                    font-size  : 23px;
+                    font-weight: 600;
+                    line-height: 1.5;
+                    font-family: 'Poppins', 'pretendard', sans-serif;
+
+                }
+
+                .primary-price {
+                    color          : #cecece;
+                    font-size      : 16px;
+                    text-decoration: line-through;
+                    letter-spacing : -0.02em;
+                    font-family    : 'Poppins', 'pretendard', sans-serif;
+                    margin-left    : 10px;
+
+                }
+            }
+
+            .coupon-down {
+                display       : flex;
+                flex-direction: row;
+                width         : 150px;
+                height        : 30px;
+                border-radius : 10px;
+                border        : 1px solid #f06e00;
+                overflow      : hidden;
+
+                .label-text {
+                    width           : 50%;
+                    font-size       : 10px;
+                    text-align      : center;
+                    padding-top     : 5px;
+                    background-color: #f06e00;
+                    color           : white;
+                }
+
+                .discount {
+                    width      : 50%;
+                    padding-top: 5px;
+                    color      : #f06e00;
+                    font-size  : 17px;
+                    line-height: 1;
+                    font-weight: 700;
+                }
+
+            }
+
+        }
+
+    }
+
+    .content-mid {
+        display       : flex;
+        flex-direction: column;
+        gap           : 20px;
+
+        .group-text {
+            width         : 100%;
+            display       : flex;
+            flex-direction: row;
+            gap           : 10px;
+
+            .label-left {
+                width     : 50%;
+                text-align: left;
+                font-size : 14px;
+            }
+
+            .label-right {
+                width     : 50%;
+                text-align: left;
+                font-size : 14px;
+            }
+        }
+    }
+}
+
+.divider {
+    width : 100%;
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
