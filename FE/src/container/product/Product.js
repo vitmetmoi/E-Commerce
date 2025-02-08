@@ -31,7 +31,13 @@ function Product(props) {
 
 
                 <div className='content-right'>
-                    <OrderSide></OrderSide>
+                    <OrderSide
+                        colorArr={['Black', 'White']}
+                        sizeArr={['S', 'M', 'L', 'XL', 'XXL']}
+                        productName={'Varsity Logo Hoodie'}
+                        price={230.321}
+                        discount={10}
+                    ></OrderSide>
                 </div>
 
 
