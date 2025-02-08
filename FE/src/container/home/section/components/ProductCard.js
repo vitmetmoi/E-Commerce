@@ -57,8 +57,6 @@ function ProductCard(props) {
                             <div className='color' style={{ backgroundColor: `${item}` }}></div>
                         )
                     })}
-
-
                 </div>
 
             </div>
