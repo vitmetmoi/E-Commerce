@@ -5,7 +5,10 @@ import Divider from '@mui/material/Divider';
 import _ from 'lodash';
 import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
-
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import IconButton from '@mui/material/IconButton';
 function OrderSide(props) {
 
     let priceAfterDiscouted = 0;
@@ -19,28 +22,50 @@ function OrderSide(props) {
     const [defaultSizeArr, setDefaultSizeArr] = useState([]);
     const [colorArr, setColorArr] = useState([]);
     const [sizeArr, setSizeArr] = useState([]);
-    const [sizeIsDisabled, setSizeIsDisabled] = useState(true);
     const [orderList, setOrderList] = useState([]);
 
     useEffect(() => {
-        if (props && props.colorArr && props.sizeArr) {
+        if (props && props.colorSizeArr) {
             let colorArr = []
+            let sizeArrBefore = []
             let sizeArr = []
-            props.colorArr.map(item => {
-                let obj = {
-                    color: item,
-                    colorRgb: asignColor(item),
-                    isSelected: false
+            props.colorSizeArr.map(item => {
+                let colorIsIncludes = false;
+                let sizeIsIncludes = false;
+
+                if (colorArr && sizeArr) {
+                    colorArr.map(item1 => { if (item1.color === item.color) { colorIsIncludes = true } })
+                    sizeArrBefore.map(item1 => { if (item1 === item.size) { sizeIsIncludes = true } })
                 }
-                colorArr.push(obj);
+
+                if (colorIsIncludes === false) {
+
+                    let obj = {
+                        color: item.color,
+                        colorRgb: asignColor(item.color),
+                        isSelected: false
+                    }
+
+                    colorArr.push(obj);
+                }
+
+                if (sizeIsIncludes === false) {
+
+
+                    let index = asignSizeOrder(item.size);
+                    sizeArrBefore[index] = item.size;
+                }
             })
 
-            props.sizeArr.map(item => {
-                let obj = {
-                    size: item,
-                    isSelected: false
+            sizeArrBefore.map((item, index) => {
+                if (item) {
+                    let obj = {
+                        size: item,
+                        isSelected: false,
+                        isDisable: true,
+                    }
+                    sizeArr.push(obj)
                 }
-                sizeArr.push(obj);
             })
 
             setColorArr(colorArr);
@@ -49,19 +74,27 @@ function OrderSide(props) {
             setDefaultColorArr(colorArr);
 
         }
-    }, [props.colorArr, props.sizeArr])
+    }, [props.colorSizeArr])
 
     useEffect(() => {
         if (colorArr) {
-            let isSelected = false;
 
-            colorArr.map(item => {
-                if (item.isSelected === true) {
-                    isSelected = true;
+            let _sizeArr = _.cloneDeep(sizeArr);
+
+            colorArr.map(item1 => {
+                if (item1.isSelected === true) {
+
+                    _sizeArr.map(item2 => {
+                        props.colorSizeArr.map(item3 => {
+                            if (item3.color === item1.color && item3.size === item2.size) {
+                                return item2.isDisable = false;
+                            }
+                        })
+                    })
+
+                    setSizeArr(_sizeArr);
                 }
             })
-
-            setSizeIsDisabled(!isSelected)
         }
     }, [colorArr])
 
@@ -99,6 +132,26 @@ function OrderSide(props) {
             colorRgb = '#f5f5f5'
         }
         return colorRgb;
+    }
+
+    const asignSizeOrder = (size) => {
+
+        if (size === 'S') {
+            return 0;
+        }
+        if (size === 'M') {
+            return 1;
+        }
+        if (size === 'L') {
+            return 2;
+        }
+        if (size === 'XL') {
+            return 3;
+        }
+        if (size === 'XXL') {
+            return 4;
+        }
+
     }
 
     const handleOnChange = (name, index) => {
@@ -179,6 +232,51 @@ function OrderSide(props) {
         })
 
         return isValid;
+    }
+
+    const handleOnclickTotal = (type, index) => {
+        console.log('hy', orderList)
+        let order = orderList[index];
+        let _orderList = _.cloneDeep(orderList);
+
+        if (type === 'ADD') {
+            if (props.colorSizeArr) {
+
+
+                props.colorSizeArr.map(item => {
+                    console.log('hy1', item)
+                    if (item.color === order.color && item.size === order.size) {
+                        if ((order.total) === item.stock) {
+                            toast('Out of stock!')
+                        }
+                        else {
+                            order.total = order.total + 1;
+                        }
+                    }
+                })
+
+                _orderList[index] = order;
+                setOrderList(_orderList);
+
+            }
+        }
+
+        else if (type === 'SUBTRACT') {
+            if (order.total === 1) {
+                toast('Total reached minimum !')
+            }
+            else {
+                order.total = order.total - 1;
+            }
+        }
+
+    }
+
+
+    const handleDeleteOrder = (index) => {
+        let _orderList = _.cloneDeep(orderList)
+        _orderList.splice(index, 1);
+        setOrderList(_orderList)
     }
 
     return (
@@ -271,15 +369,20 @@ function OrderSide(props) {
                             {colorArr && colorArr.map((item, index) => {
 
                                 return (
-                                    <div
-                                        onClick={() => handleOnChange('COLOR', index)}
-                                        className='color'
-                                        style={{
-                                            backgroundColor: `${item.colorRgb}`
+                                    <IconButton
+                                        style={{ fontSize: '120%', padding: '5px' }}
+                                    >
+                                        <div
+                                            onClick={() => handleOnChange('COLOR', index)}
+                                            className='color'
+                                            style={{
+                                                backgroundColor: `${item.colorRgb}`
 
-                                        }}>
+                                            }}>
 
-                                    </div>
+                                        </div>
+                                    </IconButton>
+
                                 )
                             })}
 
@@ -313,7 +416,7 @@ function OrderSide(props) {
                                     <button
                                         onClick={() => handleOnChange('SIZE', index)}
                                         className={item.isSelected ? 'size active' : 'size'}
-                                        disabled={sizeIsDisabled}>{item.size}</button>
+                                        disabled={item.isDisable}>{item.size}</button>
                                 )
                             })}
                         </div>
@@ -324,14 +427,38 @@ function OrderSide(props) {
                     {orderList && orderList.map((item, index) => {
                         return (
                             <div className='order'>
-                                <div className='content-left'>
-                                    <span className='product-name'></span>
-                                    <span className='color-size'></span>
+
+                                <div className='left-info'>
+                                    <span className='product-name'>{index + 1}. {props.productName}</span>
+                                    <span className='color-size'>( {item.color} / {item.size} )</span>
                                 </div>
-                                <div className='content-right'>
-                                    <div className='total'>{item.total}</div>
+
+                                <div className='right-info'>
+
+                                    <div className='total-container'>
+                                        <button
+                                            onClick={() => handleOnclickTotal('SUBTRACT', index)}
+                                            className='button-adj'><span>-</span></button>
+                                        <span className='total'>{item.total}</span>
+                                        <button
+                                            onClick={() => handleOnclickTotal('ADD', index)}
+                                            className='button-adj'><span>+</span></button>
+                                    </div>
+
                                     <span className='sumary-price'>{props.price * item.total}</span>
+
+                                    <div className='remove-ele' >
+                                        <IconButton
+                                            style={{ fontSize: '120%', cursor: 'pointer' }}
+                                            onClick={() => handleDeleteOrder(index)}
+                                        >
+                                            <RemoveCircleOutlineOutlinedIcon></RemoveCircleOutlineOutlinedIcon>
+
+                                        </IconButton>
+
+                                    </div>
                                 </div>
+
                             </div>
                         )
                     })}

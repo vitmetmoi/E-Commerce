@@ -32,8 +32,57 @@ function Product(props) {
 
                 <div className='content-right'>
                     <OrderSide
-                        colorArr={['Black', 'White']}
-                        sizeArr={['S', 'M', 'L', 'XL', 'XXL']}
+                        colorSizeArr={[
+                            {
+                                clothesId: 66,
+                                color: 'White',
+                                size: 'S',
+                                stock: 5
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'White',
+                                size: 'XXL',
+                                stock: 5
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Black',
+                                size: 'M',
+                                stock: 2
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Black',
+                                size: 'L',
+                                stock: 3
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Green',
+                                size: 'L',
+                                stock: 3
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Green',
+                                size: 'XXL',
+                                stock: 5
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Green',
+                                size: 'L',
+                                stock: 3
+                            },
+                            {
+                                clothesId: 66,
+                                color: 'Green',
+                                size: 'M',
+                                stock: 5
+                            },
+
+                        ]}
                         productName={'Varsity Logo Hoodie'}
                         price={230.321}
                         discount={10}
