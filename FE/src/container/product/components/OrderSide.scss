@@ -120,9 +120,134 @@
             }
 
             .label-right {
-                width     : 50%;
-                text-align: left;
-                font-size : 14px;
+                width         : 50%;
+                text-align    : left;
+                font-size     : 14px;
+                display       : flex;
+                flex-direction: row;
+
+                .group-color {
+                    z-index         : 2;
+                    opacity         : 1;
+                    width           : 100%;
+                    height          : 0px;
+                    background-color: white;
+                    display         : flex;
+                    flex-direction  : row;
+                    justify-content : left;
+                    align-items     : center;
+                    gap             : 7px;
+                    transition      : all 0.3s ease;
+                    padding-top     : 12px;
+
+                    .color {
+                        transition      : all 0.3s ease;
+                        opacity         : 1;
+                        position        : relative;
+                        width           : 18px;
+                        height          : 18px;
+                        border-radius   : 20px;
+                        border          : 1.5px solid rgba(0, 0, 0, 0.1);
+                        background-color: pink;
+                        cursor          : pointer;
+                    }
+                }
+
+                .group-size {
+                    display       : flex;
+                    flex-direction: row;
+                    gap           : 10px;
+
+                    .size {
+                        width           : 40px;
+                        height          : 40px;
+                        border          : 1px solid rgba(0, 0, 0, 0.2);
+                        text-align      : center;
+                        background-color: white;
+                        opacity         : 0.5;
+
+                        &.active {
+                            opacity: 1;
+                            border : 1px solid #f06e00;
+                            color  : #f06e00;
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+
+        .group-orders {
+            display          : flex;
+            flex-direction   : column;
+            max-height       : 200px;
+            // border        : 1px solid red;
+            overflow-y       : scroll;
+
+            .order {
+                display        : flex;
+                flex-direction : row;
+                justify-content: space-between;
+                margin-top     : 15px;
+
+                .left-info {
+                    text-align    : left;
+                    display       : flex;
+                    flex-direction: column;
+
+                    .product-name {
+                        font-weight: 400;
+                        color      : #2e2d32;
+                        line-height: 21px;
+                        font-size  : 14px;
+                    }
+
+                    .color-size {
+                        font-size: 13px;
+                        color    : #aaa;
+                    }
+                }
+
+                .right-info {
+                    display        : flex;
+                    flex-direction : row;
+                    justify-content: space-between;
+                    align-items    : center;
+                    gap            : 10px;
+
+                    .total-container {
+                        display          : flex;
+                        flex-direction   : row;
+                        width            : 65px;
+                        height           : 32px;
+                        // border        : 1px solid red;
+                        border           : 1px solid rgba(0, 0, 0, 0.2);
+                        margin-left      : 10px;
+
+                        .button-adj {
+                            width           : 33.3%;
+                            height          : 100%;
+                            background-color: white;
+                            border          : none;
+                            justify-content : center;
+                            align-items     : center;
+                        }
+
+                        .total {
+                            width      : 33.3%;
+                            height     : 100%;
+                            text-align : center;
+                            padding-top: 3px;
+                        }
+
+                    }
+
+                    .sumary-price {
+                        width: 100px;
+                    }
+                }
             }
         }
     }
