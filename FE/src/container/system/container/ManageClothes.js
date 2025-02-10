@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './ManageClothes.scss'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box, IconButton } from '@mui/material';
@@ -36,6 +36,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Skeleton from '@mui/material/Skeleton';
 import DeleteConfirm from './components/DeleteConfirm';
+import { downloadExcel } from "react-export-table-to-excel";
 function ManageClothes(props) {
 
 
@@ -59,6 +60,8 @@ function ManageClothes(props) {
 
     //Markdown
     const [contentMarkdown, setContentMarkDown] = useState('')
+
+    //ref
 
     useEffect(() => {
         console.log("clothes data", clothes)
@@ -91,6 +94,8 @@ function ManageClothes(props) {
                     relevantImages: item.RelevantImages,
                     description: item.Markdowns[0].contentMarkdown
                 }
+
+
                 arrRows.push(obj);
             })
             setRows(arrRows);
@@ -515,9 +520,40 @@ function ManageClothes(props) {
         )
     }
 
+    const header = ["ID", "Name product", "Type", "Category", "Price", "Updated At", "Created At"];
+
+    const handleDownloadExcel = () => {
+
+        let rowsToStoreExcel = _.cloneDeep(clothes);
+
+        rowsToStoreExcel.map(item => {
+            let rowAfterDeletedImg = '';
+            delete item.RelevantImages;
+            rowAfterDeletedImg = item;
+            return rowAfterDeletedImg;
+        })
+
+        console.log('rows', rowsToStoreExcel)
+
+
+        downloadExcel({
+            fileName: "All clothes data",
+            sheet: "react-export-table-to-excel",
+            tablePayload: {
+                header, body: rowsToStoreExcel
+            },
+        });
+    }
+
     return (
         <>
             <div className='manage-clothes-container'>
+
+                <button
+                    onClick={() => handleDownloadExcel()}
+                    className='btn btn-primary'>get data
+                </button>
+
                 <DataGrid
                     style={{ height: 'fit-content' }}
                     rows={rows}
@@ -547,6 +583,7 @@ function ManageClothes(props) {
                     }}
                     sx={{ marginTop: 2 }}
                     rowHeight={100}
+
                 />
 
                 <Modal

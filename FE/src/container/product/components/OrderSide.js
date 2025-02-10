@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import IconButton from '@mui/material/IconButton';
+import Rating from '@mui/material/Rating';
 function OrderSide(props) {
 
     let priceAfterDiscouted = 0;
@@ -23,7 +24,8 @@ function OrderSide(props) {
     const [colorArr, setColorArr] = useState([]);
     const [sizeArr, setSizeArr] = useState([]);
     const [orderList, setOrderList] = useState([]);
-
+    const [orderPrice, setOrderPrice] = useState(0);
+    const [orderTotal, setOrderTotal] = useState(0);
     useEffect(() => {
         if (props && props.colorSizeArr) {
             let colorArr = []
@@ -97,6 +99,19 @@ function OrderSide(props) {
             })
         }
     }, [colorArr])
+
+    useEffect(() => {
+        if (orderList && props && props.price) {
+            let sum = 0;
+            let total = 0;
+            orderList && orderList.map(item => {
+                sum = sum + (item.total * priceAfterDiscouted);
+                total = total + item.total
+            })
+            setOrderTotal(total);
+            setOrderPrice(sum);
+        }
+    }, [orderList])
 
 
     const asignColor = (color) => {
@@ -278,6 +293,8 @@ function OrderSide(props) {
         _orderList.splice(index, 1);
         setOrderList(_orderList)
     }
+
+
 
     return (
         <div className='order-side-content'>
@@ -467,12 +484,28 @@ function OrderSide(props) {
 
             </div>
 
-            <div style={{ margin: '35px 0px' }} className='divider'></div>
+            <div style={{ margin: '35px 0px', border: '1px solid rgba(0,0,0,0.3)' }} className='divider'></div>
 
             <div className='content-bottom'>
 
+                <div className='total-price'>
+                    <span className='total-title'>Total product price</span>
+                    <div className='group-price'>
+                        <span className='price'>{orderPrice}</span>
+                        <span className='total'>({orderTotal} pices)</span>
+                    </div>
+                </div>
+
+                <div className='group-button'>
+                    <button className='button btn1'>Product of interest</button>
+                    <button className='button btn2'>Shopping Cart</button>
+                    <button className='button btn3'>Purchase</button>
+                </div>
+
+
 
             </div>
+
         </div>
     );
 }
