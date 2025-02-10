@@ -37,6 +37,7 @@
     "npm": "^11.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-export-table-to-excel": "^1.0.6",
     "react-lazyload": "^3.2.1",
     "react-photo-view": "^1.2.7",
     "react-redux": "^9.2.0",

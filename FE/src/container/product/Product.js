@@ -4,17 +4,25 @@ import NavigationHome from '../home/NavigationHome';
 import AdsHome from '../home/AdsHome';
 import OrderSide from './components/OrderSide';
 import Divider from '@mui/material/Divider';
-
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 function Product(props) {
     return (
         <>
             <AdsHome></AdsHome>
             <NavigationHome></NavigationHome>
 
+            <div className='nav-items'>
+                <span>Home</span>
+                <KeyboardArrowRightIcon />
+                <span> Special Exhibition</span>
+                <KeyboardArrowRightIcon />
+                <span>Best Products</span>
+            </div>
 
             <div className='product-container'>
+
                 <div className='content-left'>
-                    123
+                    ###
                     <div className='group-images'></div>
                     <div className='relevant-products'></div>
 
