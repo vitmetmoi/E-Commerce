@@ -11,6 +11,7 @@ import { useGetClothesDataMutation } from '../../../store/slice/API/systemAPI';
 import Skeleton from '@mui/material/Skeleton';
 import { useSelector, useDispatch } from 'react-redux'
 import { setClothesDataSlice } from '../../../store/slice/Reducer/systemSlice';
+import _ from 'lodash'
 function TheNewDropSection(props) {
     const dispatch = useDispatch()
     const [getClothesData, {
@@ -22,13 +23,18 @@ function TheNewDropSection(props) {
     const [clothesData, setClothesData] = useState('');
 
     useEffect(() => {
-        getClothes();
+        if (_.isEmpty(clothes)) {
+            getClothes();
+        }
+        else {
+            setClothesData(clothes.clothesData)
+        }
+
     }, [])
 
     useEffect(() => {
         if (isLoading === false && data) {
             dispatch(setClothesDataSlice(data.DT))
-            console.log('clothes', clothes)
         }
     }, [isLoading])
 
@@ -40,8 +46,6 @@ function TheNewDropSection(props) {
         if (res && res.data && res.data.EC === 0) {
             setClothesData(res.data.DT)
         }
-
-
     }
 
     const asignColor = (color) => {
@@ -128,7 +132,6 @@ function TheNewDropSection(props) {
                         :
                         <>
                             {clothesData && clothesData.map(item => {
-                                console.log('item', item);
                                 let swiperImg = [];
                                 item.RelevantImages.map((item, index) => {
                                     index !== 0 && swiperImg.push(item.image)
