@@ -42,7 +42,7 @@ function TheNewDropSection(props) {
         let params = { type: 'NEW', id: 0 }
         let res = '';
         res = await getClothesData(params);
-        console.log('res', res);
+
         if (res && res.data && res.data.EC === 0) {
             setClothesData(res.data.DT)
         }
@@ -86,7 +86,7 @@ function TheNewDropSection(props) {
 
     return (
         <div className='the-new-drop-container'>
-            <div className='title'>The New Drop</div>
+
             <div className='section-clothes'>
 
                 <Swiper
@@ -96,15 +96,15 @@ function TheNewDropSection(props) {
                     // slidesPerView={5}
                     breakpoints={{
                         640: {
-                            slidesPerView: 1,
+                            slidesPerView: props.slicePerView1,
                             spaceBetween: 20,
                         },
                         768: {
-                            slidesPerView: 3,
+                            slidesPerView: props.slicePerView2,
                             spaceBetween: 40,
                         },
                         1024: {
-                            slidesPerView: 5,
+                            slidesPerView: props.slicePerView3,
                             spaceBetween: 0,
                         },
                     }}
@@ -113,7 +113,7 @@ function TheNewDropSection(props) {
                     {isLoading === true ?
                         <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>{
 
-                            [...Array(5)].map((x, i) => {
+                            [...Array(props.slicePerView3)].map((x, i) => {
                                 return (
                                     <div className='skeleton-container'>
                                         <Skeleton variant="rectangular" width={'100%'} height={310} />
@@ -152,6 +152,7 @@ function TheNewDropSection(props) {
                                             mainImage={item.RelevantImages[0].image}
                                             discount={item.Discounts[0].value}
                                             name={item.name}
+                                            id={item.id}
                                             price={item.price}
                                             imageArr={swiperImg}
                                             colorArr={colorArr}
