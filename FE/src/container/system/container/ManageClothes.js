@@ -10,6 +10,10 @@ import {
     GridToolbarContainer,
     GridActionsCellItem,
     GridRowEditStopReasons,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -37,6 +41,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Skeleton from '@mui/material/Skeleton';
 import DeleteConfirm from './components/DeleteConfirm';
 import { downloadExcel } from "react-export-table-to-excel";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 function ManageClothes(props) {
 
 
@@ -533,7 +538,6 @@ function ManageClothes(props) {
             return rowAfterDeletedImg;
         })
 
-        console.log('rows', rowsToStoreExcel)
 
 
         downloadExcel({
@@ -545,14 +549,30 @@ function ManageClothes(props) {
         });
     }
 
+    const CustomToolbar = () => {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector
+                    slotProps={{ tooltip: { title: 'Change density' } }}
+                />
+
+                <Button
+                    startIcon={<FileDownloadIcon></FileDownloadIcon>}
+                    variant='text'
+                    onClick={() => handleDownloadExcel()}
+                >Export</Button>
+
+            </GridToolbarContainer>
+        );
+    }
+
     return (
         <>
             <div className='manage-clothes-container'>
 
-                <button
-                    onClick={() => handleDownloadExcel()}
-                    className='btn btn-primary'>get data
-                </button>
+
 
                 <DataGrid
                     style={{ height: 'fit-content' }}
@@ -560,7 +580,7 @@ function ManageClothes(props) {
 
                     columns={columns}
                     slots={{
-                        toolbar: GridToolbar,
+                        toolbar: CustomToolbar,
                         noRowsOverlay: customNoRows
                     }}
                     initialState={{

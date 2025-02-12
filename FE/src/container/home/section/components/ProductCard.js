@@ -17,7 +17,7 @@ function ProductCard(props) {
     }
 
     const handleOnclickProductCard = () => {
-        navigate('/product')
+        navigate(`/product?id=${props.id}`)
     }
 
     return (
