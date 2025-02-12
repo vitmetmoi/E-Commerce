@@ -20,7 +20,12 @@ function Home(props) {
 
             <div className='home-sections'>
                 <div className='sections col-12 mt-5'>
-                    <TheNewDropSection></TheNewDropSection>
+                    <div className='title-1'>The New Drop</div>
+                    <TheNewDropSection
+                        slicePerView1={1}
+                        slicePerView2={3}
+                        slicePerView3={5}
+                    ></TheNewDropSection>
                 </div>
                 <div className='secitons col-12 '>
                     <CollecSection></CollecSection>
@@ -36,9 +41,9 @@ function Home(props) {
             <div className='second-about-container'>
                 <SecondAboutSection></SecondAboutSection>
             </div>
-            <div className='footer'>
-                <Footer></Footer>
-            </div>
+
+            <Footer></Footer>
+
         </>
     );
 }

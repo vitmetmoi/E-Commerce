@@ -10,6 +10,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import IconButton from '@mui/material/IconButton';
 import Rating from '@mui/material/Rating';
+import { Scrollbar } from 'react-scrollbars-custom';
 function OrderSide(props) {
 
     let priceAfterDiscouted = 0;
@@ -282,6 +283,8 @@ function OrderSide(props) {
             }
             else {
                 order.total = order.total - 1;
+                _orderList[index] = order;
+                setOrderList(_orderList);
             }
         }
 
@@ -297,6 +300,7 @@ function OrderSide(props) {
 
 
     return (
+
         <div className='order-side-content'>
 
 

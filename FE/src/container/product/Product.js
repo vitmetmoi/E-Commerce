@@ -1,11 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Product.scss';
 import NavigationHome from '../home/NavigationHome';
 import AdsHome from '../home/AdsHome';
 import OrderSide from './components/OrderSide';
 import Divider from '@mui/material/Divider';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useLocation, useSearchParams } from 'react-router';
+import { useGetClothesDataMutation } from '../../store/slice/API/systemAPI';
+import { useSelector, useDispatch } from 'react-redux'
+import _ from 'lodash'
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import TheNewDropSection from '../home/section/TheNewDropSection';
+import Footer from '../home/Footer';
+
 function Product(props) {
+    const [searchParams] = useSearchParams();
+    const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
+    const clothesData = useSelector((state) => state.system.clothesData);
+    const [product, setProduct] = useState('');
+
+
+    useEffect(() => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        });
+        let productId = searchParams.get('id')
+
+        if (!_.isEmpty(clothesData)) {
+
+            if (productId) {
+                clothesData.map(item => {
+
+                    if (_.isEqual(item.id, +productId)) {
+                        console.log('item', item)
+                        setProduct(item);
+                    }
+                })
+            }
+        }
+        else {
+            getClothesData();
+        }
+
+    }, [])
+
+    const getClothesData = async () => {
+        let productId = searchParams.get('id')
+        let res = await getClothesService({ type: 'ONE', id: productId });
+        if (res && res.data && res.data.EC === 0) {
+            console.log('res data', res.data.DT)
+            setProduct(res.data.DT)
+        }
+    }
+
+
     return (
         <>
             <AdsHome></AdsHome>
@@ -22,9 +70,39 @@ function Product(props) {
             <div className='product-container'>
 
                 <div className='content-left'>
-                    ###
-                    <div className='group-images'></div>
-                    <div className='relevant-products'></div>
+
+
+                    <PhotoProvider>
+                        <div className='group-images'>
+                            {
+                                product && product.RelevantImages && product.RelevantImages.map((item, index) => {
+                                    return (
+                                        <PhotoView key={index} src={item.image}>
+                                            <img className='img-1' src={item.image} alt="" />
+                                        </PhotoView>
+                                    )
+
+                                })
+                            }
+                        </div>
+                    </PhotoProvider>
+
+
+
+
+                    <div className='relevant-products'>
+                        <div className='title'>
+                            <span className='text-left'>Relevant</span>
+                            <span className='text-right'>items</span>
+                        </div>
+                        <TheNewDropSection
+                            slicePerView1={1}
+                            slicePerView2={3}
+                            slicePerView3={3}>
+
+                        </TheNewDropSection>
+
+                    </div>
 
 
                     <div className='additional-container'>
@@ -40,65 +118,17 @@ function Product(props) {
 
                 <div className='content-right'>
                     <OrderSide
-                        colorSizeArr={[
-                            {
-                                clothesId: 66,
-                                color: 'White',
-                                size: 'S',
-                                stock: 5
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'White',
-                                size: 'XXL',
-                                stock: 5
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Black',
-                                size: 'M',
-                                stock: 2
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Black',
-                                size: 'L',
-                                stock: 3
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Green',
-                                size: 'L',
-                                stock: 3
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Green',
-                                size: 'XXL',
-                                stock: 5
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Green',
-                                size: 'L',
-                                stock: 3
-                            },
-                            {
-                                clothesId: 66,
-                                color: 'Green',
-                                size: 'M',
-                                stock: 5
-                            },
-
-                        ]}
-                        productName={'Varsity Logo Hoodie'}
-                        price={230.321}
-                        discount={10}
+                        colorSizeArr={product && product.Color_Sizes}
+                        productName={product && product.name}
+                        price={product && product.price}
+                        discount={product && product.Discounts[0].value}
                     ></OrderSide>
                 </div>
 
 
             </div>
+
+            <Footer></Footer>
         </>
     );
 }
