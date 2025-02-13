@@ -17,19 +17,21 @@
 }
 
 .product-container {
-    width            : 100%;
+    width               : 100%;
     // border        : 1px solid red;
-    display          : flex;
-    flex-direction   : row;
-    gap              : 20px;
-    padding          : 0 45px;
-    position         : relative;
-    margin-bottom    : 300px;
+    display             : flex;
+    flex-direction      : row;
+    gap                 : 20px;
+    padding             : 0 45px;
+    position            : relative;
+    // margin-bottom    : 1000px;
 
     .content-left {
-        width      : 60%;
+        width        : 60%;
         // border  : 1px solid green;
-        position   : relative;
+        position     : relative;
+        margin-bottom: 3000px;
+        height       : 2000px;
 
         .group-images {
             // border: 1px solid red;
@@ -68,9 +70,70 @@
 
             width: 100%;
         }
+
+        .additional-container {
+            width   : 100%;
+            position: relative;
+
+            .navigation {
+                width           : 100%;
+                position        : relative;
+                display         : flex;
+                flex-direction  : row;
+                background-color: white;
+
+                // border        : 1px solid red;
+                &.reached {
+                    position: fixed;
+                    left    : 0;
+                    top     : 60px;
+                    width   : 100%;
+                }
+
+                .nav-child {
+                    width           : 25%;
+                    height          : 60px;
+                    transition      : all 0.3s;
+                    position        : relative;
+                    background-color: white;
+
+                    &::before {
+                        position   : absolute;
+                        height     : 1px;
+                        content    : '';
+                        // border  : 1px solid #f06e00;
+                        border     : 1px solid #b6b6b6;
+                        width      : 100%;
+                        left       : 0;
+                        bottom     : 0;
+                    }
+
+                    .nav-text {
+                        text-align : center;
+                        color      : #b6b6b6;
+                        line-height: 60px;
+                    }
+
+                    &.active {
+                        .nav-text {
+                            color: #f06e00;
+                        }
+
+
+                        &::before {
+                            border: 1px solid #f06e00;
+                        }
+                    }
+
+
+                }
+            }
+
+        }
     }
 
     .content-right {
+        // border    : 1px solid red;
         width     : 40%;
         left      : 60%;
         top       : 60px;
@@ -78,6 +141,12 @@
         height    : 80vh;
         overflow-y: scroll;
         position  : sticky;
-        transition: all 1s;
+        transition: all 0.6s;
+
+        &.reached {
+            top: 120px;
+        }
     }
+
+
 }

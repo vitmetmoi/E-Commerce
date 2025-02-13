@@ -18,6 +18,29 @@ function Product(props) {
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const clothesData = useSelector((state) => state.system.clothesData);
     const [product, setProduct] = useState('');
+    const [offset, setOffset] = useState(0);
+
+    const [isReachedDesBar, setIsReachedDesBar] = useState(false);
+
+    useEffect(() => {
+        const onScroll = () => setOffset(window.scrollY);
+        // clean up code
+        window.removeEventListener('scroll', onScroll);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [])
+
+    useEffect(() => {
+
+        if (offset <= 2340 || offset <= '2340') {
+            console.log("off", offset)
+            setIsReachedDesBar(false)
+        }
+        else {
+            console.log("reached!")
+            setIsReachedDesBar(true)
+        }
+    }, [offset])
 
 
     useEffect(() => {
@@ -52,7 +75,6 @@ function Product(props) {
             setProduct(res.data.DT)
         }
     }
-
 
     return (
         <>
@@ -99,14 +121,21 @@ function Product(props) {
                             slicePerView1={1}
                             slicePerView2={3}
                             slicePerView3={3}>
-
                         </TheNewDropSection>
 
                     </div>
 
 
                     <div className='additional-container'>
-                        <div className='navigation'></div>
+
+                        <div
+                            className={isReachedDesBar === false ? 'navigation' : 'navigation reached'}>
+                            <div className='nav-child active'><span className='nav-text'>Description</span></div>
+                            <div className='nav-child'><span className='nav-text'>Reviews (0)</span></div>
+                            <div className='nav-child'><span className='nav-text'>Size</span></div>
+                            <div className='nav-child'><span className='nav-text'>Other</span></div>
+                        </div>
+
                         <div className='markdown'></div>
                         <div className='shipping-detail'></div>
                         <div className='my-fit-size'></div>
@@ -116,7 +145,7 @@ function Product(props) {
                 </div>
 
 
-                <div className='content-right'>
+                <div className={isReachedDesBar === false ? 'content-right' : 'content-right reached'}>
                     <OrderSide
                         colorSizeArr={product && product.Color_Sizes}
                         productName={product && product.name}

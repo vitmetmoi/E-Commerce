@@ -68,13 +68,6 @@ function HomeBanner(props) {
                     </div>
                 </SwiperSlide>
 
-                <SwiperSlide>
-                    <div style={{ backgroundImage: "url(" + `https://pos.nvncdn.com/80cfbf-41716/ps/20240730_NLvoTlCFaK.jpeg` + ")", }}
-                        className='banner-cover'>
-
-                    </div>
-                </SwiperSlide>
-
             </Swiper>
         </div >
     );
