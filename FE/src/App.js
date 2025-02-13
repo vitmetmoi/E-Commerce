@@ -6,9 +6,9 @@ import { Scrollbar } from 'react-scrollbars-custom';
 function App() {
 
   return (
-    // <Scrollbar style={{ width: "100%", height: "100vh" }}>
-    <div className="App">
 
+    <div className="App">
+      {/* <Scrollbar style={{ width: "100%", height: "100vh" }}> */}
       <RouteIndex></RouteIndex>
       <ToastContainer position="bottom-right"
         autoClose={3000}
@@ -21,9 +21,9 @@ function App() {
         pauseOnHover
         theme="light"
       />
-
+      {/* </Scrollbar> */}
     </div>
-    // </Scrollbar>
+
   );
 }
 
