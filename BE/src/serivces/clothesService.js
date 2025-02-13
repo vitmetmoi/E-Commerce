@@ -9,7 +9,7 @@ const validateClothes = async (name) => {
         where: { name: name },
         raw: true
     })
-    console.log(clothes);
+
     if (clothes && !_.isEmpty(clothes)) {
         isValid = false;
     }
@@ -120,7 +120,7 @@ const createClothesService = async (data) => {
 }
 
 const convertClothesImgArray = (clothesArr) => {
-    if (clothesArr && clothesArr.length > 0) {
+    if (clothesArr && _.isArray(clothesArr)) {
         let data = [];
         clothesArr.map((item) => {
             let child = item;
@@ -132,6 +132,14 @@ const convertClothesImgArray = (clothesArr) => {
             data.push(child);
         })
         return data;
+    }
+    else if (_.isObject(clothesArr)) {
+        clothesArr.RelevantImages.map((item) => {
+            let base64String = new Buffer(item.image, 'base64').toString('binary');
+            item.image = base64String;
+            return item;
+        })
+        return clothesArr;
     }
     else {
         return '';
@@ -207,14 +215,38 @@ const getClothesService = async (type, id) => {
                 })
 
             }
-            else {
-                data = db.Clothes.findOne({
-                    where: { id: id }
+            else if (type === 'ONE') {
+                data = await db.Clothes.findOne({
+                    where: { id: id },
+                    include: [{
+                        model: db.Discount,
+                        attributes: ['id', 'value'],
+
+                    },
+                    {
+                        model: db.Markdown,
+                        attributes: ['id', 'contentMarkdown'],
+
+                    },
+                    {
+                        model: db.RelevantImage,
+                        attributes: ['id', 'image'],
+
+                    },
+                    {
+                        model: db.Color_Size,
+                        attributes: ['id', 'color', 'size', 'stock'],
+
+                    }
+                    ]
+
                 })
+
             }
 
             if (data) {
                 let clothesData = convertClothesImgArray(data);
+
                 return {
                     DT: clothesData,
                     EC: 0,
@@ -384,7 +416,7 @@ const deleteClothesService = async (id) => {
         else {
 
             let clothes = await db.Clothes.findOne({ where: { id: id } });
-            console.log('cl', clothes);
+
             if (clothes && clothes.id) {
                 await db.Clothes.destroy({ where: { id: id } })
                 await db.Discount.destroy({ where: { id: id } })

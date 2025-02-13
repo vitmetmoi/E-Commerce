@@ -36,6 +36,7 @@
         display        : flex;
         align-items    : center;
         justify-content: space-between;
+        border-bottom  : 1px solid rgba(0, 0, 0, 0.1);
 
         .content-left {
             display       : flex;
@@ -85,7 +86,7 @@
     .hightlight-item {
         color          : #f06e00;
         text-decoration: none;
-        font-size      : 13px;
+        font-size      : 12px;
         font-weight    : 700;
         padding        : 9px 15px;
         border-radius  : 5px;
@@ -95,7 +96,7 @@
     .normal-item {
         color          : black;
         text-decoration: none;
-        font-size      : 13px;
+        font-size      : 12px;
         font-weight    : 400;
         padding        : 9px 15px;
         border-radius  : 5px;

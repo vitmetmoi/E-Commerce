@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width     : 100%;
+  height    : 100%;
 }
 
 .App-logo {
@@ -58,6 +60,8 @@
 * {
   -ms-overflow-style: none;
 }
+
+//Disable Scrollbar
 
 // ::-webkit-scrollbar {
 //   display: none;
