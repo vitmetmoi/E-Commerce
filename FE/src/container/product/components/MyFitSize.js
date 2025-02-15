@@ -39,6 +39,12 @@ function MyFitSize(props) {
         setSizeFit(compareFit(weigh, height));
     }
 
+    const handleReset = () => {
+        setHeight('');
+        setWeigh('');
+        setSizeFit('');
+    }
+
 
     return (
         <div className='my-fit-size-container'>
@@ -86,7 +92,22 @@ function MyFitSize(props) {
                 </div>
                 :
                 <div className='content'>
-                    {sizeFit}
+                    <div className='result-content'>
+                        <span className='text-1'>My size is</span>
+                        <span className='text-2'>{sizeFit}</span>
+                        <span className='text-3'>
+                            Please use the size recommendation results for reference only.<br></br>
+                            Please comprehensively check the actual measurements and size feedback.</span>
+                    </div>
+                    <div className='spare-content'>
+                        <div className='divider'></div>
+                        <div className='spare-group'>
+                            <span className='text-left'>* Height {height && height} cm / Weight {weigh && weigh} kg</span>
+                            <span
+                                onClick={() => handleReset()}
+                                className='text-right'>Reset</span>
+                        </div>
+                    </div>
                 </div>
             }
 
