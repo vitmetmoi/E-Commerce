@@ -10,7 +10,14 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import IconButton from '@mui/material/IconButton';
 import Rating from '@mui/material/Rating';
-import { Scrollbar } from 'react-scrollbars-custom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+
 function OrderSide(props) {
 
     let priceAfterDiscouted = 0;
@@ -27,6 +34,8 @@ function OrderSide(props) {
     const [orderList, setOrderList] = useState([]);
     const [orderPrice, setOrderPrice] = useState(0);
     const [orderTotal, setOrderTotal] = useState(0);
+
+
     useEffect(() => {
         if (props && props.colorSizeArr) {
             let colorArr = []
@@ -505,6 +514,61 @@ function OrderSide(props) {
                     <button className='button btn2'>Shopping Cart</button>
                     <button className='button btn3'>Purchase</button>
                 </div>
+
+                <Swiper
+                    // install Swiper modules
+                    modules={[A11y, Pagination, Autoplay]}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    spaceBetween={0}
+                    slidesPerView={1}
+                    autoplay={{
+                        delay: 2000,
+                        disableOnInteraction: false,
+                    }}
+                >
+
+                    <SwiperSlide>
+                        <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241004/604bb55812ce7bc39c36914a09b23e6d.jpg` + ")", }}
+                            className='banner-cover'>
+                        </div>
+
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                        <div style={{ backgroundImage: "url(" + `https://culltique.in/cdn/shop/files/posterdesignmockup-2-26_0bf8b966-c4c2-4af9-aae1-fbf889a0449a.jpg?v=1715892315&width=1946` + ")", }}
+                            className='banner-cover'>
+
+                        </div>
+
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241016/8427f4c98cc4bf7892f7760ce4d3101f.jpg` + ")", }}
+                            className='banner-cover'>
+
+                        </div>
+
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div style={{
+                            backgroundPositionY: "15%",
+                            backgroundImage: "url(" + `https://doncare-club.com/cdn/shop/files/5_68cd7cdf-4b4b-4dbe-bcc8-f9d7526c85e1.jpg?v=1734677425&width=2400` + ")",
+                        }}
+                            className='banner-cover'>
+
+                        </div>
+
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                        <div style={{ backgroundImage: "url(" + `https://whoau.com/web/upload/NNEditor/20241212/726a0d37ac5396aa741713f389c6371a.jpg` + ")", }}
+                            className='banner-cover'>
+
+                        </div>
+                    </SwiperSlide>
+
+                </Swiper>
 
 
 
