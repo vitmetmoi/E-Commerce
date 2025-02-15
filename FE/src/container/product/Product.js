@@ -14,7 +14,7 @@ import TheNewDropSection from '../home/section/TheNewDropSection';
 import Footer from '../home/Footer';
 import MDEditor from '@uiw/react-md-editor';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-
+import MyFitSize from './components/MyFitSize';
 function Product(props) {
     const [searchParams] = useSearchParams();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
@@ -216,8 +216,7 @@ function Product(props) {
                         </div>
 
                         <div className='my-fit-size'>
-                            myfit
-
+                            <MyFitSize></MyFitSize>
                         </div>
                         <div className='rating'></div>
                     </div>
