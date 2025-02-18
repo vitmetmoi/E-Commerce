@@ -230,6 +230,7 @@ function Product(props) {
                         productName={product && product.name}
                         price={product && product.price}
                         discount={product && product.Discounts[0].value}
+                        clothesId={product.id}
                     ></OrderSide>
                 </div>
 

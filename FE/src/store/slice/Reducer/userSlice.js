@@ -13,10 +13,8 @@ const defaultUserData = {
     groupId: 3,
     authenticated: false
 }
-
 const initialState = {
     userData: defaultUserData,
-
 }
 
 export const counterSlice = createSlice({
@@ -37,6 +35,8 @@ export const counterSlice = createSlice({
         }
     },
 })
+
+
 
 export const { setUserData, clearUserData, test } = counterSlice.actions
 

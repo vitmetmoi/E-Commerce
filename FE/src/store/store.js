@@ -7,10 +7,11 @@ import { clothesAPI } from './slice/API/systemAPI';
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { combineReducers } from "redux";
-
+import shopingCartReducer from './slice/Reducer/shoppingCartSilce'
 
 const reducers = combineReducers({
     user: userReducer,
+    shoppingCart: shopingCartReducer,
     system: systemReducer,
     [userAPI.reducerPath]: userAPI.reducer,
     [clothesAPI.reducerPath]: clothesAPI.reducer
