@@ -10,16 +10,21 @@ const defaultShoppingCart = {
     total: 0,
 }
 
+
 const initialState = {
     shoppingCart: [''],
+    shoppingCartData: [''],
 }
 
 export const shoppingCartSlice = createSlice({
     name: 'shoppingCart',
     initialState,
     reducers: {
-        setShoppingCartData: (state, action) => {
+        setShoppingCart: (state, action) => {
             state.shoppingCart = action.payload
+        },
+        setShoppingCartData: (state, action) => {
+            state.shoppingCart = action.payload;
         },
         deleteShoppingCart: (state, action) => {
             let _shoppingCart = state.shoppingCart;
@@ -41,6 +46,6 @@ export const shoppingCartSlice = createSlice({
 
 
 
-export const { setShoppingCartData, deleteShoppingCart, clearShoppingCartData } = shoppingCartSlice.actions
+export const { setShoppingCart, deleteShoppingCart, clearShoppingCartData } = shoppingCartSlice.actions
 
 export default shoppingCartSlice.reducer

@@ -17,7 +17,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { useSelector, useDispatch } from 'react-redux'
-import { setShoppingCartData } from '../../../store/slice/Reducer/shoppingCartSilce';
+import { setShoppingCart } from '../../../store/slice/Reducer/shoppingCartSilce';
 function OrderSide(props) {
 
     const shoppingCartData = useSelector((state) => state.shoppingCart);
@@ -323,7 +323,7 @@ function OrderSide(props) {
                 data.push(obj);
             })
 
-            dispath(setShoppingCartData(data));
+            dispath(setShoppingCart(data));
         }
         // dispath(setShoppingCartData());
     }
