@@ -8,10 +8,28 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import { useNavigate } from 'react-router';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+import { useSelector, useDispatch } from 'react-redux'
+import _ from 'lodash';
+
+
 function NavigationHome(props) {
+    const shoppingCartData = useSelector((state) => state.shoppingCart.shoppingCart);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [navClass, setNavClass] = useState('nav-sticky');
     const navigate = useNavigate();
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        '& .MuiBadge-badge': {
+            right: -3,
+            top: 13,
+            border: `2px solid ${theme.palette.background.paper}`,
+            padding: '0 4px',
+        },
+    }));
+
     const handleScroll = () => {
         const position = window.pageYOffset;
         if (position > 0) {
@@ -269,14 +287,30 @@ function NavigationHome(props) {
                                 <path d="M73.5 141C110.779 141 141 110.779 141 73.5C141 36.2208 110.779 6 73.5 6C36.2208 6 6 36.2208 6 73.5C6 110.779 36.2208 141 73.5 141Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M171 171L121.2 121.2" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path>
                             </svg>
                         </Tooltip>
+                        <Tooltip title="Order" arrow>
+                            <StyledBadge
+                                onClick={() => { navigate('/order') }}
+                                badgeContent={!_.isEmpty(shoppingCartData) && shoppingCartData[0] !== '' ? shoppingCartData.length : 0}
+                                // style={{ backgroundColor: '#f06e00' }}
+                                color='primary'
+                                showZero>
+                                <svg
+                                    onClick={() => { navigate('/order') }}
+                                    className='icon'
+                                    viewBox="0 0 162 177"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"><path d="M156 171L148.5 51H13.5L6 171H156Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M43.5 66V36C43.5 28.0435 46.6607 20.4129 52.2868 14.7868C57.9129 9.16071 65.5435 6 73.5 6H88.5C96.4565 6 104.087 9.16071 109.713 14.7868C115.339 20.4129 118.5 28.0435 118.5 36V66" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path>
+                                </svg>
+                            </StyledBadge>
+
+                        </Tooltip>
                         <Tooltip title="System" arrow>
-                            <svg
+
+                            <AcUnitIcon
+                                style={{ cursor: 'pointer' }}
                                 onClick={() => { navigate('/system') }}
-                                className='icon'
-                                viewBox="0 0 162 177"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"><path d="M156 171L148.5 51H13.5L6 171H156Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M43.5 66V36C43.5 28.0435 46.6607 20.4129 52.2868 14.7868C57.9129 9.16071 65.5435 6 73.5 6H88.5C96.4565 6 104.087 9.16071 109.713 14.7868C115.339 20.4129 118.5 28.0435 118.5 36V66" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path>
-                            </svg>
+                            ></AcUnitIcon>
+
                         </Tooltip>
                     </div>
 
