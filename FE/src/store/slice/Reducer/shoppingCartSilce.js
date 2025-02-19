@@ -12,8 +12,8 @@ const defaultShoppingCart = {
 
 
 const initialState = {
-    shoppingCart: [''],
-    shoppingCartData: [''],
+    shoppingCart: [],
+    shoppingCartData: [],
 }
 
 export const shoppingCartSlice = createSlice({
@@ -21,11 +21,46 @@ export const shoppingCartSlice = createSlice({
     initialState,
     reducers: {
         setShoppingCart: (state, action) => {
-            state.shoppingCart = action.payload
+            let data = action.payload;
+            let _shoppingCart = state.shoppingCart;
+            if (state.shoppingCart[0] === '') { state.shoppingCart.splice(0, 1) }
+            if (data) {
+                let hasChanged = false;
+                data.map(item1 => {
+                    let isValid = false;
+                    _shoppingCart.map(item2 => {
+                        if (item2.clothesId === item1.clothesId && item1.color === item2.color && item1.size === item2.size) {
+                            isValid = true;
+                            if (item2.total !== item1.total) {
+                                item2.total = item1.total;
+                                hasChanged = true;
+                                return item2;
+                            }
+                        }
+                        else {
+                            return item2;
+                        }
+                    })
+                    if (isValid === false) {
+                        hasChanged = true;
+                        _shoppingCart.push(item1);
+                    }
+                })
+                if (hasChanged === true) {
+                    state.shoppingCart = _shoppingCart;
+                    toast("Add shopping cart completed!")
+                }
+                else {
+                    toast("Your items exist!")
+                }
+
+            }
         },
+
         setShoppingCartData: (state, action) => {
             state.shoppingCart = action.payload;
         },
+
         deleteShoppingCart: (state, action) => {
             let _shoppingCart = state.shoppingCart;
             if (_shoppingCart) {
@@ -46,6 +81,6 @@ export const shoppingCartSlice = createSlice({
 
 
 
-export const { setShoppingCart, deleteShoppingCart, clearShoppingCartData } = shoppingCartSlice.actions
+export const { setShoppingCart, deleteShoppingCart, clearShoppingCartData, setShoppingCartData } = shoppingCartSlice.actions
 
 export default shoppingCartSlice.reducer

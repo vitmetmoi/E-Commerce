@@ -23,10 +23,6 @@ import { setUserData } from '../../../store/slice/Reducer/userSlice';
 import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 
-
-
-
-
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
 const BRANDING = {
     logo: (
