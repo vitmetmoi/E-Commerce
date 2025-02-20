@@ -61,11 +61,17 @@ function ShoppingCart(props) {
         <>
             <AdsHome></AdsHome>
             <NavigationHome></NavigationHome>
-            <Footer></Footer>
 
             <div className='shopping-cart-container'>
 
+                <h2 className='header'>
+                    <font>Shopping Cart</font>
+                </h2>
             </div>
+
+            <Footer></Footer>
+
+
         </>
     );
 }
