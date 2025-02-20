@@ -14,12 +14,9 @@ import { setClothesDataSlice } from '../../../store/slice/Reducer/systemSlice';
 import _ from 'lodash'
 function TheNewDropSection(props) {
     const dispatch = useDispatch()
-    const [getClothesData, {
-        data,
-        isFetching,
-        isLoading,
-    }] = useGetClothesDataMutation({ type: 'NEW', id: 0 });
-    const clothes = useSelector((state) => state.system)
+    const [getClothesData, { data }] = useGetClothesDataMutation({ type: 'NEW', id: 0 });
+    const [isLoading, setIsLoading] = useState(false);
+    const clothes = useSelector((state) => state.system.clothesData)
     const [clothesData, setClothesData] = useState('');
 
     useEffect(() => {
@@ -27,24 +24,22 @@ function TheNewDropSection(props) {
             getClothes();
         }
         else {
-            setClothesData(clothes.clothesData)
+            setClothesData(clothes)
         }
 
     }, [])
 
-    useEffect(() => {
-        if (isLoading === false && data) {
-            dispatch(setClothesDataSlice(data.DT))
-        }
-    }, [isLoading])
 
     const getClothes = async () => {
         let params = { type: 'NEW', id: 0 }
         let res = '';
+        setIsLoading(true);
         res = await getClothesData(params);
 
         if (res && res.data && res.data.EC === 0) {
             setClothesData(res.data.DT)
+            setIsLoading(false);
+            dispatch(setClothesDataSlice(res.data.DT))
         }
     }
 

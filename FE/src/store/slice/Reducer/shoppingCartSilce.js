@@ -13,7 +13,7 @@ const defaultShoppingCart = {
 
 const initialState = {
     shoppingCart: [],
-    shoppingCartData: [],
+    // shoppingCartData: [],
 }
 
 export const shoppingCartSlice = createSlice({
@@ -57,10 +57,6 @@ export const shoppingCartSlice = createSlice({
             }
         },
 
-        setShoppingCartData: (state, action) => {
-            state.shoppingCart = action.payload;
-        },
-
         deleteShoppingCart: (state, action) => {
             let _shoppingCart = state.shoppingCart;
             if (_shoppingCart) {
@@ -81,6 +77,6 @@ export const shoppingCartSlice = createSlice({
 
 
 
-export const { setShoppingCart, deleteShoppingCart, clearShoppingCartData, setShoppingCartData } = shoppingCartSlice.actions
+export const { setShoppingCart, deleteShoppingCart, clearShoppingCartData } = shoppingCartSlice.actions
 
 export default shoppingCartSlice.reducer
