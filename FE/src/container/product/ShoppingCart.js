@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useGetClothesDataMutation } from '../../store/slice/API/systemAPI';
 import _ from 'lodash'
 import { setShoppingCart, setShoppingCartData } from '../../store/slice/Reducer/shoppingCartSilce';
+
 function ShoppingCart(props) {
     const dispatch = useDispatch();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
@@ -15,19 +16,30 @@ function ShoppingCart(props) {
     // console.log("shop", shoppingCartData)
     useEffect(() => {
         if (_.isEmpty(shoppingCartData) || shoppingCartData[0] === '') {
-            getClothes();
+            if (shoppingCart && !_.isEmpty(shoppingCart)) {
+                getClothes();
+            }
         }
     }, [])
 
     const getClothes = async () => {
-        let arrId = new Set();
-
-        shoppingCart.map(async (item) => {
-            arrId.add(item.clothesId);
+        let arrId = [];
+        console.log('shop cart', shoppingCart);
+        shoppingCart.map(item1 => {
+            let isExist = false;
+            arrId.map(item2 => {
+                if (item1.clothesId === item2) {
+                    isExist = true;
+                }
+            })
+            if (isExist === false) {
+                arrId.push(item1.clothesId);
+            }
         })
+        console.log('arr id', arrId)
 
         if (arrId) {
-            arrId = Array.from(arrId);
+
             let arrDataClothes = [];
             arrId.map(async (item) => {
                 console.log(item);

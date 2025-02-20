@@ -19,7 +19,8 @@ const reducers = combineReducers({
 
 const persistConfig = {
     key: 'root',
-    storage
+    storage,
+    blacklist: ['userAPI', 'systemAPI', 'system']
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
