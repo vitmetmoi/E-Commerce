@@ -8,12 +8,16 @@ import { useGetClothesDataMutation } from '../../store/slice/API/systemAPI';
 import _ from 'lodash'
 import { setShoppingCart } from '../../store/slice/Reducer/shoppingCartSilce';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { Icon, IconButton } from '@mui/material';
 function ShoppingCart(props) {
     const dispatch = useDispatch();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const shoppingCart = useSelector((state) => state.shoppingCart.shoppingCart);
     const [shoppingCartData, setShoppingCartData] = useState('');
     const [tableData, setTableData] = useState('');
+    const [isSelectAll, setIsSelectAll] = useState(false);
     console.log("shop", shoppingCartData)
     console.log("shopCart", shoppingCart)
     console.log('tabledata', tableData)
@@ -59,15 +63,17 @@ function ShoppingCart(props) {
                 shoppingCart.map(item1 => {
 
                     setTimeout(() => {
-                        arrDataClothes.map(item2 => {
+                        arrDataClothes.map((item2, index2) => {
 
                             if (item1.clothesId === item2.id) {
-                                item2.Color_Sizes.map(item3 => {
+                                item2.Color_Sizes.map((item3, index3) => {
 
                                     if (item3.color === item1.color && item3.size === item1.size && +item3.stock >= item1.total) {
 
                                         let obj = {
-                                            id: item2.id,
+                                            id: _tableData.length,
+                                            isSelected: false,
+                                            clothesId: item2.id,
                                             name: item2.name,
                                             color: item1.color,
                                             size: item1.size,
@@ -85,13 +91,48 @@ function ShoppingCart(props) {
                     }, 1000);
                 })
 
-                setTableData(_tableData);
-
+                setTimeout(() => {
+                    setTableData(_tableData);
+                }, 1000);
 
             }
         }
 
     }
+    const handleSelecAll = () => {
+
+        let _tableData = _.cloneDeep(tableData);
+        if (_tableData) {
+            _tableData.map(item => {
+                if (isSelectAll === false) {
+                    item.isSelected = true;
+                    return item;
+                }
+                else {
+                    item.isSelected = false;
+                    return item;
+                }
+            })
+        }
+        setTableData(_tableData);
+        setIsSelectAll(!isSelectAll);
+    }
+
+    const hanleIsSelected = (id) => {
+        let _tableData = _.cloneDeep(tableData);
+        if (_tableData) {
+            _tableData.map(item => {
+
+                if (item.id === id) {
+                    item.isSelected = !item.isSelected;
+                    return item;
+                }
+            })
+        }
+        setTableData(_tableData);
+    }
+
+    const handleOnclickTotal = () => { }
 
     return (
         <>
@@ -116,13 +157,21 @@ function ShoppingCart(props) {
                     <table>
                         <thead>
                             <tr>
-                                <th scope='col'>o</th>
+                                <th scope='col' >
+                                    <IconButton
+                                        onClick={() => { handleSelecAll() }}>
+                                        <div className={isSelectAll === true ? 'action-box active' : 'action-box'}>
+                                            <div className='round'></div>
+                                        </div>
+                                    </IconButton>
+
+                                </th>
                                 <th scope='col'></th>
                                 <th scope='col'><font>Product Information</font></th>
                                 <th scope='col'></th>
                                 <th scope='col'><font>Savings</font></th>
                                 <th scope='col'><font>Delivery fee</font></th>
-                                <th scope='col'><font>Total</font></th>
+                                <th scope='col'><font>Price</font></th>
                                 <th scope='col'><font>Select</font></th>
                             </tr>
                         </thead>
@@ -134,14 +183,71 @@ function ShoppingCart(props) {
                                     return (
                                         <>
                                             <tr>
-                                                <td>o</td>
-                                                <td><img src={item.image}></img></td>
-                                                <td>o</td>
-                                                <td>o</td>
-                                                <td>o</td>
-                                                <td>o</td>
-                                                <td>o</td>
-                                                <td>o</td>
+                                                <td>
+                                                    <div className='action-content'>
+                                                        <IconButton
+                                                            onClick={() => hanleIsSelected(item.id)}
+                                                        >
+                                                            <div className={item.isSelected === true ? 'action-box active' : 'action-box'}>
+                                                                <div className='round'></div>
+                                                            </div>
+                                                        </IconButton>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <img width={100} height={133} src={item.image}></img>
+                                                </td>
+                                                <td>
+                                                    <div className='infor-group'>
+                                                        <font className='name'>{item.name}</font>
+                                                        <font className='relevant'>[{item.color} / {item.size}]</font>
+                                                    </div>
+
+
+                                                </td>
+                                                <td>
+                                                    <div className='total-container'>
+                                                        <button
+                                                            onClick={() => handleOnclickTotal('SUBTRACT')}
+                                                            className='button-adj'><span>-</span></button>
+                                                        <span className='total'>{item.total}</span>
+                                                        <button
+                                                            onClick={() => handleOnclickTotal('ADD')}
+                                                            className='button-adj'><span>+</span></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='discount'>
+                                                        <font>{item.discount}%</font>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div className='delivery'>
+                                                        <font>Free</font>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='price'>
+                                                        <font>{item.price}</font>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='select-group'>
+
+                                                        <button className='btn-top'>Order now</button>
+
+                                                        <div className='btn-bottom'>
+                                                            <IconButton>
+                                                                <RemoveCircleOutlineIcon></RemoveCircleOutlineIcon>
+                                                            </IconButton>
+                                                            <IconButton>
+                                                                <BookmarkBorderIcon></BookmarkBorderIcon>
+                                                            </IconButton>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </>
                                     )
