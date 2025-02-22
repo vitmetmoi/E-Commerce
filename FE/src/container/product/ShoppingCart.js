@@ -7,17 +7,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useGetClothesDataMutation } from '../../store/slice/API/systemAPI';
 import _ from 'lodash'
 import { setShoppingCart } from '../../store/slice/Reducer/shoppingCartSilce';
-
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import { Icon, IconButton } from '@mui/material';
+import { toast } from 'react-toastify';
 function ShoppingCart(props) {
     const dispatch = useDispatch();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const shoppingCart = useSelector((state) => state.shoppingCart.shoppingCart);
     const [shoppingCartData, setShoppingCartData] = useState('');
-    // console.log("shop", shoppingCartData)
+    const [tableData, setTableData] = useState('');
+    const [isSelectAll, setIsSelectAll] = useState(false);
+    console.log("shop", shoppingCartData)
+    console.log("shopCart", shoppingCart)
+    console.log('tabledata', tableData)
     useEffect(() => {
 
         if (_.isEmpty(shoppingCartData) || shoppingCartData[0] === '') {
-            console.log("123")
             if (shoppingCart && !_.isEmpty(shoppingCart)) {
                 getClothes();
             }
@@ -52,20 +59,278 @@ function ShoppingCart(props) {
 
             if (arrDataClothes) {
                 setShoppingCartData(arrDataClothes);
+                let _tableData = [];
+
+                shoppingCart.map(item1 => {
+
+                    setTimeout(() => {
+                        arrDataClothes.map((item2, index2) => {
+
+                            if (item1.clothesId === item2.id) {
+                                item2.Color_Sizes.map((item3, index3) => {
+
+                                    if (item3.color === item1.color && item3.size === item1.size && +item3.stock >= item1.total) {
+
+                                        let obj = {
+                                            id: _tableData.length,
+                                            isSelected: false,
+                                            clothesId: item2.id,
+                                            name: item2.name,
+                                            color: item1.color,
+                                            size: item1.size,
+                                            total: item1.total,
+                                            price: item2.price,
+                                            discount: item2.Discounts[0].value,
+                                            image: item2.RelevantImages[0].image,
+                                            stock: +item3.stock
+                                        }
+
+                                        _tableData.push(obj);
+                                    }
+                                })
+                            }
+                        })
+                    }, 1000);
+                })
+
+                setTimeout(() => {
+                    setTableData(_tableData);
+                }, 1000);
+
             }
         }
 
+    }
+    const handleSelecAll = () => {
+
+        let _tableData = _.cloneDeep(tableData);
+        if (_tableData) {
+            _tableData.map(item => {
+                if (isSelectAll === false) {
+                    item.isSelected = true;
+                    return item;
+                }
+                else {
+                    item.isSelected = false;
+                    return item;
+                }
+            })
+        }
+        setTableData(_tableData);
+        setIsSelectAll(!isSelectAll);
+    }
+
+    const hanleIsSelected = (id) => {
+        let _tableData = _.cloneDeep(tableData);
+        if (_tableData) {
+            _tableData.map(item => {
+
+                if (item.id === id) {
+                    item.isSelected = !item.isSelected;
+                    return item;
+                }
+            })
+        }
+        setTableData(_tableData);
+    }
+
+    const handleOnclickTotal = (type, id) => {
+        if (tableData) {
+            let _tableData = _.cloneDeep(tableData);
+
+            _tableData.map(item1 => {
+                if (item1.id === id) {
+
+                    if (type === 'ADD') {
+                        if (item1.total < item1.stock) {
+                            item1.total++;
+                        }
+                        else {
+                            toast('Out of stock!');
+                        }
+                    }
+
+                    else if (type === 'SUBTRACT') {
+                        if (item1.total > 1) {
+                            item1.total--;
+                        }
+                        else {
+                            toast('Reached minimum!');
+                        }
+                    }
+
+                }
+                return item1;
+            })
+
+            setTableData(_tableData);
+
+        }
+    }
+
+    const caculateFinallyPrice = (type) => {
+        if (tableData) {
+            let sum = 0;
+            if (type === 'BARE') {
+                tableData.map(item => {
+                    let price = +item.price;
+                    sum = price + sum;
+                })
+                return sum;
+            }
+            else if (type === 'DISCOUNT') {
+
+                tableData.map(item => {
+                    let price = +item.price * (item.discount / 100);
+                    sum = sum + price;
+                })
+                return sum;
+            }
+            else if (type === 'AFTER_DISCOUNT') {
+                tableData.map(item => {
+                    let price = +item.price - (+item.price * (item.discount / 100));
+                    sum = sum + price;
+                })
+                return sum;
+            }
+        }
     }
 
     return (
         <>
             <AdsHome></AdsHome>
             <NavigationHome></NavigationHome>
-            <Footer></Footer>
+            <div className='nav-items'>
+                <span>Home</span>
+                <KeyboardArrowRightIcon />
+                <span> Special Exhibition</span>
+                <KeyboardArrowRightIcon />
+                <span>Best Products</span>
+            </div>
 
             <div className='shopping-cart-container'>
 
+                <h2 className='header'>
+                    <font>Shopping Cart</font>
+                </h2>
+
+
+                <div className='orders-table'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope='col' >
+                                    <IconButton
+                                        onClick={() => { handleSelecAll() }}>
+                                        <div className={isSelectAll === true ? 'action-box active' : 'action-box'}>
+                                            <div className='round'></div>
+                                        </div>
+                                    </IconButton>
+
+                                </th>
+                                <th scope='col'></th>
+                                <th scope='col'><font>Product Information</font></th>
+                                <th scope='col'></th>
+                                <th scope='col'><font>Savings</font></th>
+                                <th scope='col'><font>Delivery fee</font></th>
+                                <th scope='col'><font>Price</font></th>
+                                <th scope='col'><font>Select</font></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {
+                                tableData && tableData.map(item => {
+
+                                    return (
+                                        <>
+                                            <tr>
+                                                <td>
+                                                    <div className='action-content'>
+                                                        <IconButton
+                                                            onClick={() => hanleIsSelected(item.id)}
+                                                        >
+                                                            <div className={item.isSelected === true ? 'action-box active' : 'action-box'}>
+                                                                <div className='round'></div>
+                                                            </div>
+                                                        </IconButton>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <img width={100} height={133} src={item.image}></img>
+                                                </td>
+                                                <td>
+                                                    <div className='infor-group'>
+                                                        <font className='name'>{item.name}</font>
+                                                        <font className='relevant'>[{item.color} / {item.size}]</font>
+                                                    </div>
+
+
+                                                </td>
+                                                <td>
+                                                    <div className='total-container'>
+                                                        <button
+                                                            onClick={() => handleOnclickTotal('SUBTRACT', item.id)}
+                                                            className='button-adj'><span>-</span></button>
+                                                        <span className='total'>{item.total}</span>
+                                                        <button
+                                                            onClick={() => handleOnclickTotal('ADD', item.id)}
+                                                            className='button-adj'><span>+</span></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='discount'>
+                                                        <font>{item.discount}%</font>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div className='delivery'>
+                                                        <font>Free</font>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='price'>
+                                                        <font>{item.price}$</font>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='select-group'>
+
+                                                        <button className='btn-top'>Order now</button>
+
+                                                        <div className='btn-bottom'>
+                                                            <IconButton>
+                                                                <RemoveCircleOutlineIcon></RemoveCircleOutlineIcon>
+                                                            </IconButton>
+                                                            <IconButton>
+                                                                <BookmarkBorderIcon></BookmarkBorderIcon>
+                                                            </IconButton>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+
+                    <div className="sum-price">
+                        <font>Product purchase amount</font> <strong>{caculateFinallyPrice('BARE')}$</strong>
+                        <font> + Shipping cost 0 (free) </font> <font> - Product discount amount</font> <strong>{caculateFinallyPrice('DISCOUNT')}$</strong>
+                        <font> = Total </font><strong>{caculateFinallyPrice('AFTER_DISCOUNT')}$</strong>
+                    </div>
+
+                </div>
+
             </div>
+
+            <Footer></Footer>
+
+
         </>
     );
 }

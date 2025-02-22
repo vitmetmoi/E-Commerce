@@ -262,7 +262,6 @@ function OrderSide(props) {
     }
 
     const handleOnclickTotal = (type, index) => {
-        console.log('hy', orderList)
         let order = orderList[index];
         let _orderList = _.cloneDeep(orderList);
 
@@ -327,8 +326,6 @@ function OrderSide(props) {
         }
         // dispath(setShoppingCartData());
     }
-
-    console.log('shoppingcaretDt', shoppingCartData);
 
     return (
 
