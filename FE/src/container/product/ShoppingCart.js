@@ -11,6 +11,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { Icon, IconButton } from '@mui/material';
+import { toast } from 'react-toastify';
 function ShoppingCart(props) {
     const dispatch = useDispatch();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
@@ -80,7 +81,8 @@ function ShoppingCart(props) {
                                             total: item1.total,
                                             price: item2.price,
                                             discount: item2.Discounts[0].value,
-                                            image: item2.RelevantImages[0].image
+                                            image: item2.RelevantImages[0].image,
+                                            stock: +item3.stock
                                         }
 
                                         _tableData.push(obj);
@@ -132,7 +134,67 @@ function ShoppingCart(props) {
         setTableData(_tableData);
     }
 
-    const handleOnclickTotal = () => { }
+    const handleOnclickTotal = (type, id) => {
+        if (tableData) {
+            let _tableData = _.cloneDeep(tableData);
+
+            _tableData.map(item1 => {
+                if (item1.id === id) {
+
+                    if (type === 'ADD') {
+                        if (item1.total < item1.stock) {
+                            item1.total++;
+                        }
+                        else {
+                            toast('Out of stock!');
+                        }
+                    }
+
+                    else if (type === 'SUBTRACT') {
+                        if (item1.total > 1) {
+                            item1.total--;
+                        }
+                        else {
+                            toast('Reached minimum!');
+                        }
+                    }
+
+                }
+                return item1;
+            })
+
+            setTableData(_tableData);
+
+        }
+    }
+
+    const caculateFinallyPrice = (type) => {
+        if (tableData) {
+            let sum = 0;
+            if (type === 'BARE') {
+                tableData.map(item => {
+                    let price = +item.price;
+                    sum = price + sum;
+                })
+                return sum;
+            }
+            else if (type === 'DISCOUNT') {
+
+                tableData.map(item => {
+                    let price = +item.price * (item.discount / 100);
+                    sum = sum + price;
+                })
+                return sum;
+            }
+            else if (type === 'AFTER_DISCOUNT') {
+                tableData.map(item => {
+                    let price = +item.price - (+item.price * (item.discount / 100));
+                    sum = sum + price;
+                })
+                return sum;
+            }
+        }
+    }
 
     return (
         <>
@@ -209,11 +271,11 @@ function ShoppingCart(props) {
                                                 <td>
                                                     <div className='total-container'>
                                                         <button
-                                                            onClick={() => handleOnclickTotal('SUBTRACT')}
+                                                            onClick={() => handleOnclickTotal('SUBTRACT', item.id)}
                                                             className='button-adj'><span>-</span></button>
                                                         <span className='total'>{item.total}</span>
                                                         <button
-                                                            onClick={() => handleOnclickTotal('ADD')}
+                                                            onClick={() => handleOnclickTotal('ADD', item.id)}
                                                             className='button-adj'><span>+</span></button>
                                                     </div>
                                                 </td>
@@ -230,7 +292,7 @@ function ShoppingCart(props) {
                                                 </td>
                                                 <td>
                                                     <div className='price'>
-                                                        <font>{item.price}</font>
+                                                        <font>{item.price}$</font>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -255,6 +317,13 @@ function ShoppingCart(props) {
                             }
                         </tbody>
                     </table>
+
+                    <div className="sum-price">
+                        <font>Product purchase amount</font> <strong>{caculateFinallyPrice('BARE')}$</strong>
+                        <font> + Shipping cost 0 (free) </font> <font> - Product discount amount</font> <strong>{caculateFinallyPrice('DISCOUNT')}$</strong>
+                        <font> = Total </font><strong>{caculateFinallyPrice('AFTER_DISCOUNT')}$</strong>
+                    </div>
+
                 </div>
 
             </div>
