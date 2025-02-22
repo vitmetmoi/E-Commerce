@@ -214,22 +214,26 @@ function ShoppingCart(props) {
     }
 
     const handleDeleteItems = (type) => {
-        console.log('st');
+
         if (type === 'ALL') {
             dispatch(clearShoppingCartData())
+            setTableData('');
         }
         else {
             if (tableData) {
-                console.log('st');
-                let _tableData = tableData;
-                _tableData.map((item, index) => {
+
+                let _tableData = _.cloneDeep(tableData);
+
+
+                _tableData.map(async (item, index) => {
                     if (item.isSelected === true) {
                         console.log("delete", item)
-                        delete _tableData[index];
-                        dispatch(deleteShoppingCart(item.id));
+                        await _tableData.splice(index, 1);
+                        await dispatch(deleteShoppingCart(item.id));
                     }
-                    return item;
                 })
+
+
 
                 setTableData(_tableData);
 

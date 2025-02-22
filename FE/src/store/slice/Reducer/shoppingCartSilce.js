@@ -58,10 +58,11 @@ export const shoppingCartSlice = createSlice({
 
         deleteShoppingCart: (state, action) => {
             let _shoppingCart = state.shoppingCart;
+            let clothesId = action.payload;
             if (_shoppingCart) {
                 _shoppingCart.map((item, index) => {
-                    if (index === action.payload.id) {
-                        delete _shoppingCart[index];
+                    if (index === clothesId) {
+                        _shoppingCart.splice(index, 1);
                     }
                     return item;
                 })
