@@ -227,7 +227,6 @@ function ShoppingCart(props) {
 
                 _tableData.map(async (item, index) => {
                     if (item.isSelected === true) {
-                        console.log("delete", item)
                         await _tableData.splice(index, 1);
                         await dispatch(deleteShoppingCart(item.id));
                     }
