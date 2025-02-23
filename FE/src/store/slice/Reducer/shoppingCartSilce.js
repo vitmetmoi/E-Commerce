@@ -13,7 +13,6 @@ const defaultShoppingCart = {
 
 const initialState = {
     shoppingCart: [],
-    // shoppingCartData: [],
 }
 
 export const shoppingCartSlice = createSlice({
@@ -59,16 +58,18 @@ export const shoppingCartSlice = createSlice({
 
         deleteShoppingCart: (state, action) => {
             let _shoppingCart = state.shoppingCart;
+            let clothesId = action.payload;
             if (_shoppingCart) {
-                _shoppingCart.map(item => {
-                    if (item.clothesId === action.payload.id) {
-                        item = action.payload;
+                _shoppingCart.map((item, index) => {
+                    if (index === clothesId) {
+                        _shoppingCart.splice(index, 1);
                     }
                     return item;
                 })
             }
-
+            state.shoppingCart = _shoppingCart;
         },
+
         clearShoppingCartData: (state, action) => {
             state.shoppingCart = [''];
         },

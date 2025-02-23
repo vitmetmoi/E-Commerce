@@ -332,7 +332,6 @@ function OrderSide(props) {
         <div className='order-side-content'>
 
 
-
             <div className='content-top'>
 
                 <div className='share-icon'>

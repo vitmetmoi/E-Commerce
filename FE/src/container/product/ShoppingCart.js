@@ -6,19 +6,30 @@ import Footer from '../home/Footer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetClothesDataMutation } from '../../store/slice/API/systemAPI';
 import _ from 'lodash'
-import { setShoppingCart } from '../../store/slice/Reducer/shoppingCartSilce';
+import { setShoppingCart, deleteShoppingCart, clearShoppingCartData } from '../../store/slice/Reducer/shoppingCartSilce';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { Icon, IconButton } from '@mui/material';
 import { toast } from 'react-toastify';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import LooksOneIcon from '@mui/icons-material/LooksOne';
+import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+import Looks3Icon from '@mui/icons-material/Looks3';
+import Looks4Icon from '@mui/icons-material/Looks4';
+import Looks5Icon from '@mui/icons-material/Looks5';
+import Looks6Icon from '@mui/icons-material/Looks6';
+
+
 function ShoppingCart(props) {
     const dispatch = useDispatch();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const shoppingCart = useSelector((state) => state.shoppingCart.shoppingCart);
     const [shoppingCartData, setShoppingCartData] = useState('');
     const [tableData, setTableData] = useState('');
-    const [isSelectAll, setIsSelectAll] = useState(false);
+    const [isSelectAll, setIsSelectAll] = useState(true);
     console.log("shop", shoppingCartData)
     console.log("shopCart", shoppingCart)
     console.log('tabledata', tableData)
@@ -73,7 +84,7 @@ function ShoppingCart(props) {
 
                                         let obj = {
                                             id: _tableData.length,
-                                            isSelected: false,
+                                            isSelected: true,
                                             clothesId: item2.id,
                                             name: item2.name,
                                             color: item1.color,
@@ -173,25 +184,58 @@ function ShoppingCart(props) {
             let sum = 0;
             if (type === 'BARE') {
                 tableData.map(item => {
-                    let price = +item.price;
-                    sum = price + sum;
+                    if (item.isSelected === true) {
+                        let price = +item.price;
+                        sum = price + sum;
+                    }
                 })
                 return sum;
             }
             else if (type === 'DISCOUNT') {
 
                 tableData.map(item => {
-                    let price = +item.price * (item.discount / 100);
-                    sum = sum + price;
+                    if (item.isSelected === true) {
+                        let price = +item.price * (item.discount / 100);
+                        sum = sum + price;
+                    }
                 })
                 return sum;
             }
             else if (type === 'AFTER_DISCOUNT') {
                 tableData.map(item => {
-                    let price = +item.price - (+item.price * (item.discount / 100));
-                    sum = sum + price;
+                    if (item.isSelected === true) {
+                        let price = +item.price - (+item.price * (item.discount / 100));
+                        sum = sum + price;
+                    }
                 })
                 return sum;
+            }
+        }
+    }
+
+    const handleDeleteItems = (type) => {
+
+        if (type === 'ALL') {
+            dispatch(clearShoppingCartData())
+            setTableData('');
+        }
+        else {
+            if (tableData) {
+
+                let _tableData = _.cloneDeep(tableData);
+
+
+                _tableData.map(async (item, index) => {
+                    if (item.isSelected === true) {
+                        await _tableData.splice(index, 1);
+                        await dispatch(deleteShoppingCart(item.id));
+                    }
+                })
+
+
+
+                setTableData(_tableData);
+
             }
         }
     }
@@ -318,18 +362,136 @@ function ShoppingCart(props) {
                         </tbody>
                     </table>
 
-                    <div className="sum-price">
-                        <font>Product purchase amount</font> <strong>{caculateFinallyPrice('BARE')}$</strong>
-                        <font> + Shipping cost 0 (free) </font> <font> - Product discount amount</font> <strong>{caculateFinallyPrice('DISCOUNT')}$</strong>
-                        <font> = Total </font><strong>{caculateFinallyPrice('AFTER_DISCOUNT')}$</strong>
+                </div>
+
+
+                <div className="sum-price">
+                    <font>Product purchase amount</font> <strong>{caculateFinallyPrice('BARE')}$</strong>
+                    <font> + Shipping cost 0 (free) </font> <font> - Product discount amount</font> <strong>{caculateFinallyPrice('DISCOUNT')}$</strong>
+                    <font> = Total </font><strong>{caculateFinallyPrice('AFTER_DISCOUNT')}$</strong>
+                </div>
+
+                <div className='options-container'>
+                    <button
+                        onClick={() => handleDeleteItems('SELECTED')}
+                    >Delete selected items</button>
+                    <div className='btn-right'>
+                        <button>Print a quote</button>
+                        <button
+                            onClick={() => handleDeleteItems('ALL')}
+                        >Empty cart</button>
+                    </div>
+                </div>
+
+                <div className='table-final'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope='col'><font>Total product price</font></th>
+                                <th scope='col'></th>
+                                <th scope='col'><font>Total shipping cost</font></th>
+                                <th scope='col'></th>
+                                <th scope='col'><font>Total discount amount</font></th>
+                                <th scope='col'></th>
+                                <th scope='col'><font>Amount to be paid</font></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope='col' className='price-row'>
+                                    <strong>{caculateFinallyPrice('BARE')}$</strong>
+                                </td>
+                                <td scope='col'>
+                                    <LocalShippingIcon style={{ color: '#909090' }} />
+                                </td>
+                                <td scope='col' className='price-row'>
+                                    <strong>0$</strong></td>
+                                <td scope='col'><LocalOfferIcon style={{ color: '#909090' }} />
+                                </td>
+                                <td scope='col' className='price-row'>
+                                    <strong>{caculateFinallyPrice('DISCOUNT')}$</strong>
+                                </td>
+                                <td scope='col'><ShoppingCartCheckoutIcon /></td>
+                                <td scope='col' className='price-row'>
+                                    <strong className='final-price'>{caculateFinallyPrice('AFTER_DISCOUNT')}$</strong>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div className='submit-group'>
+                    <button className='btn1'>Continue Shopping</button>
+                    <button className='btn2'>Order All Products</button>
+                </div>
+
+                <div className='informations'>
+
+                    <div className='head-title'>Shopping Cart Usage Guide</div>
+
+                    <div className='scripts-group'>
+                        <div className='script'>
+                            <LooksOneIcon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            International shipping products and domestic shipping products cannot be paid for together, so please pay for each shopping cart separately.
+                        </div>
+
+                        <div className='script'>
+                            <LooksTwoIcon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            For products eligible for overseas delivery, you can add them to the domestic delivery cart and then move them to the overseas delivery cart to make payment.
+                        </div>
+                        <div className='script'>
+                            <Looks3Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            If you want to change the quantity of the product you selected, change the quantity and then click the [Change] button.
+                        </div>
+                        <div className='script'>
+                            <Looks4Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            You can continue shopping by clicking the [Continue Shopping] button.
+                        </div>
+                        <div className='script'>
+                            <Looks5Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            You can use the shopping cart and wish list to order only the products you want or register them as wish lists.
+                        </div>
+                        <div className='script'>
+                            <Looks6Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            The file attachment option will be replaced with the last uploaded file when adding the same product to the shopping cart.
+                        </div>
+                    </div>
+
+                    <div className='head-title header2'>Interest-free installment plan usage guide</div>
+                    <div className='scripts-group'>
+
+
+                        <div className='script'>
+                            <LooksOneIcon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            To receive the interest-free installment benefit for each product, select only the interest-free installment products and click the [Order] button to order/pay.
+                        </div>
+
+                        <div className='script'>
+                            <LooksTwoIcon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            If you click the [Order All Products] button, an order/payment will be made for all selected products in the shopping cart, regardless of category.
+                        </div>
+                        <div className='script'>
+                            <Looks3Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            However, if you order/pay for all products, you will not be able to receive the interest-free installment benefit for each product.
+                        </div>
+                        <div className='script'>
+                            <Looks4Icon style={{ fontSize: '20px', marginRight: '5px', color: '#707070', opacity: '0.5' }} />
+                            Interest-free installment products are displayed in a separate interest-free installment product area in the shopping cart, and shipping costs are displayed based on interest-free installment products.
+                            Actual shipping costs are applied based on the products ordered together, so please refer to the shipping cost information at the bottom of the order form.
+                        </div>
+
+
                     </div>
 
                 </div>
 
+
+
             </div>
 
             <Footer></Footer>
-
 
         </>
     );
