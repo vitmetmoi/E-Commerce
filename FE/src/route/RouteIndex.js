@@ -24,6 +24,11 @@ function RouteIndex(props) {
                         <Route path='user' >
                             <Route element={<AuthLayout />}>
                                 <Route path="profile" element={<UserProfile />}></Route>
+                                <Route path="my-account" element={<UserProfile />}></Route>
+                                <Route path="my-orders" element={<UserProfile />}></Route>
+                                <Route path="returns-cancel" element={<UserProfile />}></Route>
+                                <Route path="my-rating-reviews" element={<UserProfile />}></Route>
+                                <Route path="change-password" element={<UserProfile />}></Route>
                             </Route>
                         </Route>
 

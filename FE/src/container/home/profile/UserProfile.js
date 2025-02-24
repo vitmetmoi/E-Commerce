@@ -1,16 +1,125 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './UserProfile.scss';
 import { useSelector, useDispatch } from 'react-redux'
 import NavigationHome from '../NavigationHome';
-
+import AdsHome from '../AdsHome';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import BlockIcon from '@mui/icons-material/Block';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import { useLocation, useSearchParams, useNavigate } from 'react-router';
+import MyAccount from './Components/MyAccount';
+import MyOrders from './Components/MyOrders';
+import ReturnsAndCancel from './Components/ReturnsAndCancel';
+import MyRatingAndReviews from './Components/MyRatingAndReviews';
+import ChangePassword from './Components/ChangePassword';
+import { clearUserData } from '../../../store/slice/Reducer/userSlice';
+import LogoutIcon from '@mui/icons-material/Logout';
 function UserProfile(props) {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const userData = useSelector((state) => state.user.userData);
-    // const base64String = btoa(String.fromCharCode(...new Uint8Array(userData.avatar)));
+
+
+    useEffect(() => {
+        console.log('search', location.pathname);
+    }, [])
+    console.log('user', userData);
+
+    const handleOnClickMenu = (path) => {
+        navigate(path);
+    }
+
+    const handleLogOut = () => {
+        dispatch(clearUserData());
+    }
     return (
         <>
+            <AdsHome></AdsHome>
             <NavigationHome></NavigationHome>
-            <div>user : {userData.email}</div>
-            <img style={{ marginTop: "50px" }} width={300} height={300} src={userData && userData.avatar} alt="" />
+
+            <div className='user-profile-container'>
+                <h4 className='profile-header'>Profile</h4>
+
+                <div className='profile-container'>
+
+                    <div className='content-left'>
+
+                        <div className='user-avt'>
+                            <div className='avt-container'>
+                                <img className='user-avt' src={userData.avatar}></img>
+                            </div>
+                            <div className='name-container'>
+                                <span className='text-1'>Hello</span>
+                                <span className='text-2'>{userData.firstName} {userData.lastName}</span>
+                            </div>
+                        </div>
+
+                        <div className='menu'>
+
+                            <div
+                                onClick={() => handleOnClickMenu('/user/profile')}
+                                className={(location.pathname === '/user/profile' || location.pathname === '/user/my-account') ? 'item active' : 'item'}>
+                                <PersonOutlineIcon />
+                                <span>My Accounts</span>
+                            </div>
+
+                            <div
+                                onClick={() => handleOnClickMenu('/user/my-orders')}
+                                className={location.pathname === '/user/my-orders' ? 'item active' : 'item'}>
+                                <ShoppingCartCheckoutIcon />
+                                <span>My Orders</span>
+                            </div>
+
+                            <div
+                                onClick={() => handleOnClickMenu('/user/returns-cancel')}
+                                className={location.pathname === '/user/returns-cancel' ? 'item active' : 'item'}>
+                                <BlockIcon />
+                                <span>Returns & Cancel</span>
+                            </div>
+
+                            <div
+                                onClick={() => handleOnClickMenu('/user/my-rating-reviews')}
+                                className={location.pathname === '/user/my-rating-reviews' ? 'item active' : 'item'}>
+                                <StarBorderIcon />
+                                <span>My Rating & Reviews</span>
+                            </div>
+
+                            <div
+                                onClick={() => handleOnClickMenu('/user/change-password')}
+                                className={location.pathname === '/user/change-password' ? 'item active' : 'item'}>
+                                <LockResetIcon />
+                                <span>Change Password</span>
+                            </div>
+
+                            <div
+                                onClick={() => handleLogOut()}
+                                className='item'>
+                                <LogoutIcon />
+                                <span>Log Out</span>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div className='content-right'>
+                        {(location.pathname === '/user/profile' || location.pathname === '/user/my-account') && <MyAccount />}
+                        {(location.pathname === '/user/my-orders') && <MyOrders />}
+                        {(location.pathname === '/user/returns-cancel') && <ReturnsAndCancel />}
+                        {(location.pathname === '/user/my-rating-reviews') && <MyRatingAndReviews />}
+                        {(location.pathname === '/user/change-password') && <ChangePassword />}
+
+                    </div>
+
+                </div>
+            </div>
+
         </>
     );
 }
