@@ -185,30 +185,31 @@ function ShoppingCart(props) {
             if (type === 'BARE') {
                 tableData.map(item => {
                     if (item.isSelected === true) {
-                        let price = +item.price;
+
+                        let price = +item.price * item.total;
                         sum = price + sum;
                     }
                 })
-                return sum;
+                return sum.toFixed(3);
             }
             else if (type === 'DISCOUNT') {
 
                 tableData.map(item => {
                     if (item.isSelected === true) {
-                        let price = +item.price * (item.discount / 100);
+                        let price = (+item.price * (item.discount / 100)) * item.total;
                         sum = sum + price;
                     }
                 })
-                return sum;
+                return sum.toFixed(3);
             }
             else if (type === 'AFTER_DISCOUNT') {
                 tableData.map(item => {
                     if (item.isSelected === true) {
-                        let price = +item.price - (+item.price * (item.discount / 100));
+                        let price = (+item.price - (+item.price * (item.discount / 100))) * item.total;
                         sum = sum + price;
                     }
                 })
-                return sum;
+                return sum.toFixed(3);
             }
         }
     }
