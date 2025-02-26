@@ -248,7 +248,7 @@ const registerService = async (data) => {
                     lastName: data.lastName,
                     email: data.email,
                     phoneNumber: data.phoneNumber,
-                    address: data.address,
+                    address: '',
                     gender: data.gender,
                     groupId: data.groupId ? data.groupId : 3,
                     password: hashPassword,

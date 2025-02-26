@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: DataTypes.STRING,
     password: DataTypes.STRING,
     address: DataTypes.STRING,
+    birthDay: DataTypes.STRING,
     gender: DataTypes.STRING,
     avatar: DataTypes.BLOB('long'),
     groupId: DataTypes.INTEGER

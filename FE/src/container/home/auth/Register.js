@@ -50,7 +50,6 @@ function Register(props) {
         password: '',
         gender: '',
         avatar: '',
-        address: '',
         groupId: 3
     }
     const [showPassword, setShowPassword] = useState(false)
@@ -85,7 +84,6 @@ function Register(props) {
             lastName: inputValue.lastName ? inputValue.lastName : '',
             email: inputValue.email ? inputValue.email : '',
             phoneNumber: inputValue.phoneNumber ? inputValue.phoneNumber : '',
-            address: inputValue.address ? inputValue.address : '',
             gender: inputValue.gender ? inputValue.gender : '',
             groupId: inputValue.groupId ? inputValue.groupId : 3,
             password: inputValue.password ? inputValue.password : '',
@@ -267,18 +265,6 @@ function Register(props) {
                             </FormControl>
                         </div>
 
-                        <div className='form-row'>
-                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                                <TextField
-                                    id="standard-helperText"
-                                    label="Address"
-                                    helperText="Enter your excactly addresss"
-                                    variant="standard"
-                                    value={inputValue.address}
-                                    onChange={(event) => handleOnchangeInput(event.target.value, 'address')}
-                                />
-                            </FormControl>
-                        </div>
 
                         <div className='form-row'>
                             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
