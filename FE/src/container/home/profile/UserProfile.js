@@ -20,7 +20,6 @@ import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
 
-
 function UserProfile(props) {
 
     const StyledBadge = styled(Badge)(({ theme }) => ({

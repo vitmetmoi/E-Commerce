@@ -50,7 +50,12 @@ const getUserService = async (type, userId) => {
         else {
             let data = [];
             if (type === 'ALL') {
-                data = await db.User.findAll();
+                data = await db.User.findAll({
+                    include: [{
+                        model: db.Address,
+                    },],
+                    nested: true
+                });
                 return {
                     DT: data,
                     EC: 0,
@@ -58,7 +63,14 @@ const getUserService = async (type, userId) => {
                 }
             }
             else {
-                data = await db.User.findOne({ where: { id: userId } });
+                data = await db.User.findOne({
+                    where: { id: userId },
+                    include: [{
+                        model: db.Address,
+                    },],
+                    nested: true
+
+                });
                 return {
                     DT: data,
                     EC: 0,
@@ -97,7 +109,14 @@ const loginService = async (loginAcc, password) => {
                         phoneNumber: loginAcc,
                     },
                 },
-                raw: true
+                include: [{
+                    model: db.Address,
+                    attributes: ['id', 'provinceId', 'districtId', 'wardId', 'note'],
+                    nested: true
+                }],
+                raw: true,
+
+
             });
             if (!_.isEmpty(user)) {
                 let checkPassword = bcrypt.compareSync(password, user.password);
@@ -106,14 +125,20 @@ const loginService = async (loginAcc, password) => {
                     // let base64 = new Buffer(user.avatar, 'binary').toString('base64');
                     let base64String = new Buffer(user.avatar, 'base64').toString('binary');
                     // console.log('image', base64String);
+                    console.log(user);
                     let data = {
                         firstName: user.firstName,
                         lastName: user.lastName,
                         email: user.email,
                         phoneNumber: user.phoneNumber,
-                        address: user.address,
                         gender: user.gender,
                         avatar: base64String,
+                        // addressData: {
+                        //     provinceId: user.Addresses.provinceId,
+                        //     districtId: user.Addresses.districtId,
+                        //     wardId: user.Addresses.wardId,
+                        //     note: user.Addresses.note
+                        // },
                         groupId: user.groupId ? user.groupId : 3,
                     }
                     let dataForVertify = {

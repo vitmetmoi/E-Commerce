@@ -21,6 +21,9 @@ import dayjs from 'dayjs';
 import _ from 'lodash'
 import GoogleMapReact from 'google-map-react';
 import ReactDOM from "react-dom";
+import { useGetAddresssDataMutation } from '../../../../store/slice/API/otherAPI';
+import { setAddresssDataSlice } from '../../../../store/slice/Reducer/otherSlice';
+
 function MyAccount(props) {
 
     const userData = useSelector((state) => state.user.userData);
@@ -28,6 +31,12 @@ function MyAccount(props) {
     const [birthValue, setBirthValue] = useState(dayjs('2025-1-1'));
     const [formState, setFormState] = useState(userData);
     const [isDisabledState, setIsDisabledState] = useState(false);
+    const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+
+    useEffect(() => {
+        handleGetAddress();
+    }, [])
+
     useEffect(() => {
         if (userData) {
             setFormState(userData);
@@ -42,6 +51,16 @@ function MyAccount(props) {
             setFormState(_formState)
         }
 
+    }
+
+    const handleGetAddress = async () => {
+        console.log("fired");
+
+        let res = await getAddressService({ A: '1', B: '0' });
+        if (res) {
+            console.log("res address", res.data);
+            dispatch(setAddresssDataSlice({ type: 'PROVINCE', data: res.data.data }))
+        }
     }
 
 
