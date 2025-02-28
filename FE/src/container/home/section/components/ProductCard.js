@@ -69,7 +69,7 @@ function ProductCard(props) {
                 </div>
                 <div className='price-inf noselect'>
                     <span className='discount noselect'>{props.discount}%</span>
-                    <span className='price noselect'>{Number((priceAfterDiscouted).toFixed(3))}</span>
+                    <span className='price noselect'>{priceAfterDiscouted.toFixed(3)}</span>
                     <span className='primary-price noselect'>{props.price}</span>
                 </div>
             </div>

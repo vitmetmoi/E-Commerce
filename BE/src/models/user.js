@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Group, { foreignKey: "groupId" })
       User.hasMany(models.Bill, { foreignKey: 'userId' });
+      User.hasMany(models.Address, { foreignKey: 'userId' });
       User.hasMany(models.Review, { foreignKey: 'userId' });
     }
   }
@@ -22,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: DataTypes.STRING,
     password: DataTypes.STRING,
     address: DataTypes.STRING,
+    birthDay: DataTypes.STRING,
     gender: DataTypes.STRING,
     avatar: DataTypes.BLOB('long'),
     groupId: DataTypes.INTEGER

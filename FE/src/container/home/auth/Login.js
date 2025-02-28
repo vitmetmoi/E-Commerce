@@ -80,6 +80,7 @@ function Login(props) {
                                             gender: resData.gender ? resData.gender : '',
                                             groupId: resData.groupId ? resData.groupId : '',
                                             avatar: resData.avatar ? resData.avatar : '',
+
                                             authenticated: true
                                         }
                                         dispatch(setUserData(data))

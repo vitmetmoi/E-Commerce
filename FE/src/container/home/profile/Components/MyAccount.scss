@@ -1,0 +1,130 @@
+.my-account-container {
+    width         : 100%;
+    display       : flex;
+    flex-direction: column;
+
+    .title-content {
+        width        : 100%;
+        height       : 65px;
+        padding      : 18px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+        .title {}
+    }
+
+    .profile-content {
+        width         : 100%;
+        display       : flex;
+        flex-direction: row;
+        padding-top   : 20px;
+        gap           : 50px;
+
+        .content-left {
+            width           : 50%;
+            display         : flex;
+            flex-direction  : column;
+            background-color: inherit;
+            gap             : 30px;
+            padding-left    : 20px;
+
+            .change-avt {
+                width : 130px;
+                height: 130px;
+
+                .avt {
+                    width        : 130px;
+                    height       : 130px;
+                    border-radius: 120px;
+                }
+
+                .css-5iv1t3-MuiBadge-badge {
+                    background-color: #f06e00;
+                }
+            }
+
+            label {
+                font-weight: 500;
+                font-size  : 16px;
+                width      : fit-content;
+            }
+
+            .name-container {
+                display        : flex;
+                flex-direction : row;
+                width          : 100%;
+                justify-content: space-between;
+                gap            : 20px;
+
+                .name {
+                    width: 50% !important;
+
+                    .name-field {
+                        width: 100%;
+                    }
+                }
+
+            }
+
+            .date-container {
+                display       : flex;
+                flex-direction: column;
+                width         : 100%;
+                gap           : 15px;
+
+                .date-picker {
+                    width           : 100%;
+                    background-color: white;
+
+                    .css-jupps9-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+                        border-color: #f06e00;
+                        border-width: 1px;
+                    }
+
+                    // .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+                    //     color: #707070 !important;
+                    // }
+                }
+            }
+
+            .phone-container {
+                display       : flex;
+                flex-direction: column;
+                gap           : 10px;
+            }
+
+            .email-container {
+                display       : flex;
+                flex-direction: column;
+                gap           : 10px;
+            }
+
+
+        }
+
+        .content-right {
+            width           : 50%;
+            background-color: inherit;
+
+            .change-btn {
+                color    : #f06e00;
+                font-size: 17px;
+                cursor   : pointer;
+
+                span {
+                    color      : #f06e00;
+                    margin-left: 10px;
+                    font-weight: 480;
+
+
+                }
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+
+
+
+        }
+    }
+}
