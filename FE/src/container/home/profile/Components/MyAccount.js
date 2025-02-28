@@ -116,9 +116,6 @@ function MyAccount(props) {
         },
     }));
 
-    // console.log('bor', birthValue)
-    // console.log
-
     return (
         <>
             <div className='my-account-container'>
