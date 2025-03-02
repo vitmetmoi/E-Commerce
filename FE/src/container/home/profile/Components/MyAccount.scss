@@ -32,9 +32,11 @@
                 height: 130px;
 
                 .avt {
-                    width        : 130px;
-                    height       : 130px;
-                    border-radius: 120px;
+                    width          : 130px;
+                    height         : 130px;
+                    border-radius  : 120px;
+                    object-position: center;
+                    object-fit     : cover;
                 }
 
                 .css-5iv1t3-MuiBadge-badge {
@@ -47,6 +49,7 @@
                 font-size  : 16px;
                 width      : fit-content;
             }
+
 
             .name-container {
                 display        : flex;
@@ -98,6 +101,23 @@
                 gap           : 10px;
             }
 
+            .address-group {
+                display        : flex;
+                flex-direction : row;
+                justify-content: space-between;
+
+                .address-container {
+                    display       : flex;
+                    flex-direction: column;
+                    gap           : 10px;
+                }
+            }
+
+            .note-container {
+                display       : flex;
+                flex-direction: column;
+                gap           : 10px;
+            }
 
         }
 

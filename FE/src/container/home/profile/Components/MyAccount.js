@@ -23,15 +23,21 @@ import GoogleMapReact from 'google-map-react';
 import ReactDOM from "react-dom";
 import { useGetAddresssDataMutation } from '../../../../store/slice/API/otherAPI';
 import { setAddresssDataSlice } from '../../../../store/slice/Reducer/otherSlice';
-
+import Select from '@mui/material/Select';
+import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 function MyAccount(props) {
 
     const userData = useSelector((state) => state.user.userData);
+    const addressData = useSelector((state) => state.other);
     const dispatch = useDispatch();
     const [birthValue, setBirthValue] = useState(dayjs('2025-1-1'));
     const [formState, setFormState] = useState(userData);
     const [isDisabledState, setIsDisabledState] = useState(false);
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+
+    console.log('address', addressData);
+    console.log('formState', formState)
 
     useEffect(() => {
         handleGetAddress();
@@ -53,14 +59,53 @@ function MyAccount(props) {
 
     }
 
-    const handleGetAddress = async () => {
-        console.log("fired");
-
-        let res = await getAddressService({ A: '1', B: '0' });
-        if (res) {
-            console.log("res address", res.data);
-            dispatch(setAddresssDataSlice({ type: 'PROVINCE', data: res.data.data }))
+    const handleOnChangeAddress = async (name, value) => {
+        console.log('name', name);
+        console.log('value', value)
+        if (name === 'provinceId') {
+            let res2 = await getAddressService({ A: '2', B: `${value}` });
+            if (res2) {
+                console.log("res2 address12", res2.data);
+                dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
+            }
         }
+        else if (name === 'districtId') {
+            let res3 = await getAddressService({ A: '3', B: `${value}` });
+            if (res3) {
+                console.log("res3 address", res3.data);
+                dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
+            }
+        }
+
+        let _formState = _.cloneDeep(formState);
+        if (_formState) {
+            _formState.address[name] = value;
+            setFormState(_formState);
+        }
+    }
+
+    const handleGetAddress = async () => {
+
+        if (userData.address.provinceId === 0) {
+            let res1 = await getAddressService({ A: '1', B: '0' });
+            if (res1) {
+                console.log("res1 address", res1.data);
+                dispatch(setAddresssDataSlice({ type: 'PROVINCE', data: res1.data.data }))
+            }
+        }
+        else if (userData.address.provinceId !== 0) {
+            let res2 = await getAddressService({ A: '2', B: `${userData.address.districtId}` });
+            let res3 = await getAddressService({ A: '3', B: `${userData.address.wardId}` });
+            if (res2) {
+                console.log("res1 address", res2.data);
+                dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
+            }
+            if (res3) {
+                console.log("res2 address", res3.data);
+                dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
+            }
+        }
+
     }
 
 
@@ -251,8 +296,82 @@ function MyAccount(props) {
                         </div>
 
 
-                        <div style={{ height: '100vh', width: '100%' }}>
+                        {addressData && addressData.provinceData &&
+                            <div className='address-group'>
 
+                                <div className='address-container'>
+                                    <label className='name-label' >Province</label>
+
+                                    <Select
+                                        value={formState.address && formState.address.provinceId ? formState.address.provinceId : '01'}
+                                        onChange={(e) => handleOnChangeAddress('provinceId', e.target.value)}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                    >
+                                        {addressData && addressData.provinceData && addressData.provinceData.map(item => {
+                                            return (
+                                                <MenuItem value={item.id ? item.id : '0'}>{item.name_en}</MenuItem>
+                                            )
+                                        })}
+
+                                    </Select>
+                                    <FormHelperText>Your province currently</FormHelperText>
+                                </div>
+
+                                <div className='address-container'>
+                                    <label className='name-label' >District</label>
+
+                                    <Select
+                                        value={formState && formState.address && formState.address.districtId ? formState.address.districtId : '01'}
+                                        onChange={(e) => handleOnChangeAddress('districtId', e.target.value)}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                    >
+                                        {addressData && addressData.districtData && addressData.districtData.length > 0 && addressData.districtData.map(item => {
+                                            return (
+                                                <MenuItem value={item.id ? item.id : '0'}>{item.name_en}</MenuItem>
+                                            )
+                                        })
+
+                                        }
+
+                                    </Select>
+                                    <FormHelperText>Your district currently</FormHelperText>
+                                </div>
+
+                                <div className='address-container'>
+                                    <label className='name-label' >Ward</label>
+
+                                    <Select
+                                        value={formState && formState.address && formState.address.wardId ? formState.address.wardId : '01'}
+                                        onChange={(e) => handleOnChangeAddress('wardId', e.target.value)}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Without label' }}
+                                    >
+                                        {
+                                            addressData && addressData.wardData && addressData.wardData.map(item => {
+                                                return (
+                                                    <MenuItem value={item.id ? item.id : '0'}>{item.name_en}</MenuItem>
+                                                )
+                                            })
+                                        }
+
+                                    </Select>
+                                    <FormHelperText>Your ward currently</FormHelperText>
+                                </div>
+
+                            </div>
+
+                        }
+
+                        <div className='note-container'>
+                            <label className='name-label' >Additional address information</label>
+                            <BootstrapInput
+                                style={{ height: '300px !important' }}
+                                id="bootstrap-input"
+                                value={formState.address.note}
+                                onChange={(e) => handleOnChangeAddress('note', e.target.value)}
+                                disabled={isDisabledState} />
                         </div>
 
 

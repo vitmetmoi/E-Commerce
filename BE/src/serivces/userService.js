@@ -112,9 +112,10 @@ const loginService = async (loginAcc, password) => {
                 include: [{
                     model: db.Address,
                     attributes: ['id', 'provinceId', 'districtId', 'wardId', 'note'],
-                    nested: true
+                    // nested: true,
+
                 }],
-                raw: true,
+
 
 
             });
@@ -122,9 +123,9 @@ const loginService = async (loginAcc, password) => {
                 let checkPassword = bcrypt.compareSync(password, user.password);
                 if (checkPassword === true) {
                     let test;
-                    // let base64 = new Buffer(user.avatar, 'binary').toString('base64');
+
                     let base64String = new Buffer(user.avatar, 'base64').toString('binary');
-                    // console.log('image', base64String);
+
                     console.log(user);
                     let data = {
                         firstName: user.firstName,
@@ -133,12 +134,12 @@ const loginService = async (loginAcc, password) => {
                         phoneNumber: user.phoneNumber,
                         gender: user.gender,
                         avatar: base64String,
-                        // addressData: {
-                        //     provinceId: user.Addresses.provinceId,
-                        //     districtId: user.Addresses.districtId,
-                        //     wardId: user.Addresses.wardId,
-                        //     note: user.Addresses.note
-                        // },
+                        address: {
+                            provinceId: user.Addresses[0].provinceId,
+                            districtId: user.Addresses[0].districtId,
+                            wardId: user.Addresses[0].wardId,
+                            note: user.Addresses[0].note
+                        },
                         groupId: user.groupId ? user.groupId : 3,
                     }
                     let dataForVertify = {
@@ -279,7 +280,16 @@ const registerService = async (data) => {
                     password: hashPassword,
                     avatar: data.avatar
                 }
-                await db.User.create(user);
+                let userRes = await db.User.create(user);
+                console.log('user res', userRes);
+                let address = {
+                    userId: userRes.id,
+                    provinceId: 0,
+                    districtId: 0,
+                    wardId: 0,
+                    note: '',
+                }
+                await db.Address.create(address);
                 return {
                     DT: "",
                     EC: 0,
