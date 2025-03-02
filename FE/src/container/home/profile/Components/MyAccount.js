@@ -33,7 +33,7 @@ function MyAccount(props) {
     const dispatch = useDispatch();
     const [birthValue, setBirthValue] = useState(dayjs('2025-1-1'));
     const [formState, setFormState] = useState(userData);
-    const [isDisabledState, setIsDisabledState] = useState(false);
+    const [isDisabledState, setIsDisabledState] = useState(true);
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
 
     console.log('address', addressData);
@@ -108,6 +108,16 @@ function MyAccount(props) {
 
     }
 
+    const handleOnchangeEdit = () => {
+        if (isDisabledState === true) {
+            setIsDisabledState(!isDisabledState);
+        }
+        else {
+            console.log('adjust');
+            setIsDisabledState(!isDisabledState);
+        }
+    }
+
 
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -122,45 +132,6 @@ function MyAccount(props) {
         },
     }));
 
-    const BootstrapInput = styled(InputBase)(({ theme }) => ({
-        '& .MuiInputBase-input': {
-            borderRadius: 4,
-            position: 'relative',
-            backgroundColor: 'white',
-            border: '1px solid',
-            borderColor: '#E0E3E7',
-            fontSize: 16,
-            width: '100%',
-            padding: '10px 12px',
-            transition: theme.transitions.create([
-                'border-color',
-                'background-color',
-                'box-shadow',
-            ]),
-            // Use the system font instead of the default Roboto font.
-            fontFamily: [
-                '-apple-system',
-                'BlinkMacSystemFont',
-                '"Segoe UI"',
-                'Roboto',
-                '"Helvetica Neue"',
-                'Arial',
-                'sans-serif',
-                '"Apple Color Emoji"',
-                '"Segoe UI Emoji"',
-                '"Segoe UI Symbol"',
-            ].join(','),
-            '&:focus': {
-                boxShadow: `rgba(0, 0, 0, 0.16) 0px 1px 4px;`,
-                borderColor: '#f06e00',
-            },
-            ...theme.applyStyles('dark', {
-                backgroundColor: '#1A2027',
-                borderColor: '#2D3843',
-            }),
-        },
-    }));
-
     return (
         <>
             <div className='my-account-container'>
@@ -172,10 +143,12 @@ function MyAccount(props) {
 
                 <div className='profile-content'>
 
-                    <div className='content-left'>
+                    <div className='myAC-content-left'>
 
                         <div className='change-avt'>
-                            <IconButton aria-label="cart">
+                            <IconButton
+                                disabled={isDisabledState}
+                                aria-label="cart">
                                 <StyledBadge
                                     anchorOrigin={{
                                         vertical: 'bottom',
@@ -190,9 +163,9 @@ function MyAccount(props) {
                         <div className='name-container'>
                             <div className='name'>
                                 <label className='name-label' >First Name</label>
-                                <BootstrapInput
+                                <input className='customize-input'
                                     id="bootstrap-input"
-                                    className='name-field'
+
                                     value={formState.firstName}
                                     onChange={(e) => handleOnChange('firstName', e.target.value)}
                                     disabled={isDisabledState} />
@@ -200,9 +173,8 @@ function MyAccount(props) {
 
                             <div className='name'>
                                 <label className='name-label' >Last Name</label>
-                                <BootstrapInput
+                                <input className='customize-input'
                                     id="bootstrap-input"
-                                    className='name-field'
                                     value={formState.lastName}
                                     onChange={(e) => handleOnChange('lastName', e.target.value)}
                                     disabled={isDisabledState} />
@@ -279,7 +251,7 @@ function MyAccount(props) {
 
                         <div className='phone-container'>
                             <label className='name-label' >PhoneNumber</label>
-                            <BootstrapInput
+                            <input className='customize-input'
                                 id="bootstrap-input"
                                 value={formState.phoneNumber}
                                 onChange={(e) => handleOnChange('phoneNumber', e.target.value)}
@@ -288,7 +260,7 @@ function MyAccount(props) {
 
                         <div className='email-container'>
                             <label className='name-label' >Email</label>
-                            <BootstrapInput
+                            <input className='customize-input'
                                 id="bootstrap-input"
                                 value={formState.email}
                                 onChange={(e) => handleOnChange('email', e.target.value)}
@@ -307,6 +279,7 @@ function MyAccount(props) {
                                         onChange={(e) => handleOnChangeAddress('provinceId', e.target.value)}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled={isDisabledState}
                                     >
                                         {addressData && addressData.provinceData && addressData.provinceData.map(item => {
                                             return (
@@ -326,6 +299,7 @@ function MyAccount(props) {
                                         onChange={(e) => handleOnChangeAddress('districtId', e.target.value)}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled={isDisabledState}
                                     >
                                         {addressData && addressData.districtData && addressData.districtData.length > 0 && addressData.districtData.map(item => {
                                             return (
@@ -347,6 +321,7 @@ function MyAccount(props) {
                                         onChange={(e) => handleOnChangeAddress('wardId', e.target.value)}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled={isDisabledState}
                                     >
                                         {
                                             addressData && addressData.wardData && addressData.wardData.map(item => {
@@ -366,12 +341,14 @@ function MyAccount(props) {
 
                         <div className='note-container'>
                             <label className='name-label' >Additional address information</label>
-                            <BootstrapInput
-                                style={{ height: '300px !important' }}
-                                id="bootstrap-input"
+
+                            <textarea
+                                style={{ height: '100px' }}
+                                className='customize-input'
                                 value={formState.address.note}
                                 onChange={(e) => handleOnChangeAddress('note', e.target.value)}
                                 disabled={isDisabledState} />
+
                         </div>
 
 
@@ -381,12 +358,29 @@ function MyAccount(props) {
 
 
 
-                    <div className='content-right'>
-                        <div className='change-btn'>
+                    <div className='myAC-content-right'>
 
-                            <RateReviewIcon />
-                            <span>Change Profile Information</span>
-                        </div>
+                        {isDisabledState === true ?
+                            <button
+                                onClick={() => handleOnchangeEdit()}
+                                className='change-btn'>
+                                <RateReviewIcon />
+                                <span>Change Profile Information</span>
+                            </button>
+                            :
+                            <button
+                                onClick={() => handleOnchangeEdit()}
+                                className='change-btn submit'>
+                                <RateReviewIcon />
+                                <span>Submit</span>
+                            </button>
+                        }
+
+
+
+
+
+
                     </div>
 
 

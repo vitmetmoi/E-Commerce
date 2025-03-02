@@ -2,6 +2,7 @@
     width         : 100%;
     display       : flex;
     flex-direction: column;
+    padding-bottom: 100px;
 
     .title-content {
         width        : 100%;
@@ -19,13 +20,13 @@
         padding-top   : 20px;
         gap           : 50px;
 
-        .content-left {
-            width           : 50%;
-            display         : flex;
-            flex-direction  : column;
-            background-color: inherit;
-            gap             : 30px;
-            padding-left    : 20px;
+        .myAC-content-left {
+            width         : 50%;
+            display       : flex;
+            flex-direction: column;
+            gap           : 30px;
+            padding-left  : 20px;
+            height        : fit-content;
 
             .change-avt {
                 width : 130px;
@@ -48,6 +49,24 @@
                 font-weight: 500;
                 font-size  : 16px;
                 width      : fit-content;
+            }
+
+            .customize-input {
+                width           : 100%;
+                height          : 50px;
+                outline         : none;
+                background-color: white;
+                border          : 1px solid #E0E3E7;
+                border-bottom   : '#E0E3E7';
+                font-size       : 16px;
+                border-radius   : 4px;
+                padding         : 10px 12px;
+                opacity         : 0.7;
+
+                &:focus {
+                    box-shadow  : rgba(0, 0, 0, 0.16) 0px 1px 4px;
+                    border-color: '#f06e00';
+                }
             }
 
 
@@ -121,21 +140,29 @@
 
         }
 
-        .content-right {
-            width           : 50%;
-            background-color: inherit;
+        .myAC-content-right {
+            width: 50%;
 
             .change-btn {
-                color    : #f06e00;
-                font-size: 17px;
-                cursor   : pointer;
+                color           : #f06e00;
+                font-size       : 17px;
+                cursor          : pointer;
+                outline         : none;
+                border          : none;
+                background-color: inherit;
 
                 span {
                     color      : #f06e00;
                     margin-left: 10px;
                     font-weight: 480;
+                }
 
+                &.submit {
+                    color: #4caf50;
 
+                    span {
+                        color: #4caf50
+                    }
                 }
 
                 &:hover {
