@@ -29,20 +29,38 @@
             height        : fit-content;
 
             .change-avt {
-                width : 130px;
-                height: 130px;
+                width   : 130px;
+                height  : 130px;
+                position: relative;
 
-                .avt {
-                    width          : 130px;
-                    height         : 130px;
-                    border-radius  : 120px;
-                    object-position: center;
-                    object-fit     : cover;
+
+                input {
+                    // display : none;
+                    width   : 100%;
+                    height  : 100%;
+                    position: absolute;
+                    z-index : 2;
+                    opacity : 0;
+                    cursor  : pointer;
                 }
 
-                .css-5iv1t3-MuiBadge-badge {
-                    background-color: #f06e00;
+                .avt-container {
+                    position: absolute;
+                    z-index : 1;
+
+                    .avt {
+                        width          : 130px;
+                        height         : 130px;
+                        border-radius  : 120px;
+                        object-position: center;
+                        object-fit     : cover;
+                    }
+
+                    .css-5iv1t3-MuiBadge-badge {
+                        background-color: #f06e00;
+                    }
                 }
+
             }
 
             label {

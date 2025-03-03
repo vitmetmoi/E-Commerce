@@ -111,12 +111,6 @@ const handleLogin = async (req, res) => {
                 EM: response.EM
             })
 
-
-
-
-
-
-
         }
         else {
             return res.status(200).json({
@@ -176,6 +170,35 @@ const handleAccount = async (req, res) => {
     }
 }
 
+const handleUpdateUser = async (req, res) => {
+    try {
+        let data = req.body;
+        let response = await userService.updateUserService(data);
+        if (response) {
+            return res.status(200).json({
+                DT: response.DT,
+                EC: response.EC,
+                EM: response.EM
+            })
+        }
+        else {
+            return res.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: "err from sever controller..."
+            })
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+}
+
 module.exports = {
-    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem, handleAccount
+    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem, handleAccount, handleUpdateUser
 }

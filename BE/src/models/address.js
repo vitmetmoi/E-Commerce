@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
     }
     Address.init({
         userId: DataTypes.INTEGER,
-        provinceId: DataTypes.INTEGER,
-        districtId: DataTypes.INTEGER,
-        wardId: DataTypes.INTEGER,
+        provinceId: DataTypes.STRING,
+        districtId: DataTypes.STRING,
+        wardId: DataTypes.STRING,
         note: DataTypes.TEXT('long')
     }, {
         sequelize,
         modelName: 'Address',
     });
+    Address.sync({ alter: true })
     return Address;
 };

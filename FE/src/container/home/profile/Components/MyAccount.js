@@ -3,7 +3,7 @@ import './MyAccount.scss';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { alpha, styled } from '@mui/material/styles';
-import { IconButton } from '@mui/material';
+import { IconButton, Backdrop, CircularProgress } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -26,6 +26,9 @@ import { setAddresssDataSlice } from '../../../../store/slice/Reducer/otherSlice
 import Select from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
+import { useUpdateMutation } from '../../../../store/slice/API/userAPI';
+import { toast } from 'react-toastify';
+import { setUserData } from '../../../../store/slice/Reducer/userSlice';
 function MyAccount(props) {
 
     const userData = useSelector((state) => state.user.userData);
@@ -35,44 +38,68 @@ function MyAccount(props) {
     const [formState, setFormState] = useState(userData);
     const [isDisabledState, setIsDisabledState] = useState(true);
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
-
+    const [updateUserService, { isLoading: updateisLoading }] = useUpdateMutation();
+    const [isOpenBackDrop, setIsOpenBackDrop] = useState(false);
     console.log('address', addressData);
-    console.log('formState', formState)
+    console.log('formState', formState);
+    console.log('time', birthValue);
 
     useEffect(() => {
+
         handleGetAddress();
+
+
     }, [])
 
     useEffect(() => {
         if (userData) {
             setFormState(userData);
+            if (userData.birthDay) {
+                setBirthValue(dayjs(userData.birthDay))
+            }
         }
     }, [userData])
 
     const handleOnChange = (name, value) => {
+        console.log('value', value)
+        if (name === 'avatar') {
 
-        let _formState = _.cloneDeep(formState);
-        if (_formState) {
-            _formState[name] = value;
-            setFormState(_formState)
+            let reader = new FileReader();
+            reader.readAsDataURL(value);
+            setTimeout(() => {
+                console.log('img', reader.result)
+                let _formState = _.cloneDeep(formState);
+                if (_formState) {
+                    _formState.avatar = reader.result;
+                    setFormState(_formState)
+                }
+            }, 1000);
+
+        }
+        else {
+            let _formState = _.cloneDeep(formState);
+            if (_formState) {
+                _formState[name] = value;
+                setFormState(_formState)
+            }
         }
 
     }
 
     const handleOnChangeAddress = async (name, value) => {
-        console.log('name', name);
-        console.log('value', value)
+        // console.log('name', name);
+        // console.log('value', value)
         if (name === 'provinceId') {
             let res2 = await getAddressService({ A: '2', B: `${value}` });
             if (res2) {
-                console.log("res2 address12", res2.data);
+                // console.log("res2 address12", res2.data);
                 dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
             }
         }
         else if (name === 'districtId') {
             let res3 = await getAddressService({ A: '3', B: `${value}` });
             if (res3) {
-                console.log("res3 address", res3.data);
+                // console.log("res3 address", res3.data);
                 dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
             }
         }
@@ -89,32 +116,69 @@ function MyAccount(props) {
         if (userData.address.provinceId === 0) {
             let res1 = await getAddressService({ A: '1', B: '0' });
             if (res1) {
-                console.log("res1 address", res1.data);
+                // console.log("res1 address", res1.data);
                 dispatch(setAddresssDataSlice({ type: 'PROVINCE', data: res1.data.data }))
             }
         }
         else if (userData.address.provinceId !== 0) {
-            let res2 = await getAddressService({ A: '2', B: `${userData.address.districtId}` });
-            let res3 = await getAddressService({ A: '3', B: `${userData.address.wardId}` });
+
+            let res2 = await getAddressService({ A: '2', B: `${userData.address.provinceId}` });
+            let res3 = await getAddressService({ A: '3', B: `${+userData.address.districtId}` });
             if (res2) {
-                console.log("res1 address", res2.data);
+                // console.log("res1 address", res2.data);
                 dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
             }
             if (res3) {
-                console.log("res2 address", res3.data);
+                // console.log("res2 address", res3.data);
                 dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
             }
         }
 
     }
 
-    const handleOnchangeEdit = () => {
+
+    const handleOnchangeEdit = async () => {
         if (isDisabledState === true) {
             setIsDisabledState(!isDisabledState);
         }
         else {
-            console.log('adjust');
-            setIsDisabledState(!isDisabledState);
+            let birthData = String(birthValue.get('y')) + '-' + String(+birthValue.get('M') + 1) + '-' + String(birthValue.get('D'));
+
+            let data = {
+                ...formState,
+                birthDay: birthData
+            }
+
+            let res = await updateUserService(data);
+            setIsOpenBackDrop(true);
+
+            setTimeout(() => {
+                console.log('adjust', res);
+                if (res && res.data && res.data.EC === 0) {
+                    toast('completed');
+                    let userData = {
+                        id: formState.id ? formState.id : '',
+                        firstName: formState.firstName ? formState.firstName : '',
+                        lastName: formState.lastName ? formState.lastName : '',
+                        email: formState.email ? formState.email : '',
+                        phoneNumber: formState.phoneNumber ? formState.phoneNumber : '',
+                        address: formState.address ? formState.address : '',
+                        gender: formState.gender ? formState.gender : '',
+                        groupId: formState.groupId ? formState.groupId : '',
+                        avatar: formState.avatar ? formState.avatar : '',
+                        birthDay: formState.birthDay ? formState.birthDay : '',
+                        authenticated: true
+                    }
+                    dispatch(setUserData(userData));
+                    setIsDisabledState(!isDisabledState);
+                }
+                else {
+                    toast.error('err')
+                }
+                setIsOpenBackDrop(false);
+            }, 3000);
+
+
         }
     }
 
@@ -146,7 +210,13 @@ function MyAccount(props) {
                     <div className='myAC-content-left'>
 
                         <div className='change-avt'>
+                            <input
+                                type='file'
+                                onChange={(e) => handleOnChange('avatar', e.target.files[0])}
+                            />
+
                             <IconButton
+                                className='avt-container'
                                 disabled={isDisabledState}
                                 aria-label="cart">
                                 <StyledBadge
@@ -189,7 +259,6 @@ function MyAccount(props) {
                             </label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
-
                                     className='date-picker'
                                     // label="Controlled picker"
                                     value={birthValue}
@@ -388,6 +457,13 @@ function MyAccount(props) {
 
 
                 </div>
+
+                <Backdrop
+                    sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                    open={isOpenBackDrop}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div >
         </>
     );
