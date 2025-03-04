@@ -211,7 +211,9 @@ function MyAccount(props) {
 
                         <div className='change-avt'>
                             <input
+                                disabled={isDisabledState}
                                 type='file'
+                                className={isDisabledState ? 'isDisable' : ''}
                                 onChange={(e) => handleOnChange('avatar', e.target.files[0])}
                             />
 
@@ -235,7 +237,6 @@ function MyAccount(props) {
                                 <label className='name-label' >First Name</label>
                                 <input className='customize-input'
                                     id="bootstrap-input"
-
                                     value={formState.firstName}
                                     onChange={(e) => handleOnChange('firstName', e.target.value)}
                                     disabled={isDisabledState} />
