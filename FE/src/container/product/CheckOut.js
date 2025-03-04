@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useGetAddresssDataMutation } from '../../store/slice/API/otherAPI';
 import { setAddresssDataSlice } from '../../store/slice/Reducer/otherSlice';
-import _ from 'lodash'
+import _ from 'lodash';
 function CheckOut(props) {
     const defaultFormState = {
         province: '',
@@ -15,13 +15,14 @@ function CheckOut(props) {
     }
     const userData = useSelector((state) => state.user.userData);
     const addressData = useSelector((state) => state.other);
+    const checkOutData = useSelector((state) => state.checkOut.checkOutData);
     const [formState, setFormState] = useState(defaultFormState);
     const dispatch = useDispatch();
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
     console.log('formState', formState)
     console.log('userData', userData);
     console.log('addressData', addressData);
-
+    console.log('checkOutData', checkOutData);
     useEffect(() => {
         handleGetAddress();
     }, [])
@@ -105,42 +106,51 @@ function CheckOut(props) {
                     </div>
 
                     <div className='checkout-side'>
+
                         <table>
                             <thead>
                                 <th> <h5>Product</h5></th>
-                                <th></th>
+                                <th> </th>
                                 <th><span>Price</span></th>
                                 <th><span>Amount</span></th>
                                 <th><span>Summary</span></th>
                             </thead>
 
                             <tbody>
-                                <tr>
+                                {
+                                    checkOutData && checkOutData.map(item => {
+                                        return (
+                                            <tr>
 
-                                    <td>
-                                        <div className='product'>
-                                            <img className='img'></img>
-                                            <div>
-                                                <span>product name</span>
-                                                <div className='default'>Order item</div>
-                                            </div>
-                                        </div>
+                                                <td>
+                                                    <div className='product'>
+                                                        <img className='img' src={item.image}></img>
+                                                        <div>
+                                                            <span>{item.name}</span>
+                                                            <div className='default'>Order item</div>
+                                                        </div>
+                                                    </div>
 
-                                    </td>
+                                                </td>
 
-                                    <td>
-                                        <div></div>
-                                    </td>
-                                    <td>
-                                        <span>100.100</span>
-                                    </td>
-                                    <td>
+                                                <td>
+                                                    <div className='gap'></div>
+                                                </td>
+                                                <td>
+                                                    <span>{item.price}</span>
+                                                </td>
+                                                <td>
+                                                    <span>{item.total}</span>
+                                                </td>
+                                                <td>
+                                                    {(item.total * (+item.price)).toFixed(3)}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
 
-                                    </td>
-                                    <td>
 
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
