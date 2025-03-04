@@ -112,33 +112,33 @@ const loginService = async (loginAcc, password) => {
                 include: [{
                     model: db.Address,
                     attributes: ['id', 'provinceId', 'districtId', 'wardId', 'note'],
-                    nested: true
+                    // nested: true,
+
                 }],
-                raw: true,
+
 
 
             });
             if (!_.isEmpty(user)) {
                 let checkPassword = bcrypt.compareSync(password, user.password);
                 if (checkPassword === true) {
-                    let test;
-                    // let base64 = new Buffer(user.avatar, 'binary').toString('base64');
                     let base64String = new Buffer(user.avatar, 'base64').toString('binary');
-                    // console.log('image', base64String);
-                    console.log(user);
+
                     let data = {
+                        id: user.id,
                         firstName: user.firstName,
                         lastName: user.lastName,
                         email: user.email,
                         phoneNumber: user.phoneNumber,
                         gender: user.gender,
                         avatar: base64String,
-                        // addressData: {
-                        //     provinceId: user.Addresses.provinceId,
-                        //     districtId: user.Addresses.districtId,
-                        //     wardId: user.Addresses.wardId,
-                        //     note: user.Addresses.note
-                        // },
+                        birthDay: user.birthDay,
+                        address: {
+                            provinceId: user.Addresses[0].provinceId,
+                            districtId: user.Addresses[0].districtId,
+                            wardId: user.Addresses[0].wardId,
+                            note: user.Addresses[0].note
+                        },
                         groupId: user.groupId ? user.groupId : 3,
                     }
                     let dataForVertify = {
@@ -279,7 +279,16 @@ const registerService = async (data) => {
                     password: hashPassword,
                     avatar: data.avatar
                 }
-                await db.User.create(user);
+                let userRes = await db.User.create(user);
+                console.log('user res', userRes);
+                let address = {
+                    userId: userRes.id,
+                    provinceId: 0,
+                    districtId: 0,
+                    wardId: 0,
+                    note: '',
+                }
+                await db.Address.create(address);
                 return {
                     DT: "",
                     EC: 0,
@@ -299,6 +308,65 @@ const registerService = async (data) => {
     }
 }
 
+const updateUserService = async (userData) => {
+    try {
+        if (!userData || !userData.id || !userData.address || !userData.firstName || !userData.lastName
+            || !userData.gender || !userData.groupId || !userData.email || !userData.phoneNumber
+        ) {
+            return {
+                DT: "",
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+            let user = await db.User.update(
+                {
+                    id: userData.id,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
+                    gender: userData.gender,
+                    avatar: userData.avatar,
+                    birthDay: userData.birthDay,
+                    groupId: userData.groupId ? userData.groupId : 3
+                }
+                ,
+                { where: { id: userData.id } }
+            )
+
+            let address = await db.Address.update({
+
+                provinceId: userData.address.provinceId,
+                districtId: userData.address.districtId,
+                wardId: userData.address.wardId,
+                note: userData.address.note
+
+            },
+                { where: { userId: userData.id } }
+            )
+            if (user && address) {
+                return {
+                    DT: "",
+                    EC: 0,
+                    EM: 'Update completed!'
+                }
+            }
+            else {
+                return {
+                    DT: "",
+                    EC: -1,
+                    EM: 'Err from sever update user service!'
+                }
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 module.exports = {
-    createUserService, getUserService, registerService, loginService
+    createUserService, getUserService, registerService, loginService, updateUserService
 }

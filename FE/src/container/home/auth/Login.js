@@ -72,6 +72,7 @@ function Login(props) {
                                         let resData = res.data.DT;
 
                                         let data = {
+                                            id: resData.id ? resData.id : '',
                                             firstName: resData.firstName ? resData.firstName : '',
                                             lastName: resData.lastName ? resData.lastName : '',
                                             email: resData.email ? resData.email : '',
@@ -80,7 +81,7 @@ function Login(props) {
                                             gender: resData.gender ? resData.gender : '',
                                             groupId: resData.groupId ? resData.groupId : '',
                                             avatar: resData.avatar ? resData.avatar : '',
-
+                                            birthDay: resData.birthDay ? resData.birthDay : '',
                                             authenticated: true
                                         }
                                         dispatch(setUserData(data))

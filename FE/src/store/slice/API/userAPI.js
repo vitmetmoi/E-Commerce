@@ -37,10 +37,15 @@ export const userAPI = createApi({
         }),
         register: build.mutation({
             query: (userData) => ({ url: '/api/user/register', method: 'post', data: userData })
+        }),
+        update: build.mutation({
+            query: (userData) => ({ url: '/api/user/update', method: 'put', data: userData })
         })
 
     }),
 })
 
 
-export const { useRegisterMutation, useLazyLoginQuery, useGetUserDataQuery, useCreateUserMutation, useLazyCheckUserAccountQuery } = userAPI
+export const { useRegisterMutation, useLazyLoginQuery,
+    useGetUserDataQuery, useCreateUserMutation,
+    useLazyCheckUserAccountQuery, useUpdateMutation } = userAPI

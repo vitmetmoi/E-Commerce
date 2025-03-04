@@ -28,6 +28,7 @@ export const otherAPI = createApi({
 
         getAddresssData: build.mutation({
             query: (params) => {
+                console.log('params', params)
                 return {
                     url: `https://esgoo.net/api-tinhthanh/${params.A}/${params.B}.htm`,
                     method: 'get',

@@ -3,6 +3,7 @@ import { createUser } from '../../../service/userService'
 import { ToastContainer, toast } from 'react-toastify';
 
 const defaultUserData = {
+    id: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -11,6 +12,7 @@ const defaultUserData = {
     avatar: '',
     gender: '',
     groupId: 3,
+    birthDay: '',
     authenticated: false
 }
 const initialState = {
