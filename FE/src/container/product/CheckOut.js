@@ -105,7 +105,44 @@ function CheckOut(props) {
                     </div>
 
                     <div className='checkout-side'>
-                        checkout
+                        <table>
+                            <thead>
+                                <th> <h5>Product</h5></th>
+                                <th></th>
+                                <th><span>Price</span></th>
+                                <th><span>Amount</span></th>
+                                <th><span>Summary</span></th>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+
+                                    <td>
+                                        <div className='product'>
+                                            <img className='img'></img>
+                                            <div>
+                                                <span>product name</span>
+                                                <div className='default'>Order item</div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                        <div></div>
+                                    </td>
+                                    <td>
+                                        <span>100.100</span>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>

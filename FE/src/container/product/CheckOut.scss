@@ -7,12 +7,13 @@
         padding         : 0 55px;
         display         : flex;
         flex-direction  : column;
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.03);
 
         .address-container {
-            width    : 100%;
-            height   : 130px;
+            width           : 100%;
+            height          : 130px;
             // border: 1px solid red;
+            background-color: white;
 
             .horizone-line {
                 width           : 100%;
@@ -74,9 +75,27 @@
         }
 
         .checkout-side {
-            width : 100%;
-            height: 100px;
-            border: 1px solid red;
+            width           : 100%;
+            height          : 100px;
+            border          : 1px solid red;
+            background-color: white;
+            margin-top      : 15px;
+
+            table {
+                thead {
+                    h5 {
+                        font-size    : 18px;
+                        font-weight  : 400;
+                        margin-bottom: 0;
+                    }
+
+                    span {
+                        font-size  : 14px;
+                        font-weight: 400;
+                        color      : #707070;
+                    }
+                }
+            }
         }
     }
 }
