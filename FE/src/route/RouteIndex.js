@@ -10,6 +10,7 @@ import SystemLayout from '../container/home/auth/SystemLayout.js';
 import SystemHome from '../container/system/SystemHome.js';
 import Product from '../container/product/Product.js';
 import ShoppingCart from '../container/product/ShoppingCart.js';
+import CheckOut from '../container/product/CheckOut.js';
 function RouteIndex(props) {
     return (
         <div>
@@ -21,6 +22,7 @@ function RouteIndex(props) {
                         <Route path="register" element={<Register />} />
                         <Route path="product" element={<Product></Product>}></Route>
                         <Route path="order" element={<ShoppingCart></ShoppingCart>}></Route>
+                        <Route path="checkout" element={<CheckOut></CheckOut>}></Route>
                         <Route path='user' >
                             <Route element={<AuthLayout />}>
                                 <Route path="profile" element={<UserProfile />}></Route>

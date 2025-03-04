@@ -45,10 +45,7 @@ function MyAccount(props) {
     console.log('time', birthValue);
 
     useEffect(() => {
-
         handleGetAddress();
-
-
     }, [])
 
     useEffect(() => {

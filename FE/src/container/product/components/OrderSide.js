@@ -18,9 +18,11 @@ import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { useSelector, useDispatch } from 'react-redux'
 import { setShoppingCart } from '../../../store/slice/Reducer/shoppingCartSilce';
+
 function OrderSide(props) {
 
     const shoppingCartData = useSelector((state) => state.shoppingCart);
+    const userData = useSelector((state) => state.user.userData);
     const dispath = useDispatch();
     let priceAfterDiscouted = 0;
     const navigate = useNavigate();
@@ -308,8 +310,8 @@ function OrderSide(props) {
     }
 
     const handleShoppingCartButton = () => {
-        console.log('data', orderList);
-        console.log("clothes", props.clothesId);
+        // console.log('data', orderList);
+        // console.log("clothes", props.clothesId);
         let data = [];
         if (orderList) {
             orderList.map(item => {
@@ -324,7 +326,16 @@ function OrderSide(props) {
 
             dispath(setShoppingCart(data));
         }
-        // dispath(setShoppingCartData());
+    }
+
+    const handlePurchaseButton = () => {
+        console.log('userData', userData)
+        if (userData && userData.authenticated === true) {
+            navigate('/checkout')
+        }
+        else {
+            navigate('/login');
+        }
     }
 
     return (
@@ -533,7 +544,9 @@ function OrderSide(props) {
                         className='button btn2'
                         onClick={() => handleShoppingCartButton()}
                     >Shopping Cart</button>
-                    <button className='button btn3'>Purchase</button>
+                    <button
+                        onClick={() => handlePurchaseButton()}
+                        className='button btn3'>Purchase</button>
                 </div>
 
                 <Swiper
