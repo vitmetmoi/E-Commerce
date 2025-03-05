@@ -10,6 +10,11 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
 
+            status: {
+                allowNull: true,
+                type: Sequelize.STRING
+            },
+
             time: {
                 allowNull: true,
                 type: Sequelize.STRING
@@ -18,11 +23,11 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            clothesId: {
+            colorSizeId: {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            description: {
+            note: {
                 allowNull: true,
                 type: Sequelize.TEXT
             },

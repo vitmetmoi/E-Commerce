@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Bill.init({
+        status: DataTypes.STRING,
         time: DataTypes.STRING,
         userId: DataTypes.INTEGER,
-        clothesId: DataTypes.INTEGER,
-        description: DataTypes.TEXT,
+        colorSizeId: DataTypes.INTEGER,
+        note: DataTypes.TEXT,
     }, {
         sequelize,
         modelName: 'Bill',
     });
-
     return Bill;
 };

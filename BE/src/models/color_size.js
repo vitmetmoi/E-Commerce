@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Color_Size.belongsTo(models.Clothes, { foreignKey: 'clothesId' });
+            Color_Size.hasMany(models.Bill, { foreignKey: 'colorSizeId' });
         }
     }
     Color_Size.init({

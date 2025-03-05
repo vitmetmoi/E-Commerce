@@ -21,7 +21,8 @@ import Looks3Icon from '@mui/icons-material/Looks3';
 import Looks4Icon from '@mui/icons-material/Looks4';
 import Looks5Icon from '@mui/icons-material/Looks5';
 import Looks6Icon from '@mui/icons-material/Looks6';
-
+import { useNavigate } from 'react-router';
+import { setCheckOutDataSlice } from '../../store/slice/Reducer/checkOutSlice';
 
 function ShoppingCart(props) {
     const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function ShoppingCart(props) {
     const [shoppingCartData, setShoppingCartData] = useState('');
     const [tableData, setTableData] = useState('');
     const [isSelectAll, setIsSelectAll] = useState(true);
+    const navigate = useNavigate();
     console.log("shop", shoppingCartData)
     console.log("shopCart", shoppingCart)
     console.log('tabledata', tableData)
@@ -81,7 +83,7 @@ function ShoppingCart(props) {
                                 item2.Color_Sizes.map((item3, index3) => {
 
                                     if (item3.color === item1.color && item3.size === item1.size && +item3.stock >= item1.total) {
-
+                                        console.log('item2', item2);
                                         let obj = {
                                             id: _tableData.length,
                                             isSelected: true,
@@ -93,6 +95,9 @@ function ShoppingCart(props) {
                                             price: item2.price,
                                             discount: item2.Discounts[0].value,
                                             image: item2.RelevantImages[0].image,
+                                            colorSizeId: item3.id,
+                                            type: item2.type,
+                                            category: item2.category,
                                             stock: +item3.stock
                                         }
 
@@ -238,6 +243,26 @@ function ShoppingCart(props) {
                 setTableData(_tableData);
 
             }
+        }
+    }
+
+    const handleOnClickOrder = () => {
+        if (tableData) {
+            let checkOutData = []
+            tableData.map(item => {
+                if (item.isSelected === true) {
+                    let obj = {};
+                    delete item.isSelected;
+                    obj = {
+                        ...item
+                    }
+                    checkOutData.push(obj);
+                }
+
+            })
+
+            dispatch(setCheckOutDataSlice(checkOutData))
+            navigate('/checkOut');
         }
     }
 
@@ -425,7 +450,10 @@ function ShoppingCart(props) {
 
                 <div className='submit-group'>
                     <button className='btn1'>Continue Shopping</button>
-                    <button className='btn2'>Order All Products</button>
+                    <button
+
+                        onClick={() => handleOnClickOrder()}
+                        className='btn2'>Order All Products</button>
                 </div>
 
                 <div className='informations'>
