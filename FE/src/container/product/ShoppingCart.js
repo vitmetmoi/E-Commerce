@@ -83,7 +83,7 @@ function ShoppingCart(props) {
                                 item2.Color_Sizes.map((item3, index3) => {
 
                                     if (item3.color === item1.color && item3.size === item1.size && +item3.stock >= item1.total) {
-
+                                        console.log('item2', item2);
                                         let obj = {
                                             id: _tableData.length,
                                             isSelected: true,
@@ -96,6 +96,8 @@ function ShoppingCart(props) {
                                             discount: item2.Discounts[0].value,
                                             image: item2.RelevantImages[0].image,
                                             colorSizeId: item3.id,
+                                            type: item2.type,
+                                            category: item2.category,
                                             stock: +item3.stock
                                         }
 

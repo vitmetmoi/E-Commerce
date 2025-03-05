@@ -75,12 +75,12 @@
         }
 
         .checkout-side {
-            width           : 100%;
-            border          : 1px solid red;
-            background-color: white;
-            margin-top      : 15px;
-            padding         : 0 20px;
-            padding-top     : 30px;
+            width              : 100%;
+            // border          : 1px solid red;
+            background-color   : white;
+            margin-top         : 15px;
+            padding            : 0 20px;
+            padding-top        : 30px;
 
             table {
 
@@ -101,19 +101,24 @@
                 }
 
                 tbody {
-                    display       : flex;
-                    flex-direction: column;
-                    gap           : 20px;
-                    margin        : 20px 0;
+                    // display       : flex;
+                    // flex-direction: column;
+                    // gap           : 20px;
+                    // margin        : 20px 0;
 
 
                     tr {
-
-
                         td {
 
                             .gap {
-                                // width: 40%;
+                                width      : 400px;
+                                padding-top: 10px;
+                                color      : #707070;
+                                font-size  : 14px;
+                                text-align : left;
+                                margin     : 20px 0;
+
+                                // position   : absolute;
                             }
 
 
@@ -122,6 +127,7 @@
                                 display       : flex;
                                 flex-direction: row;
                                 gap           : 15px;
+                                width         : 300px;
 
                                 .img {
                                     width          : 50px;
@@ -139,6 +145,11 @@
                                     margin-top: 3px;
                                 }
                             }
+
+                            .col-right {
+                                font-size: 14px;
+                                width    : 150px;
+                            }
                         }
                     }
 
@@ -147,5 +158,133 @@
 
 
         }
+
+        .sumary-section {
+            width           : 100%;
+            background-color: white;
+            margin-top      : 10px;
+            display         : flex;
+            flex-direction  : row;
+
+
+            .content-left {
+                width         : 50%;
+                border        : 1px solid rgba(0, 0, 0, 0.1);
+                display       : flex;
+                flex-direction: row;
+                align-items   : flex-start;
+                padding       : 0 20px;
+                padding-top   : 30px;
+                gap           : 20px;
+
+                label {
+                    font-size : 15px;
+                    margin-top: 6px;
+                }
+
+                input {
+                    border      : 1px solid rgba(0, 0, 0, 0.1);
+                    outline     : none;
+                    height      : 35px;
+                    width       : 80%;
+                    padding-left: 10px;
+                    font-size   : 14px;
+                }
+            }
+
+            .content-right {
+                width         : 50%;
+                border        : 1px solid rgba(0, 0, 0, 0.1);
+                // padding    : 0 20px;
+                padding-top   : 30px;
+                height        : fit-content;
+
+                ul {
+                    width          : 100%;
+                    list-style-type: none;
+                    padding        : 0;
+                    height         : fit-content;
+                    margin-bottom  : 0;
+
+                    li {
+                        padding-left  : 20px;
+                        width         : 100%;
+                        height        : fit-content;
+                        border-bottom : 1px solid rgba(0, 0, 0, 0.1);
+                        text-align    : left;
+                        font-size     : 14px;
+                        display       : flex;
+                        flex-direction: row;
+                        padding       : 10px 20px;
+
+                        .inf-left {
+                            width      : 20%;
+                            padding-top: 1px;
+                        }
+
+                        .inf-right {
+                            width         : 80%;
+                            display       : flex;
+                            flex-direction: column;
+
+                            .main-text {
+                                color: #f06e00;
+                            }
+
+                            .sub-text {
+                                color    : #707070;
+                                font-size: 13px;
+                            }
+
+                            .icon {
+                                font-size : 17px;
+                                color     : #707070;
+                                margin-top: 3px;
+                                cursor    : pointer;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+        .voucher-section {
+            width           : 100%;
+            background-color: white;
+            margin-top      : 30px;
+            display         : flex;
+            flex-direction  : row;
+            justify-content : space-between;
+            align-items     : center;
+            height          : 70px;
+            padding         : 0 20px;
+
+            .content-left {
+
+                .icon {
+                    color       : #f06e00;
+                    margin-right: 10px;
+                }
+
+                span {
+                    font-size: 18px;
+                }
+            }
+
+            .content-right {
+                button {
+                    background-color: white;
+                    border          : none;
+                    color           : #f06e00;
+                }
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+
     }
 }

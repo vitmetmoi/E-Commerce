@@ -7,6 +7,16 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useGetAddresssDataMutation } from '../../store/slice/API/otherAPI';
 import { setAddresssDataSlice } from '../../store/slice/Reducer/otherSlice';
 import _ from 'lodash';
+import dayjs from 'dayjs'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { IconButton } from '@mui/material';
+import DiscountIcon from '@mui/icons-material/Discount';
 function CheckOut(props) {
     const defaultFormState = {
         province: '',
@@ -19,10 +29,13 @@ function CheckOut(props) {
     const [formState, setFormState] = useState(defaultFormState);
     const dispatch = useDispatch();
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+    const [openMoreInfo, setOpenMoreInfo] = useState(false);
+
     console.log('formState', formState)
     console.log('userData', userData);
     console.log('addressData', addressData);
     console.log('checkOutData', checkOutData);
+    console.log('dayjs', dayjs())
     useEffect(() => {
         handleGetAddress();
     }, [])
@@ -81,6 +94,21 @@ function CheckOut(props) {
         setFormState(_formState);
     }
 
+    const handleTime = (addDays) => {
+        let time = [];
+
+        let _dayjs = dayjs().add(addDays, 'day');
+        console.log('day', _dayjs)
+        time.push(_dayjs.get('y'));
+        time.push(_dayjs.get('M') + 1);
+        time.push(_dayjs.get('D'));
+        return (
+            <>
+                <span> {time[2]}</span>/<span>{time[1]}</span>/<span>{time[0]}</span>
+            </>
+        );
+    }
+
 
     return (
         <>
@@ -134,17 +162,29 @@ function CheckOut(props) {
                                                 </td>
 
                                                 <td>
-                                                    <div className='gap'></div>
+                                                    <div className='gap'>
+                                                        type: {item.type}, {item.category}
+                                                    </div>
                                                 </td>
+
                                                 <td>
-                                                    <span>{item.price}</span>
+                                                    <div className='col-right'>
+                                                        <span >{item.price}$</span>
+                                                    </div>
                                                 </td>
+
                                                 <td>
-                                                    <span>{item.total}</span>
+                                                    <div className='col-right'>
+                                                        <span>{item.total}</span>
+                                                    </div>
                                                 </td>
+
                                                 <td>
-                                                    {(item.total * (+item.price)).toFixed(3)}
+                                                    <div className='col-right'>
+                                                        {(item.total * (+item.price)).toFixed(3)}$
+                                                    </div>
                                                 </td>
+
                                             </tr>
                                         );
                                     })
@@ -155,8 +195,83 @@ function CheckOut(props) {
                         </table>
                     </div>
 
+                    <div className='sumary-section'>
+
+                        <div className='content-left'>
+                            <label>Message: </label>
+                            <input placeholder='Notice to seller...'></input>
+                        </div>
+
+                        <div className='content-right'>
+                            <ul>
+                                <li>
+                                    <div className='inf-left'>
+                                        <span>Delivery fee: </span>
+                                    </div>
+                                    <div className='inf-right'>
+                                        <span className='main-text'>0$ (Free)</span>
+                                        <span className='sub-text'>Recieved product between : {handleTime(3)} to {handleTime(7)}</span>
+                                        <span className='sub-text'>In case products are delivered from foreign : {handleTime(3)} to {handleTime(30)}</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className='inf-left'>
+                                        <span>Jointly checked</span>
+
+                                    </div>
+                                    <div className='inf-right'>
+
+                                        <HelpOutlineIcon
+                                            onClick={() => setOpenMoreInfo(!openMoreInfo)}
+                                            className='icon'
+                                        ></HelpOutlineIcon>
+
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div className='voucher-section'>
+                        <div className='content-left'>
+                            <DiscountIcon className='icon'></DiscountIcon>
+                            <span>AFGK x Who.AU x Stussy Voucher</span>
+                        </div>
+                        <div className='content-right'>
+                            <button>Use my voucher!</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <Dialog
+                open={openMoreInfo}
+                onClose={() => setOpenMoreInfo(!openMoreInfo)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle
+                    style={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}
+                    id="alert-dialog-title">
+                    {"When will I be charged?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <div class="dialog-box">
+                            <ul style={{ marginTop: '30px' }} >
+                                <li style={{ marginTop: '7px' }}>Orders with a value of less than 3,000,000 VND (order value without Voucher Shopee, Shopee Xu, and shipping fee) will not be charged.</li>
+                                <li style={{ marginTop: '7px' }}>Orders do NOT contain products in the "not charging" category.</li>
+                                <li style={{ marginTop: '7px' }}>Orders are NOT delivered by Viettel Post, VN Post, VN Tien Giang, Kien Nguyen Delivery, or other delivery channels.</li>
+                                <li style={{ marginTop: '7px' }}>The user MUST NOT have any signs of abusing the program or Shopee's policies.</li>
+                            </ul>
+                        </div>
+                    </DialogContentText>
+                </DialogContent>
+
+            </Dialog>
         </>
     );
 }
