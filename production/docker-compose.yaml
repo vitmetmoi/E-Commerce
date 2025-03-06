@@ -1,6 +1,10 @@
 version: '3.8'
 
 services:
+
+  tags:
+    - "myimage:mytag"
+    - "registry/username/myrepos:my-other-tag"
   database-mysql:
     image: mysql:8.0
     restart: always
@@ -26,9 +30,9 @@ services:
       - URL_REACT=http://localhost
       # - DB_HOST=host.docker.internal
     ports:
-      - 8080:8080
+      - 8088:8088
     expose:
-      - 8080
+      - 8088
   nginx:
     image: nginx:1.23.3
     build:

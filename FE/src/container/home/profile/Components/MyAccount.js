@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './MyAccount.scss';
 import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
 import { alpha, styled } from '@mui/material/styles';
 import { IconButton, Backdrop, CircularProgress } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux'
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import InputLabel from '@mui/material/InputLabel';
-import InputBase from '@mui/material/InputBase';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import dayjs from 'dayjs';
 import _ from 'lodash'
-import GoogleMapReact from 'google-map-react';
-import ReactDOM from "react-dom";
 import { useGetAddresssDataMutation } from '../../../../store/slice/API/otherAPI';
 import { setAddresssDataSlice } from '../../../../store/slice/Reducer/otherSlice';
 import Select from '@mui/material/Select';
@@ -29,6 +22,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useUpdateMutation } from '../../../../store/slice/API/userAPI';
 import { toast } from 'react-toastify';
 import { setUserData } from '../../../../store/slice/Reducer/userSlice';
+
+
 function MyAccount(props) {
 
     const userData = useSelector((state) => state.user.userData);

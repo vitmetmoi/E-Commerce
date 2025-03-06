@@ -211,7 +211,7 @@ function CheckOut(props) {
                                     <div className='inf-right'>
                                         <span className='main-text'>0$ (Free)</span>
                                         <span className='sub-text'>Recieved product between : {handleTime(3)} to {handleTime(7)}</span>
-                                        <span className='sub-text'>In case products are delivered from foreign : {handleTime(3)} to {handleTime(30)}</span>
+                                        <span className='sub-text'>In case products are delivered from foreign : {handleTime(7)} to {handleTime(30)}</span>
                                     </div>
                                 </li>
                                 <li>
