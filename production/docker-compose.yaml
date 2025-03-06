@@ -26,9 +26,9 @@ services:
       - URL_REACT=http://localhost
       # - DB_HOST=host.docker.internal
     ports:
-      - 8080:8080
+      - 8088:8088
     expose:
-      - 8080
+      - 8088
   nginx:
     image: nginx:1.23.3
     build:
