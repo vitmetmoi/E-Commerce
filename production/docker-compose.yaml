@@ -1,6 +1,10 @@
 version: '3.8'
 
 services:
+
+  tags:
+    - "myimage:mytag"
+    - "registry/username/myrepos:my-other-tag"
   database-mysql:
     image: mysql:8.0
     restart: always
