@@ -1,11 +1,8 @@
 version: '3.8'
 
 services:
-
-  tags:
-    - "myimage:mytag"
-    - "registry/username/myrepos:my-other-tag"
   database-mysql:
+    build: .
     image: mysql:8.0
     restart: always
     environment:
@@ -38,7 +35,7 @@ services:
     build:
       context: .
     ports:
-      - 80:80
+      - 80:85
     volumes:
       - ./../FE/build:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
