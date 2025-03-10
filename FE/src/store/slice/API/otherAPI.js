@@ -22,7 +22,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
 export const otherAPI = createApi({
     reducerPath: 'otherAPI',
     baseQuery: axiosBaseQuery({
-        baseUrl: '',
+        baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({
 

@@ -22,7 +22,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
 export const checkOutAPI = createApi({
     reducerPath: 'checkOutAPI',
     baseQuery: axiosBaseQuery({
-        baseUrl: '',
+        baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({
 
