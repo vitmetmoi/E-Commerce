@@ -6,22 +6,24 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      - MYSQL_DATABASE=my2
+      - MYSQL_DATABASE=ecommerce
       - MYSQL_ROOT_PASSWORD=Duyngo123@
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql-config:/etc/mysql/conf.d
     ports:
-      - '3306:3306'
+      - '3307:3307'
     expose:
-      - 3306
-
+      - 3307
   backend:
     build:
       context: ../BE
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      - DB_PORT=3306
+      - DB_PORT=3307
       - DB_HOST=database-mysql
-      - DB_DATABASE_NAME=my2
+      - DB_DATABASE_NAME=ecommerce
       - DB_USERNAME=root
       - DB_PASSWORD=Duyngo123@
       # - DB_HOST=host.docker.internal
@@ -36,8 +38,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 80:80
-    # volumes:
-    #   - ./../FE/build:/usr/share/nginx/html
-    #   - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    volumes:
+      - ./../FE/build:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
+
+volumes:
+  db_data:
