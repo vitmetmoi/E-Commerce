@@ -21,7 +21,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
 export const userAPI = createApi({
     reducerPath: 'userAPI',
     baseQuery: axiosBaseQuery({
-        // baseUrl: 'http://13.239.33.251:8080',
+        // baseUrl: 'http://34.227.27.223:8080',
         baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({

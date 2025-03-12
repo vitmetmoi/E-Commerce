@@ -1,7 +1,9 @@
 var cors = require('cors');
 require('dotenv').config();
 const configCors = (app) => {
-    const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:3000', 'http://127.0.0.1:80', 'http://localhost:80', 'http://localhost'];
+    const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:3000',
+        'http://127.0.0.1:80', 'http://localhost:80', 'http://localhost',
+        'http://' + process.env.HOST_URL + ':80', 'http://' + process.env.HOST_URL];
 
     app.use(cors({
         credentials: true,

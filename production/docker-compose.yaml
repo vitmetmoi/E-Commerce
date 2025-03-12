@@ -3,18 +3,15 @@ version: '3.8'
 services:
   database-mysql:
     build: .
-    image: mysql:latest
+    image: mysql:8.0
     restart: always
     environment:
       - MYSQL_DATABASE=ecommerce
       - MYSQL_ROOT_PASSWORD=Duyngo123@
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./mysql-config:/etc/mysql/conf.d
     ports:
-      - '3307:3307'
+      - '3307:3306'
     expose:
-      - 3307
+      - 3306
   backend:
     build:
       context: ../BE
@@ -43,6 +40,3 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
-
-volumes:
-  db_data:
