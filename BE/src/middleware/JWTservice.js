@@ -43,7 +43,9 @@ const verifyTokenService = (token) => {
 const checkCookieService = (req, res, next) => {
     try {
         let path = req.path;
-
+        console.log('path', req.headers.origin)
+        // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+        // console.log("full", fullUrl)
         let isValid = exceptionPath.includes(path)
 
         if (path === '/api/account') {

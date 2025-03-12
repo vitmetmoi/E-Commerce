@@ -21,6 +21,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
 export const clothesAPI = createApi({
     reducerPath: 'systemAPI',
     baseQuery: axiosBaseQuery({
+        // baseUrl: 'http://34.227.27.223:8080',
         baseUrl: 'http://localhost:8080',
     }),
     endpoints: (build) => ({

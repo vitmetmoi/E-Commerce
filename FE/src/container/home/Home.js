@@ -9,7 +9,9 @@ import FirstAboutSection from './section/FirstAboutSection.js';
 import SecondAboutSection from './section/SecondAboutSection.js';
 import Footer from './Footer.js';
 import './Home.scss'
+
 function Home(props) {
+
     return (
         <>
             <div className='home-container col-12'>

@@ -34,6 +34,8 @@ const PORT = process.env.PORT || 8080;
 connectToDataBase();
 
 
+
+
 app.listen(PORT, () => {
     console.log(">>> Backend is running on the port = " + PORT);
 })
