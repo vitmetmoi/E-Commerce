@@ -40,7 +40,10 @@ function MyAccount(props) {
     console.log('time', birthValue);
 
     useEffect(() => {
-        handleGetAddress();
+        if (userData && userData.address && userData.address.provinceId) {
+            handleGetAddress();
+        }
+
     }, [])
 
     useEffect(() => {
@@ -80,17 +83,18 @@ function MyAccount(props) {
 
     const handleOnChangeAddress = async (name, value) => {
         // console.log('name', name);
-        // console.log('value', value)
+        // console.log('value', value);
+
         if (name === 'provinceId') {
             let res2 = await getAddressService({ A: '2', B: `${value}` });
-            if (res2) {
+            if (res2 && res2.data) {
                 // console.log("res2 address12", res2.data);
                 dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
             }
         }
         else if (name === 'districtId') {
             let res3 = await getAddressService({ A: '3', B: `${value}` });
-            if (res3) {
+            if (res3 && res3.data) {
                 // console.log("res3 address", res3.data);
                 dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
             }
@@ -107,7 +111,7 @@ function MyAccount(props) {
 
         if (userData.address.provinceId === 0) {
             let res1 = await getAddressService({ A: '1', B: '0' });
-            if (res1) {
+            if (res1 && res1.data) {
                 // console.log("res1 address", res1.data);
                 dispatch(setAddresssDataSlice({ type: 'PROVINCE', data: res1.data.data }))
             }
@@ -116,12 +120,12 @@ function MyAccount(props) {
 
             let res2 = await getAddressService({ A: '2', B: `${userData.address.provinceId}` });
             let res3 = await getAddressService({ A: '3', B: `${+userData.address.districtId}` });
-            if (res2) {
-                // console.log("res1 address", res2.data);
+            if (res2 && res2.data) {
+                // console.log("res2 address", res2);
                 dispatch(setAddresssDataSlice({ type: 'DISTRICT', data: res2.data.data }))
             }
-            if (res3) {
-                // console.log("res2 address", res3.data);
+            if (res3 && res3.data) {
+                // console.log("res3 address", res3.data);
                 dispatch(setAddresssDataSlice({ type: 'WARD', data: res3.data.data }))
             }
         }

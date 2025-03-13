@@ -23,7 +23,7 @@ export const otherAPI = createApi({
     reducerPath: 'otherAPI',
     baseQuery: axiosBaseQuery({
         // baseUrl: 'http://34.227.27.223:8080',
-        baseUrl: 'http://localhost:8080',
+        baseUrl: 'https://esgoo.net',
 
     }),
     endpoints: (build) => ({
@@ -32,7 +32,7 @@ export const otherAPI = createApi({
             query: (params) => {
                 console.log('params', params)
                 return {
-                    url: `https://esgoo.net/api-tinhthanh/${params.A}/${params.B}.htm`,
+                    url: `/api-tinhthanh/${params.A}/${params.B}.htm`,
                     method: 'get',
 
                 }

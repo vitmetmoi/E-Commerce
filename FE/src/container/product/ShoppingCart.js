@@ -248,7 +248,7 @@ function ShoppingCart(props) {
 
     const handleOnClickOrder = () => {
         if (tableData) {
-            let checkOutData = []
+            let clothesData = []
             tableData.map(item => {
                 if (item.isSelected === true) {
                     let obj = {};
@@ -256,12 +256,12 @@ function ShoppingCart(props) {
                     obj = {
                         ...item
                     }
-                    checkOutData.push(obj);
+                    clothesData.push(obj);
                 }
 
             })
 
-            dispatch(setCheckOutDataSlice(checkOutData))
+            dispatch(setCheckOutDataSlice({ type: 'clothesData', data: clothesData }))
             navigate('/checkOut');
         }
     }
