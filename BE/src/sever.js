@@ -4,6 +4,7 @@ import initWebRoutes from "./routes/web";
 import initApiRoutes from './routes/api';
 import configCors from './config/cors';
 import connectToDataBase from './config/connectDb';
+// import webHookService from './serivces/webHookService'
 require('dotenv').config();
 const app = express();
 var bodyParser = require('body-parser');
@@ -33,7 +34,7 @@ initWebRoutes(app);
 const PORT = process.env.PORT || 8080;
 connectToDataBase();
 
-
+// webHookService();
 
 
 app.listen(PORT, () => {
