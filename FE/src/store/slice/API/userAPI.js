@@ -22,8 +22,8 @@ export const userAPI = createApi({
     reducerPath: 'userAPI',
     baseQuery: axiosBaseQuery({
         // baseUrl: 'http://34.227.27.223:8080',
-        // baseUrl: 'http://localhost:8080',
-        baseUrl: 'https://f806-2001-ee0-41c1-b654-6996-5255-3ccf-91b0.ngrok-free.app'
+        baseUrl: 'http://localhost:8080',
+        // baseUrl: 'https://f806-2001-ee0-41c1-b654-6996-5255-3ccf-91b0.ngrok-free.app'
     }),
     endpoints: (build) => ({
         login: build.query({
@@ -42,7 +42,11 @@ export const userAPI = createApi({
         }),
         update: build.mutation({
             query: (userData) => ({ url: '/api/user/update', method: 'put', data: userData })
-        })
+        }),
+
+        createBill: build.mutation({
+            query: (billData) => ({ url: '/api/bill/create', method: 'post', data: billData })
+        }),
 
     }),
 })
@@ -50,4 +54,6 @@ export const userAPI = createApi({
 
 export const { useRegisterMutation, useLazyLoginQuery,
     useGetUserDataQuery, useCreateUserMutation,
-    useLazyCheckUserAccountQuery, useUpdateMutation } = userAPI
+    useLazyCheckUserAccountQuery, useUpdateMutation,
+    useCreateBillMutation
+} = userAPI

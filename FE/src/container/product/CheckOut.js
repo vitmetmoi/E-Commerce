@@ -24,6 +24,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useCreateBillMutation } from '../../store/slice/API/userAPI';
 // require('dotenv').config()
 function CheckOut(props) {
 
@@ -31,6 +32,7 @@ function CheckOut(props) {
         province: '',
         district: '',
         ward: '',
+        note: '',
     }
 
     const userData = useSelector((state) => state.user.userData);
@@ -39,6 +41,7 @@ function CheckOut(props) {
     const [formState, setFormState] = useState(defaultFormState);
     const dispatch = useDispatch();
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+    const [createBillService, { }] = useCreateBillMutation();
     const [getQRImageService, { }] = useGetQRImageMutation();
     const [openMoreInfo, setOpenMoreInfo] = useState(false);
     const [openPayment, setOpenPayment] = useState(false);
@@ -52,8 +55,8 @@ function CheckOut(props) {
     console.log('userData', userData);
     console.log('addressData', addressData);
     console.log('checkOutData', checkOutData);
-    console.log('dayjs', dayjs())
-    console.log('env', process.env.PORT)
+    // console.log('dayjs', dayjs())
+    // console.log('env', process.env.PORT)
     useEffect(() => {
         handleGetAddress();
     }, [])
@@ -112,6 +115,12 @@ function CheckOut(props) {
         setFormState(_formState);
     }
 
+    const handleOnChange = (name, value) => {
+        let _formState = _.cloneDeep(formState);
+        _formState[name] = value;
+        setFormState(_formState);
+    }
+
     const handleTime = (addDays) => {
         let time = [];
 
@@ -135,6 +144,9 @@ function CheckOut(props) {
         setOpenPayment(!openPayment);
 
         if (openPayment === false) {
+
+            handleCreateBill();
+
             let res = await getQRImageService({
                 acc: '0383984836',
                 bank: 'MBBank',
@@ -170,7 +182,23 @@ function CheckOut(props) {
             sum = sum + (+(item.total * (+item.price - (item.price * (item.discount / 100)))).toFixed(3));
         })
 
-        return sum;
+        return sum.toFixed(3);
+    }
+
+    const handleCreateBill = async () => {
+
+        let currentTime = dayjs().get('year') + '/' + dayjs().get('month') + '/' + dayjs().get('date') + '/' + dayjs().get('hour') + '/' + dayjs().get('minute') + '/' + dayjs().get('second')
+
+        let billData = {
+            time: currentTime,
+            userId: userData.id,
+            amount: calcSumPrice(),
+            note: formState.note
+        }
+
+        console.log('billData', billData)
+
+        let res = await createBillService(billData);
     }
 
 
@@ -271,7 +299,9 @@ function CheckOut(props) {
 
                         <div className='content-left'>
                             <label>Message: </label>
-                            <input placeholder='Notice to seller...'></input>
+                            <input
+                                onChange={(event) => handleOnChange('note', event.target.value)}
+                                placeholder='Notice to seller...'></input>
                         </div>
 
                         <div className='content-right'>

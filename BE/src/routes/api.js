@@ -4,7 +4,7 @@ import userController from '../controllers/userController'
 import clothesController from "../controllers/clothesController"
 import webHookController from '../controllers/webHookController'
 import JWTservice from '../middleware/JWTservice'
-
+import billController from '../controllers/billController'
 const router = express.Router();
 
 /**
@@ -33,6 +33,13 @@ const initApiRoutes = (app) => {
     router.get('/clothes/get', clothesController.handleGetClothes);
     router.put('/clothes/update', clothesController.handleUpdateClothes);
     router.delete('/clothes/delete', clothesController.handleDeleteClothes);
+
+    //checkout
+
+    router.post('/bill/create', billController.handleCreateBill);
+    router.put('/bill/update', billController.handleUpdateBill);
+    router.get('/bill/get', billController.handleGetBill);
+    router.delete('/bill/delete', billController.handleDeleteBill);
 
     //webhook
     router.post('/hooks/payment', webHookController.handleGetPayment);
