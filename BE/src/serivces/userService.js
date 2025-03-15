@@ -1,10 +1,8 @@
-import { raw } from "body-parser";
 import db from "../models"
-import _, { has, includes } from 'lodash'
+import _ from 'lodash'
 import bcrypt from 'bcryptjs';
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import JWTservice from '../middleware/JWTservice.js'
-import jwt from 'jsonwebtoken'
 const fs = require('fs');
 
 const saltRounds = 10;
