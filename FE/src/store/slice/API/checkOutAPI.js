@@ -11,6 +11,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
                 params,
                 headers,
                 body,
+                responseType: 'blob',
                 withCredentials: false,
             });
             return Promise.resolve(result);
@@ -23,18 +24,16 @@ export const checkOutAPI = createApi({
     reducerPath: 'checkOutAPI',
     baseQuery: axiosBaseQuery({
         // baseUrl: 'http://34.227.27.223:8080',
-        baseUrl: 'http://localhost:8080',
-
+        baseUrl: 'https://qr.sepay.vn',
     }),
     endpoints: (build) => ({
 
-        getAddresssData: build.mutation({
+        getQRImage: build.mutation({
             query: (params) => {
                 console.log('params', params)
                 return {
-                    url: `https://esgoo.net/api-tinhthanh/${params.A}/${params.B}.htm`,
+                    url: `/img?acc=${params.acc}&bank=${params.bank}&amount=${params.amount}&des=${params.des}&template=${params.template}&download=${params.download}`,
                     method: 'get',
-
                 }
             }
         }),
@@ -43,4 +42,4 @@ export const checkOutAPI = createApi({
 })
 
 
-export const { useGetAddresssDataMutation } = checkOutAPI
+export const { useGetQRImageMutation } = checkOutAPI

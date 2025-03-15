@@ -286,5 +286,231 @@
             }
         }
 
+        .payment-section {
+            width           : 100%;
+            background-color: white;
+            margin-top      : 30px;
+            display         : flex;
+            flex-direction  : column;
+            padding         : 20px 20px;
+            margin-bottom   : 70px;
+
+            .section1 {
+                display        : flex;
+                flex-direction : row;
+                justify-content: space-between;
+
+                h4 {
+                    font-size  : 18px;
+                    font-weight: 400;
+                }
+
+                .menu {
+                    position: relative;
+
+                    button {
+                        border          : none;
+                        background-color: white;
+                        font-size       : 14px;
+                        font-weight     : 400 !important;
+
+                        span {
+                            color: #f06e00;
+                        }
+                    }
+                }
+
+
+            }
+
+            .section2 {
+                display       : flex;
+                flex-direction: column;
+                align-items   : flex-end;
+                border-top    : 1px solid rgba(0, 0, 0, 0.1);
+
+                .price-container {
+                    width         : 100%;
+                    display       : flex;
+                    flex-direction: column;
+                    margin-top    : 5px;
+                    margin-bottom : 30px;
+
+                    .info-section {
+                        width            : 100%;
+                        border-bottom    : 1px solid rgba(0, 0, 0, 0.1);
+                        // height        : 30px;
+                        padding          : 10px 0;
+                        display          : flex;
+                        flex-direction   : row;
+
+                        .left {
+                            width      : 50%;
+                            text-align : left;
+                            font-size  : 15px;
+                            font-weight: 400;
+
+                        }
+
+                        .right {
+                            width      : 50%;
+                            text-align : right;
+                            font-size  : 16px;
+                            font-weight: 400;
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+            .section3 {
+                width          : 100%;
+                display        : flex;
+                flex-direction : row;
+                align-items    : center;
+                justify-content: center;
+                gap            : 30px;
+
+                .btn1 {
+                    border          : 1px solid rgba(0, 0, 0, 0.1);
+                    background-color: white;
+                    padding         : 15px 15px;
+
+                    &:hover {
+                        opacity: 0.8;
+                        border : 1px solid black;
+
+                    }
+                }
+
+                .btn2 {
+
+                    background-color: white;
+                    padding         : 15px 15px;
+                    color           : white;
+                    background-color: #f06e00;
+                    border          : 1px solid #f06e00;
+                    width           : 200px;
+
+                    &:hover {
+                        opacity         : 0.8;
+                        background-color: white;
+                        color           : #f06e00;
+                    }
+
+                }
+            }
+        }
+
     }
+}
+
+.dialog-qr-box {
+    display       : flex;
+    flex-direction: row;
+
+    .header-title {
+        font-size    : 15px;
+        font-weight  : 500;
+        margin-bottom: 20px;
+    }
+
+    .content-left {
+        width         : 400px;
+        height        : 600px;
+        border        : 1px solid rgba(0, 0, 0, 0.2);
+        display       : flex;
+        flex-direction: column;
+        align-items   : center;
+
+        // justify-content: center;
+        .waiting {
+            display       : flex;
+            flex-direction: row;
+            align-items   : center;
+            gap           : 10px;
+        }
+
+        .qr-container {
+            width        : 200px;
+            height       : 200px;
+            padding      : 5px;
+            border       : 1px solid rgba(0, 0, 0, 0.2);
+            margin-top   : 20px;
+            margin-bottom: 20px;
+
+            img {
+                width : 100%;
+                height: 100%;
+            }
+        }
+
+        .img-banks {
+            width : 100%;
+            height: 300px;
+        }
+
+    }
+
+    .content-right {
+        width         : 400px;
+        height        : 600px;
+        border        : 1px solid rgba(0, 0, 0, 0.2);
+        display       : flex;
+        flex-direction: column;
+        align-items   : center;
+        padding       : 0 15px;
+
+        .mbbank {
+            width        : 100px;
+            height       : 45px;
+            margin-bottom: 5px;
+        }
+
+        .inf-container {
+            width         : 100%;
+            display       : flex;
+            flex-direction: column;
+            margin-top    : 5px;
+            margin-bottom : 30px;
+
+            .info-section {
+                width            : 100%;
+                border-bottom    : 1px solid rgba(0, 0, 0, 0.1);
+                // height        : 30px;
+                padding          : 10px 0;
+                display          : flex;
+                flex-direction   : row;
+
+                .left {
+                    width      : 50%;
+                    text-align : left;
+                    font-size  : 16px;
+                    font-weight: 600;
+
+                }
+
+                .right {
+                    width      : 50%;
+                    text-align : right;
+                    font-size  : 16px;
+                    font-weight: 400;
+
+                }
+
+            }
+
+
+        }
+    }
+}
+
+.css-10d30g3-MuiPaper-root-MuiDialog-paper {
+    max-width : none !important;
+    max-height: none !important;
 }

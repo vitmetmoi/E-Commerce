@@ -12,17 +12,21 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Bill.belongsTo(models.User, { foreignKey: "userId" })
             Bill.belongsTo(models.Clothes, { foreignKey: "clothesId" })
+            Bill.hasMany(models.ShoppingCart, { foreignKey: 'billId' })
         }
     }
     Bill.init({
         status: DataTypes.STRING,
         time: DataTypes.STRING,
         userId: DataTypes.INTEGER,
-        colorSizeId: DataTypes.INTEGER,
+        amount: DataTypes.STRING,
+        bankName: DataTypes.STRING,
+        accountNumber: DataTypes.STRING,
         note: DataTypes.TEXT,
     }, {
         sequelize,
         modelName: 'Bill',
     });
+
     return Bill;
 };

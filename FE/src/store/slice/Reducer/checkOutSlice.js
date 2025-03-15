@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const defaultAddresssData = {
-    checkOutData: []
+    QRImage: '',
+    clothesData: []
 }
 
 const initialState = {
-    checkOutData: []
+    QRImage: '',
+    clothesData: []
 }
 
 export const checkOutSlice = createSlice({
@@ -13,10 +15,10 @@ export const checkOutSlice = createSlice({
     initialState,
     reducers: {
         setCheckOutDataSlice: (state, action) => {
-            state.checkOutData = action.payload;
+            state[action.payload.type] = action.payload.data;
         },
         clearCheckOutDataSlice: (state) => {
-            state.addresssData = defaultAddresssData
+            state.clothesData = defaultAddresssData
         }
     },
 })

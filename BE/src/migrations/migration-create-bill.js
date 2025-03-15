@@ -23,9 +23,17 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
-            colorSizeId: {
+            amount: {
                 allowNull: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
+            },
+            bankName: {
+                allowNull: true,
+                type: Sequelize.STRING
+            },
+            accountNumber: {
+                allowNull: true,
+                type: Sequelize.STRING
             },
             note: {
                 allowNull: true,

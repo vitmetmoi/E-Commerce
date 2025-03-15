@@ -22,7 +22,8 @@ export const userAPI = createApi({
     reducerPath: 'userAPI',
     baseQuery: axiosBaseQuery({
         // baseUrl: 'http://34.227.27.223:8080',
-        baseUrl: 'http://localhost:8080',
+        // baseUrl: 'http://localhost:8080',
+        baseUrl: 'https://f806-2001-ee0-41c1-b654-6996-5255-3ccf-91b0.ngrok-free.app'
     }),
     endpoints: (build) => ({
         login: build.query({

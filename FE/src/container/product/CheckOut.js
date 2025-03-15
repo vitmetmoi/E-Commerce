@@ -17,25 +17,43 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
 import DiscountIcon from '@mui/icons-material/Discount';
+import { useGetQRImageMutation } from '../../store/slice/API/checkOutAPI';
+import Footer from '../home/Footer';
+import { setCheckOutDataSlice } from '../../store/slice/Reducer/checkOutSlice';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+// require('dotenv').config()
 function CheckOut(props) {
+
     const defaultFormState = {
         province: '',
         district: '',
         ward: '',
     }
+
     const userData = useSelector((state) => state.user.userData);
     const addressData = useSelector((state) => state.other);
-    const checkOutData = useSelector((state) => state.checkOut.checkOutData);
+    const checkOutData = useSelector((state) => state.checkOut);
     const [formState, setFormState] = useState(defaultFormState);
     const dispatch = useDispatch();
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+    const [getQRImageService, { }] = useGetQRImageMutation();
     const [openMoreInfo, setOpenMoreInfo] = useState(false);
+    const [openPayment, setOpenPayment] = useState(false);
+    const [QRImage, setQRImage] = useState('');
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openMenu = Boolean(anchorEl);
+    const [paymentMethod, setPaymentMethod] = useState('RECEIVED')
 
     console.log('formState', formState)
     console.log('userData', userData);
     console.log('addressData', addressData);
     console.log('checkOutData', checkOutData);
     console.log('dayjs', dayjs())
+    console.log('env', process.env.PORT)
     useEffect(() => {
         handleGetAddress();
     }, [])
@@ -98,7 +116,7 @@ function CheckOut(props) {
         let time = [];
 
         let _dayjs = dayjs().add(addDays, 'day');
-        console.log('day', _dayjs)
+        // console.log('day', _dayjs)
         time.push(_dayjs.get('y'));
         time.push(_dayjs.get('M') + 1);
         time.push(_dayjs.get('D'));
@@ -108,6 +126,53 @@ function CheckOut(props) {
             </>
         );
     }
+
+    const handleClickMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleOpenPayMentModal = async () => {
+        setOpenPayment(!openPayment);
+
+        if (openPayment === false) {
+            let res = await getQRImageService({
+                acc: '0383984836',
+                bank: 'MBBank',
+                amount: '1000',
+                template: 'qronly',
+                des: 'DH000',
+                download: 'false',
+            });
+            if (res) {
+                console.log('res qr', res.data);
+                dispatch(setCheckOutDataSlice({ type: 'QRImage', data: res.data }))
+                handleSetQRImg(res.data);
+            }
+        }
+
+    }
+
+    const handleSetQRImg = (data) => {
+        var reader = new FileReader();
+        reader.readAsDataURL(data);
+
+        setTimeout(() => {
+            let srcValue = reader.result;
+            console.log('img', srcValue);
+            setQRImage(srcValue);
+        }, 1000);
+
+    }
+
+    const calcSumPrice = () => {
+        let sum = 0;
+        checkOutData && checkOutData.clothesData.map(item => {
+            sum = sum + (+(item.total * (+item.price - (item.price * (item.discount / 100)))).toFixed(3));
+        })
+
+        return sum;
+    }
+
 
 
     return (
@@ -140,13 +205,14 @@ function CheckOut(props) {
                                 <th> <h5>Product</h5></th>
                                 <th> </th>
                                 <th><span>Price</span></th>
+                                <th><span>Discount</span></th>
                                 <th><span>Amount</span></th>
                                 <th><span>Summary</span></th>
                             </thead>
 
                             <tbody>
                                 {
-                                    checkOutData && checkOutData.map(item => {
+                                    checkOutData && checkOutData.clothesData && checkOutData.clothesData.map(item => {
                                         return (
                                             <tr>
 
@@ -175,13 +241,19 @@ function CheckOut(props) {
 
                                                 <td>
                                                     <div className='col-right'>
+                                                        <span>{item.discount}%</span>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div className='col-right'>
                                                         <span>{item.total}</span>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div className='col-right'>
-                                                        {(item.total * (+item.price)).toFixed(3)}$
+                                                        {(item.total * (+item.price - (item.price * (item.discount / 100)))).toFixed(3)}$
                                                     </div>
                                                 </td>
 
@@ -244,8 +316,185 @@ function CheckOut(props) {
                         </div>
                     </div>
 
+                    <div className='payment-section'>
+                        <div className='section1'>
+                            <h4>Payment</h4>
+
+                            <div className='menu' >
+
+
+                                <Button
+                                    id="basic-button"
+                                    aria-controls={openMenu ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openMenu ? 'true' : undefined}
+                                    onClick={handleClickMenu}
+                                >
+                                    {paymentMethod === 'RECEIVED'
+                                        ?
+                                        <span>Pay after received</span>
+                                        :
+                                        <span>Pay via banking</span>
+                                    }
+
+                                </Button>
+
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorEl}
+                                    open={openMenu}
+                                    onClose={() => setAnchorEl(null)}
+                                    style={{
+                                        // position: 'relative'
+                                    }}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    <MenuItem onClick={() => setPaymentMethod('RECEIVED')}>Pay after received</MenuItem>
+                                    <MenuItem onClick={() => setPaymentMethod('BANKING')}>Pay via banking</MenuItem>
+
+                                </Menu>
+
+                            </div>
+
+                        </div>
+                        <div className='section2'>
+                            <div className='price-container'>
+                                <div className='info-section'>
+                                    <div className='left'>Summary price </div>
+                                    <div className='right'>{calcSumPrice()}$</div>
+                                </div>
+
+                                <div className='info-section'>
+                                    <div className='left'>Delivery fee </div>
+                                    <div className='right'>0$</div>
+                                </div>
+
+                                <div className='info-section'>
+                                    <div className='left'>Amount to be paid</div>
+                                    <div className='right'>{calcSumPrice()}$</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div className='section3'>
+
+                            <button className='btn1'>Continue Shopping</button>
+
+                            {
+                                paymentMethod === 'RECEIVED' ?
+                                    <button
+                                        // onClick={() => handleOnClickOrder()}
+                                        className='btn2'>
+                                        Order Now
+                                    </button>
+                                    :
+                                    <button
+                                        onClick={() => handleOpenPayMentModal()}
+                                        className='btn2'>
+                                        Open Banking
+                                    </button>
+
+                            }
+
+
+
+                        </div>
+                    </div>
+
                 </div>
+
+                <Footer></Footer>
+
+                <Dialog
+                    open={openPayment}
+                    onClose={() => setOpenPayment(!openPayment)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle
+                        style={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}
+                        id="alert-dialog-title">
+                        {"Guide for payment via banking"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <div class="dialog-qr-box">
+
+                                <div className='content-left'>
+
+                                    <span className='header-title'>Method 1: Open your banking app and scan QR</span>
+
+                                    <div className='waiting'>
+                                        <span>Status: </span>
+                                        {
+                                            QRImage ?
+                                                <CircularProgress size="20px" />
+                                                : ''
+                                        }
+
+                                    </div>
+
+
+                                    <div className='qr-container'>
+                                        <img src={QRImage ? QRImage : ''}></img>
+                                    </div>
+                                    <span>List bank supports paying via QR code</span>
+                                    <img
+                                        className='img-banks'
+                                        src='https://tttctt.1cdn.vn/2022/01/01/5.jpg'
+                                    // src='https://www.netstars.vn/wp-content/uploads/2021/05/partner-2.png'
+                                    ></img>
+
+                                </div>
+
+                                <div className='content-right'>
+                                    <span className='header-title'>Method 2: Paying manual with informations</span>
+
+                                    <img
+                                        className='mbbank'
+                                        src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Logo_MB_new.png/1200px-Logo_MB_new.png'>
+                                    </img>
+
+                                    <span className='header-title'>Bank name: MB Bank</span>
+
+                                    <div className='inf-container'>
+                                        <div className='info-section'>
+                                            <div className='left'>Name: </div>
+                                            <div className='right'>LO BAO DUY</div>
+                                        </div>
+
+                                        <div className='info-section'>
+                                            <div className='left'>Account number: </div>
+                                            <div className='right'>0383984836</div>
+                                        </div>
+
+                                        <div className='info-section'>
+                                            <div className='left'>Amount: </div>
+                                            <div className='right'>{calcSumPrice()}$</div>
+                                        </div>
+
+                                        <div className='info-section'>
+                                            <div className='left'>Description: </div>
+                                            <div className='right'>DH100</div>
+                                        </div>
+                                    </div>
+
+                                    <Alert variant="outlined" severity="info">Notice: Please keeps description for system vertify your bill</Alert>
+
+
+                                </div>
+                            </div>
+                        </DialogContentText>
+                    </DialogContent>
+
+                </Dialog>
+
             </div>
+
+
 
             <Dialog
                 open={openMoreInfo}
@@ -272,6 +521,9 @@ function CheckOut(props) {
                 </DialogContent>
 
             </Dialog>
+
+
+
         </>
     );
 }
