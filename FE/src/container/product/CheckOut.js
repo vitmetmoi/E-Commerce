@@ -33,6 +33,7 @@ function CheckOut(props) {
         district: '',
         ward: '',
         note: '',
+
     }
 
     const userData = useSelector((state) => state.user.userData);
@@ -50,6 +51,7 @@ function CheckOut(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl);
     const [paymentMethod, setPaymentMethod] = useState('RECEIVED')
+    const [bankingDHId, setBankingDHId] = useState();
 
     console.log('formState', formState)
     console.log('userData', userData);
@@ -145,21 +147,25 @@ function CheckOut(props) {
 
         if (openPayment === false) {
 
-            handleCreateBill();
+            let billRes = await handleCreateBill();
+            if (billRes && billRes.data) {
 
-            let res = await getQRImageService({
-                acc: '0383984836',
-                bank: 'MBBank',
-                amount: '1000',
-                template: 'qronly',
-                des: 'DH000',
-                download: 'false',
-            });
-            if (res) {
-                console.log('res qr', res.data);
-                dispatch(setCheckOutDataSlice({ type: 'QRImage', data: res.data }))
-                handleSetQRImg(res.data);
+                let res = await getQRImageService({
+                    acc: '0383984836',
+                    bank: 'MBBank',
+                    amount: '1000', // change if necessary
+                    template: 'qronly',
+                    des: 'DH' + bankingDHId,
+                    download: 'false',
+                });
+                if (res) {
+                    console.log('res qr', res.data);
+                    dispatch(setCheckOutDataSlice({ type: 'QRImage', data: res.data }))
+                    handleSetQRImg(res.data);
+                }
+
             }
+
         }
 
     }
@@ -189,16 +195,32 @@ function CheckOut(props) {
 
         let currentTime = dayjs().get('year') + '/' + dayjs().get('month') + '/' + dayjs().get('date') + '/' + dayjs().get('hour') + '/' + dayjs().get('minute') + '/' + dayjs().get('second')
 
+        let colorSizeData = []
+        if (checkOutData && checkOutData.clothesData) {
+            checkOutData.clothesData.map(item => {
+                let obj = {}
+                obj.colorSizeId = item.colorSizeId;
+                obj.total = item.total;
+                colorSizeData.push(obj)
+            })
+        }
+
+
         let billData = {
             time: currentTime,
             userId: userData.id,
             amount: calcSumPrice(),
-            note: formState.note
+            note: formState.note,
+            colorSizeData: colorSizeData
         }
 
         console.log('billData', billData)
 
         let res = await createBillService(billData);
+        if (res && res.data) {
+            setBankingDHId(res.data.DT)
+            return res
+        }
     }
 
 
@@ -461,7 +483,10 @@ function CheckOut(props) {
                                         <span>Status: </span>
                                         {
                                             QRImage ?
-                                                <CircularProgress size="20px" />
+                                                <div>
+                                                    <CircularProgress size="20px" />
+
+                                                </div>
                                                 : ''
                                         }
 
@@ -508,7 +533,7 @@ function CheckOut(props) {
 
                                         <div className='info-section'>
                                             <div className='left'>Description: </div>
-                                            <div className='right'>DH100</div>
+                                            <div className='right'>DH{bankingDHId}</div>
                                         </div>
                                     </div>
 
