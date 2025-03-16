@@ -24,7 +24,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useCreateBillMutation } from '../../store/slice/API/userAPI';
+import { useCreateBillMutation, useGetBillMutation } from '../../store/slice/API/userAPI';
+import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
 // require('dotenv').config()
 function CheckOut(props) {
 
@@ -33,7 +37,7 @@ function CheckOut(props) {
         district: '',
         ward: '',
         note: '',
-
+        billStatus: 'Pending',
     }
 
     const userData = useSelector((state) => state.user.userData);
@@ -41,7 +45,9 @@ function CheckOut(props) {
     const checkOutData = useSelector((state) => state.checkOut);
     const [formState, setFormState] = useState(defaultFormState);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [getAddressService, { data, isLoading }] = useGetAddresssDataMutation();
+    const [getBillService, { }] = useGetBillMutation()
     const [createBillService, { }] = useCreateBillMutation();
     const [getQRImageService, { }] = useGetQRImageMutation();
     const [openMoreInfo, setOpenMoreInfo] = useState(false);
@@ -52,6 +58,8 @@ function CheckOut(props) {
     const openMenu = Boolean(anchorEl);
     const [paymentMethod, setPaymentMethod] = useState('RECEIVED')
     const [bankingDHId, setBankingDHId] = useState();
+
+    //debug console
 
     console.log('formState', formState)
     console.log('userData', userData);
@@ -147,17 +155,21 @@ function CheckOut(props) {
 
         if (openPayment === false) {
 
-            let billRes = await handleCreateBill();
-            if (billRes && billRes.data) {
+            let billRes = await handleCreateBill(paymentMethod);
+
+            if (billRes && billRes.data && billRes.data.EC === 0) {
 
                 let res = await getQRImageService({
                     acc: '0383984836',
                     bank: 'MBBank',
-                    amount: '1000', // change if necessary
+                    amount: '2000', // change if necessary
                     template: 'qronly',
-                    des: 'DH' + bankingDHId,
+                    des: 'DH' + billRes.data.DT,
                     download: 'false',
                 });
+                handleOnChange('billStatus', 'Pending');
+                await createAutoGetBill('ONE', billRes.data.DT)
+
                 if (res) {
                     console.log('res qr', res.data);
                     dispatch(setCheckOutDataSlice({ type: 'QRImage', data: res.data }))
@@ -168,6 +180,14 @@ function CheckOut(props) {
 
         }
 
+    }
+
+    const handleSubmit = async () => {
+        let billRes = await handleCreateBill(paymentMethod);
+        if (billRes && billRes.data) {
+            toast('Order completed!')
+            navigate('/')
+        }
     }
 
     const handleSetQRImg = (data) => {
@@ -191,7 +211,7 @@ function CheckOut(props) {
         return sum.toFixed(3);
     }
 
-    const handleCreateBill = async () => {
+    const handleCreateBill = async (type) => {
 
         let currentTime = dayjs().get('year') + '/' + dayjs().get('month') + '/' + dayjs().get('date') + '/' + dayjs().get('hour') + '/' + dayjs().get('minute') + '/' + dayjs().get('second')
 
@@ -211,7 +231,8 @@ function CheckOut(props) {
             userId: userData.id,
             amount: calcSumPrice(),
             note: formState.note,
-            colorSizeData: colorSizeData
+            colorSizeData: colorSizeData,
+            type: type
         }
 
         console.log('billData', billData)
@@ -223,7 +244,32 @@ function CheckOut(props) {
         }
     }
 
+    const rendererCountDown = ({ hours, minutes, seconds, completed }) => {
+        if (completed) {
+            // Render a completed state
+            return <span>Time out!</span>;
+        } else {
+            // Render a countdown
+            return <span>( QR will be expired in: {zeroPad(minutes)}:{zeroPad(seconds)} )</span>;
+        }
+    };
 
+    const createAutoGetBill = async (type, id) => {
+        let intervalBillId = setInterval(() => GetBillApi(type, id), 5000);
+
+        setTimeout(() => {
+            clearInterval(intervalBillId);
+        }, 300000);
+
+
+    }
+
+    const GetBillApi = async (type, id) => {
+        let res = await getBillService({ type: type, id: id });
+        if (res && res.data) {
+            handleOnChange('billStatus', res.data.DT.status);
+        }
+    }
 
     return (
         <>
@@ -438,7 +484,7 @@ function CheckOut(props) {
                             {
                                 paymentMethod === 'RECEIVED' ?
                                     <button
-                                        // onClick={() => handleOnClickOrder()}
+                                        onClick={() => handleSubmit()}
                                         className='btn2'>
                                         Order Now
                                     </button>
@@ -465,6 +511,7 @@ function CheckOut(props) {
                     onClose={() => setOpenPayment(!openPayment)}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
+                    keepMounted={false}
                 >
                     <DialogTitle
                         style={{ borderBottom: '1px solid rgba(0,0,0,0.1)' }}
@@ -483,10 +530,31 @@ function CheckOut(props) {
                                         <span>Status: </span>
                                         {
                                             QRImage ?
+
                                                 <div>
-                                                    <CircularProgress size="20px" />
+                                                    {
+                                                        formState.billStatus === 'Done' ?
+                                                            <div>
+                                                                <Alert severity="success">Payment successful !.</Alert>
+                                                            </div>
+                                                            :
+                                                            <div>
+                                                                <CircularProgress
+                                                                    style={{ marginRight: '10px' }}
+                                                                    size="20px" />
+
+                                                                <Countdown
+                                                                    date={Date.now() + 300000}
+                                                                    renderer={rendererCountDown}
+
+                                                                />
+                                                            </div>
+
+                                                    }
 
                                                 </div>
+
+
                                                 : ''
                                         }
 

@@ -47,8 +47,8 @@ const handleUpdateBill = async (req, res) => {
 const handleGetBill = async (req, res) => {
     try {
         let type = req.query.type;
-        let billId = req.query.billId
-        let response = billService.getBillService(type, billId);
+        let billId = req.query.id;
+        let response = await billService.getBillService(type, billId);
 
         return res.status(200).json({
             DT: response.DT,

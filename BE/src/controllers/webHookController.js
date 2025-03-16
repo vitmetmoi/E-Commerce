@@ -3,7 +3,8 @@ import webHookService from '../serivces/webHookService'
 const handleGetPayment = async (req, res) => {
     try {
         let webHookData = req.body;
-        let response = webHookService.getPaymentWebHookService(webHookData);
+        let response = await webHookService.getPaymentWebHookService(webHookData);
+
 
         return res.status(200).json({
             DT: response.DT,
