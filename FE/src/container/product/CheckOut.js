@@ -56,7 +56,7 @@ function CheckOut(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const openMenu = Boolean(anchorEl);
-    const [paymentMethod, setPaymentMethod] = useState('RECEIVED')
+    const [paymentMethod, setPaymentMethod] = useState('BANKING')
     const [bankingDHId, setBankingDHId] = useState();
 
     //debug console
@@ -185,8 +185,12 @@ function CheckOut(props) {
     const handleSubmit = async () => {
         let billRes = await handleCreateBill(paymentMethod);
         if (billRes && billRes.data) {
-            toast('Order completed!')
-            navigate('/')
+            toast.success('Order completed!')
+
+            setTimeout(() => {
+                navigate('/')
+                window.location.reload();
+            }, 3000);
         }
     }
 
@@ -267,7 +271,9 @@ function CheckOut(props) {
     const GetBillApi = async (type, id) => {
         let res = await getBillService({ type: type, id: id });
         if (res && res.data) {
-            handleOnChange('billStatus', res.data.DT.status);
+            if (res.data.DT.status === 'Done') {
+                handleOnChange('billStatus', res.data.DT.status);
+            }
         }
     }
 

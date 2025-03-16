@@ -14,7 +14,7 @@ const createBillService = async (billData) => {
             console.log('billdata', billData)
 
             let bill = await db.Bill.create({
-                status: 'Pending',
+                status: billData.type === 'RECEIVED' ? 'Ordering' : 'Pending',
                 time: billData.time,
                 userId: billData.userId,
                 amount: billData.amount,
