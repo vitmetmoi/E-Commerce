@@ -1,3 +1,4 @@
+import _ from "lodash";
 import db from "../models"
 import { Op, where } from "sequelize";
 
@@ -21,27 +22,68 @@ const getPaymentWebHookService = async (webHookData) => {
 
             let bill = await db.Bill.findOne({
                 where: { id: productCode },
-                // include: [
-                //     { model: db.ShoppingCart } ,
-                // ]
                 attributes: {
                     exclude: ['colorSizeId']
+                },
+                include: [
+                    {
+                        model: db.ShoppingCart,
+                        attributes: ['billId', 'colorSizeId', 'total'],
+
+                    }
+
+                ],
+
+            })
+
+
+            if (webHookData.transferType === 'in'
+
+                // && _.isEqual(webHookData.transferAmount, +bill.amount) === true
+
+            ) {
+                bill.set({
+                    status: 'Done',
+                    bankName: webHookData.gateway,
+                    accountNumber: webHookData.accountNumber
+                })
+
+
+
+                bill.ShoppingCarts.map(async (item, index) => {
+
+                    let product = await db.Color_Size.findOne({
+                        where: { id: item.colorSizeId }
+                    })
+                    console.log('product', product)
+
+                    product.set({
+                        stock: product.stock - (+item.total)
+                    })
+
+                    await product.save();
+                })
+
+
+                await bill.save();
+
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: '!'
                 }
-            })
-
-            bill.set({
-                status: 'Done',
-                bankName: webHookData.gateway,
-                accountNumber: webHookData.accountNumber
-            })
-
-            await bill.save();
-
-            return {
-                DT: '',
-                EC: 0,
-                EM: '!'
             }
+
+            else {
+
+
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: '!'
+                }
+            }
+
         }
     }
     catch (e) {
