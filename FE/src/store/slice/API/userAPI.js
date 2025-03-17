@@ -48,6 +48,12 @@ export const userAPI = createApi({
             query: (billData) => ({ url: '/api/bill/create', method: 'post', data: billData })
         }),
 
+        getBill: build.mutation({
+            query: (params) => ({
+                url: `/api/bill/get?type=${params.type}&id=${params.id}`, method: 'get',
+            })
+        }),
+
     }),
 })
 
@@ -55,5 +61,5 @@ export const userAPI = createApi({
 export const { useRegisterMutation, useLazyLoginQuery,
     useGetUserDataQuery, useCreateUserMutation,
     useLazyCheckUserAccountQuery, useUpdateMutation,
-    useCreateBillMutation
+    useCreateBillMutation, useGetBillMutation
 } = userAPI

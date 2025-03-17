@@ -146,7 +146,7 @@ const convertClothesImgArray = (clothesArr) => {
     }
 }
 
-const getClothesService = async (type, id) => {
+const getClothesService = async (type, id, page, pageSize) => {
     try {
         console.log('ok');
         if (!type) {
@@ -157,7 +157,16 @@ const getClothesService = async (type, id) => {
             }
         }
         else {
+            console.log('p', type);
+
+            let paginationData = {
+                rowCount: 0,
+                data: ''
+            };
+
             let data = '';
+
+
             if (type === 'ALL') {
                 data = await db.Clothes.findAll({
                     include: [{
@@ -215,6 +224,40 @@ const getClothesService = async (type, id) => {
                 })
 
             }
+
+            else if (type === 'PAGINATION') {
+                const { count, rows } = await db.Clothes.findAndCountAll({
+                    offset: (+page) * (+pageSize),
+                    limit: +pageSize,
+                    distinct: true,
+                    include: [{
+                        model: db.Discount,
+                        attributes: ['id', 'value'],
+                        order: [['createdAt', 'DESC']],
+
+                    },
+                    {
+                        model: db.Markdown,
+                        attributes: ['id', 'contentMarkdown'],
+
+                    },
+                    {
+                        model: db.RelevantImage,
+                        attributes: ['id', 'image'],
+
+                    },
+                    {
+                        model: db.Color_Size,
+                        attributes: ['id', 'color', 'size', 'stock'],
+
+                    }
+                    ],
+                })
+
+                paginationData.data = rows;
+                paginationData.rowCount = count;
+
+            }
             else if (type === 'ONE') {
                 data = await db.Clothes.findOne({
                     where: { id: id },
@@ -243,8 +286,26 @@ const getClothesService = async (type, id) => {
                 })
 
             }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Type is not exist!'
+                }
+            }
 
-            if (data) {
+            if (type === 'PAGINATION') {
+                paginationData.data = convertClothesImgArray(paginationData.data);
+
+                return {
+                    DT: paginationData,
+                    EC: 0,
+                    EM: 'Done!'
+                }
+            }
+
+
+            else {
                 let clothesData = convertClothesImgArray(data);
 
                 return {
@@ -254,13 +315,7 @@ const getClothesService = async (type, id) => {
                 }
             }
 
-            else {
-                return {
-                    DT: "",
-                    EC: -1,
-                    EM: 'Err from sever service...'
-                }
-            }
+
 
         }
     } catch (e) {

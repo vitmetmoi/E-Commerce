@@ -11,9 +11,10 @@ const createBillService = async (billData) => {
             }
         }
         else {
+            console.log('billdata', billData)
 
             let bill = await db.Bill.create({
-                status: 'Pending',
+                status: billData.type === 'RECEIVED' ? 'Ordering' : 'Pending',
                 time: billData.time,
                 userId: billData.userId,
                 amount: billData.amount,
@@ -21,6 +22,26 @@ const createBillService = async (billData) => {
                 accountNumber: '',
                 note: billData.note ? billData.note : ''
             })
+
+            if (billData && billData.colorSizeData) {
+                billData.colorSizeData.map(item => {
+                    item.billId = bill.id;
+                    return item;
+                })
+            }
+
+
+            await db.ShoppingCart.bulkCreate(billData.colorSizeData)
+
+            if (billData.type !== 'RECEIVED') {
+                setTimeout(async () => {
+
+                    bill.status = 'EXPIRED';
+                    await bill.save();
+
+                }, 300000);
+            }
+
 
 
             return {
@@ -98,26 +119,29 @@ const getBillService = async (type, billId) => {
             if (type === 'ALL') {
                 let bill = await db.Bill.findAll({})
 
-                if (bill) {
-                    return {
-                        DT: bill,
-                        EC: 0,
-                        EM: 'Get bill completed!'
-                    }
+
+                return {
+                    DT: bill,
+                    EC: 0,
+                    EM: 'Get bill completed!'
                 }
+
             }
             else {
                 let bill = await db.Bill.findOne({
-                    where: { id: billId }
+                    where: { id: billId },
+                    attributes: {
+                        exclude: ['colorSizeId']
+                    }
                 })
 
-                if (bill) {
-                    return {
-                        DT: bill,
-                        EC: 0,
-                        EM: 'Get bill completed!'
-                    }
+
+                return {
+                    DT: bill,
+                    EC: 0,
+                    EM: 'Get bill completed!'
                 }
+
             }
 
 
