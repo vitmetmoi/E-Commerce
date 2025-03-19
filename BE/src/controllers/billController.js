@@ -48,7 +48,10 @@ const handleGetBill = async (req, res) => {
     try {
         let type = req.query.type;
         let billId = req.query.id;
-        let response = await billService.getBillService(type, billId);
+        let page = req.query.page;
+        let pageSize = req.query.pageSize;
+
+        let response = await billService.getBillService(type, billId, page, pageSize);
 
         return res.status(200).json({
             DT: response.DT,

@@ -20,13 +20,9 @@ function TheNewDropSection(props) {
     const [clothesData, setClothesData] = useState('');
 
     useEffect(() => {
-        if (_.isEmpty(clothes)) {
-            getClothes();
-        }
-        else {
-            setClothesData(clothes)
-        }
 
+        getClothes();
+        // setClothesData(clothes)
     }, [])
 
 

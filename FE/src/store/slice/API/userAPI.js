@@ -50,7 +50,7 @@ export const userAPI = createApi({
 
         getBill: build.mutation({
             query: (params) => ({
-                url: `/api/bill/get?type=${params.type}&id=${params.id}`, method: 'get',
+                url: `/api/bill/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}`, method: 'get',
             })
         }),
 

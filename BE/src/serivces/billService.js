@@ -106,9 +106,9 @@ const updateBillService = async (billData) => {
     }
 }
 
-const getBillService = async (type, billId) => {
+const getBillService = async (type, billId, page, pageSize) => {
     try {
-        if (!type || !billId) {
+        if (!type) {
             return {
                 DT: '',
                 EC: -1,
@@ -122,6 +122,43 @@ const getBillService = async (type, billId) => {
 
                 return {
                     DT: bill,
+                    EC: 0,
+                    EM: 'Get bill completed!'
+                }
+
+            }
+            else if (type === 'PAGINATION') {
+
+                const { count, rows } = await db.Bill.findAndCountAll({
+                    offset: (+page) * (+pageSize),
+                    limit: +pageSize,
+                    distinct: true,
+                    include: [
+                        {
+                            model: db.ShoppingCart,
+                            order: [['createdAt', 'DESC']],
+                        },
+                        {
+                            model: db.User,
+                            order: [['createdAt', 'DESC']],
+                            attributes: {
+                                exclude: ['password', 'createdAt', 'updatedAt']
+                            }
+                        },
+
+                    ],
+                    attributes: {
+                        exclude: ['colorSizeId']
+                    }
+                })
+
+
+
+                return {
+                    DT: {
+                        rowCount: count,
+                        data: rows
+                    },
                     EC: 0,
                     EM: 'Get bill completed!'
                 }
