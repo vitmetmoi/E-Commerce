@@ -25,7 +25,8 @@ const handleCreateBill = async (req, res) => {
 const handleUpdateBill = async (req, res) => {
     try {
         let billData = req.body;
-        let response = billService.updateBillService(billData);
+        console.log('bil', billData)
+        let response = await billService.updateBillService(billData);
 
         return res.status(200).json({
             DT: response.DT,

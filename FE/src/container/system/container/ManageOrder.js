@@ -37,9 +37,11 @@ import Skeleton from '@mui/material/Skeleton';
 import DeleteConfirm from './components/DeleteConfirm';
 import { downloadExcel } from "react-export-table-to-excel";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { useGetBillMutation } from '../../../store/slice/API/userAPI';
+import { useGetBillMutation, useUpdateBillMutation } from '../../../store/slice/API/userAPI';
 import { setBillDataSlice } from '../../../store/slice/Reducer/systemSlice';
-
+import Chip from '@mui/material/Chip';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 function ManageOrder(props) {
 
     //State
@@ -55,7 +57,7 @@ function ManageOrder(props) {
     });
 
     const [getBillService, { isLoading, data }] = useGetBillMutation();
-
+    const [updateBillService, { }] = useUpdateBillMutation();
     const rowCountRef = useRef(0);
     const rowCount = useMemo(() => {
         if (isLoading === false && data && data.DT) {
@@ -84,6 +86,7 @@ function ManageOrder(props) {
                 let obj = {
                     id: item.id,
                     customer: item.User.firstName + " " + item.User.lastName,
+                    userId: item.userId,
                     status: item.status,
                     amount: item.amount,
                     bankName: item.bankName,
@@ -114,7 +117,36 @@ function ManageOrder(props) {
         setIsOpenDeleteModal(!isOpenDeleteModal);
     }
 
-    const processRowUpdate = async () => {
+    const processRowUpdate = async (newRow, type) => {
+        const updatedRow = { ...newRow, isNew: false };
+        console.log('new Row', newRow)
+        let rowsToMutate = rows.map((row) => {
+            if (row.id === updatedRow.id) {
+                if (_.isEqual(updatedRow, row) === false) {
+                    let data = {
+                        id: updatedRow.id,
+                        userId: updatedRow.userId,
+                        amount: updatedRow.amount,
+                        time: updatedRow.time,
+                        status: updatedRow.status,
+                        accountNumber: updatedRow.accountNumber,
+                        bankName: updatedRow.bankName
+                    }
+
+                    updateBillService(data);
+                    return updatedRow
+                }
+                else {
+                    return row;
+                }
+            }
+            else {
+                return row;
+            }
+        })
+        setRows(rowsToMutate);
+        return updatedRow;
+
 
     }
 
@@ -186,9 +218,48 @@ function ManageOrder(props) {
         {
             field: 'status',
             headerName: 'Status',
-            width: 120,
-            renderCell: (params) => <>{params.value}</>,
-            editable: true,
+            width: 150,
+            renderCell: (params) =>
+                <>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        style={{
+
+                        }}
+                        size='small'
+                        value={params.value}
+                        label="Age"
+                        onChange={(event) => processRowUpdate({ ...params.row, status: event.target.value }, 'STATUS')}
+                    >
+                        <MenuItem value={'Pending'}>
+                            <Chip
+                                label={params.value}
+                                style={{
+                                    color: asignChipColor('Pending').color,
+                                    backgroundColor: asignChipColor('Pending').backgroundColor
+                                }}
+                            ></Chip></MenuItem>
+                        <MenuItem value={'EXPIRED'}>
+                            <Chip
+                                label={'EXPIRED'}
+                                style={{
+                                    color: asignChipColor('EXPIRED').color,
+                                    backgroundColor: asignChipColor('EXPIRED').backgroundColor
+                                }}
+                            ></Chip></MenuItem>
+                        <MenuItem value={'Done'}>
+                            <Chip
+                                label={'Done'}
+                                style={{
+                                    color: asignChipColor('Done').color,
+                                    backgroundColor: asignChipColor('Done').backgroundColor
+                                }}
+                            ></Chip>
+                        </MenuItem>
+                    </Select>
+                </>,
+            editable: false,
         },
 
         {
@@ -260,6 +331,28 @@ function ManageOrder(props) {
             },
         },
     ];
+
+    const asignChipColor = (label) => {
+        if (label === 'Done') {
+            return {
+                color: 'white',
+                backgroundColor: '#2e7d32'
+            }
+        }
+        else if (label === 'Ordering') {
+            return {
+                color: 'white',
+                backgroundColor: '#1976d2'
+            }
+
+        }
+        else {
+            return {
+                color: 'black',
+                backgroundColor: 'rgba(0, 0, 0, 0.08)'
+            }
+        }
+    }
 
     const header = ["ID", "Name product", "Type", "Category", "Price", "Updated At", "Created At"];
 

@@ -310,7 +310,7 @@ function ManageClothes(props) {
 
                     if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
                         let res = await getClothesService({ type: 'ALL', id: 12 });
-                        console.log('res', res);
+                        // console.log('res', res);
                         if (res && res.data && res.data.EC === 0 && isLoading === false) {
                             handleOpenMarkdownModal();
                         }

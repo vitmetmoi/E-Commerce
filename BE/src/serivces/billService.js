@@ -66,7 +66,7 @@ const createBillService = async (billData) => {
 
 const updateBillService = async (billData) => {
     try {
-        if (!billData || !billData.amount || !billData.bankName || !billData.accountNumber) {
+        if (!billData || !billData.amount) {
             return {
                 DT: '',
                 EC: -1,
@@ -75,7 +75,12 @@ const updateBillService = async (billData) => {
         }
         else {
 
-            let bill = await db.Bill.findOne({ where: { id: billData.id } })
+            let bill = await db.Bill.findOne({
+                where: { id: billData.id },
+                attributes: {
+                    exclude: ['colorSizeId']
+                }
+            })
 
             if (bill) {
 
