@@ -34,7 +34,7 @@ const initApiRoutes = (app) => {
     router.put('/clothes/update', clothesController.handleUpdateClothes);
     router.delete('/clothes/delete', clothesController.handleDeleteClothes);
 
-    //checkout
+    //checkout + bill
 
     router.post('/bill/create', billController.handleCreateBill);
     router.put('/bill/update', billController.handleUpdateBill);
@@ -43,6 +43,7 @@ const initApiRoutes = (app) => {
 
     //webhook
     router.post('/hooks/payment', webHookController.handleGetPayment);
+
 
 
 

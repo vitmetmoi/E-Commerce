@@ -248,16 +248,6 @@ function CheckOut(props) {
         }
     }
 
-    const rendererCountDown = ({ hours, minutes, seconds, completed }) => {
-        if (completed) {
-            // Render a completed state
-            return <span>Time out!</span>;
-        } else {
-            // Render a countdown
-            return <span>( QR will be expired in: {zeroPad(minutes)}:{zeroPad(seconds)} )</span>;
-        }
-    };
-
     const createAutoGetBill = async (type, id) => {
         let intervalBillId = setInterval(() => GetBillApi(type, id), 5000);
 
@@ -273,6 +263,12 @@ function CheckOut(props) {
         if (res && res.data) {
             if (res.data.DT.status === 'Done') {
                 handleOnChange('billStatus', res.data.DT.status);
+                toast.success('Order completed!')
+                toast('Navigating...')
+                setTimeout(() => {
+                    navigate('/')
+                    window.location.reload();
+                }, 3000);
             }
         }
     }
@@ -541,7 +537,7 @@ function CheckOut(props) {
                                                     {
                                                         formState.billStatus === 'Done' ?
                                                             <div>
-                                                                <Alert severity="success">Payment successful !.</Alert>
+                                                                <Alert severity="success">Payment successful.</Alert>
                                                             </div>
                                                             :
                                                             <div>
@@ -549,11 +545,7 @@ function CheckOut(props) {
                                                                     style={{ marginRight: '10px' }}
                                                                     size="20px" />
 
-                                                                <Countdown
-                                                                    date={Date.now() + 300000}
-                                                                    renderer={rendererCountDown}
-
-                                                                />
+                                                                <span>( QR will be expired in 5 munites )</span>
                                                             </div>
 
                                                     }

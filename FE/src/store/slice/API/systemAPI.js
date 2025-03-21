@@ -38,7 +38,7 @@ export const clothesAPI = createApi({
         getClothesData: build.mutation({
             query: (params) => {
                 return {
-                    url: `/api/clothes/get?type=${params.type}&id=${params.id}`,
+                    url: `/api/clothes/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}`,
                     method: 'get',
                 }
             }

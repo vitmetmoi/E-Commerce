@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import './ManageClothes.scss'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box, IconButton } from '@mui/material';
@@ -46,14 +46,17 @@ function ManageClothes(props) {
 
 
 
-
     const clothes = useSelector((state) => state.system.clothesData)
     const dispatch = useDispatch()
     const [getClothesService, { data, isLoading, isSuccess }] = useGetClothesDataMutation();
     const [updateClothesService, { isLoading: updateIsLoading }] = useUpdateClothesMutation();
     const [deleteClothesService, { isLoading: deleteIsLoading }] = useDeleteClothesMutation();
-    const [rows, setRows] = useState([]);
+    const [rows, setRows] = useState('');
     const [rowModesModel, setRowModesModel] = useState({});
+    const [paginationModel, setPaginationModel] = React.useState({
+        page: 0,
+        pageSize: 3,
+    });
 
     //modal
     const [isOpenImgModal, setIsOpenImgModal] = useState(false);
@@ -63,31 +66,48 @@ function ManageClothes(props) {
     const [prevImg, setPrevImg] = useState(0);
     const [idOfClothesToChange, setIdOfClothesToChange] = useState(0);
 
+    const rowCountRef = useRef(0);
+
+    const rowCount = useMemo(() => {
+        if (isLoading === false && data && data.DT) {
+            if (data.DT.rowCount !== undefined) {
+                rowCountRef.current = data.DT.rowCount;
+            }
+            return rowCountRef.current;
+        }
+
+    }, [isLoading]);
+
     //Markdown
     const [contentMarkdown, setContentMarkDown] = useState('')
 
-    //ref
+
+    //debug
+    console.log('rows', rows)
+    console.log('pagination', paginationModel)
+
 
     useEffect(() => {
         console.log("clothes data", clothes)
-        if (_.isEmpty(clothes)) {
-            getClothes();
-        }
+        // if (_.isEmpty(clothes)) {
+        getClothes();
+        // }
     }, [])
 
     const getClothes = async () => {
-        await getClothesService({ type: 'ALL', id: 12 });
+        await getClothesService({ type: 'PAGINATION', id: 0, page: paginationModel.page, pageSize: paginationModel.pageSize });
     }
 
     useEffect(() => {
         if (isLoading === false && data) {
-            dispatch(setClothesDataSlice(data.DT));
+            dispatch(setClothesDataSlice(data.DT.data));
         }
     }, [isLoading])
 
     useEffect(() => {
         if (clothes) {
             let arrRows = [];
+            // console.log('clothes')
             clothes.map((item) => {
                 let obj = {
                     id: item.id,
@@ -209,6 +229,15 @@ function ManageClothes(props) {
         setPrevImg(index)
     }
 
+    const handleChangePaginationPage = async (pageInfo) => {
+        let res = await getClothesService({ type: 'PAGINATION', page: pageInfo.page, pageSize: pageInfo.pageSize })
+
+        if (res && res.data && res.data.EC === 0) {
+
+        }
+        setPaginationModel(pageInfo)
+    }
+
     //MUI material functions
 
     const handleRowEditStop = (params, event) => {
@@ -281,7 +310,7 @@ function ManageClothes(props) {
 
                     if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
                         let res = await getClothesService({ type: 'ALL', id: 12 });
-                        console.log('res', res);
+                        // console.log('res', res);
                         if (res && res.data && res.data.EC === 0 && isLoading === false) {
                             handleOpenMarkdownModal();
                         }
@@ -577,23 +606,24 @@ function ManageClothes(props) {
                 <DataGrid
                     style={{ height: 'fit-content' }}
                     rows={rows}
-
                     columns={columns}
                     slots={{
                         toolbar: CustomToolbar,
                         noRowsOverlay: customNoRows
                     }}
+                    loading={isLoading}
                     initialState={{
                         pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
+                            paginationModel: paginationModel,
                         },
                     }}
-                    pageSizeOptions={[5]}
+                    onPaginationModelChange={handleChangePaginationPage}
+                    rowCount={+rowCount}
+                    // pageSizeOptions={[5, 10, 25, 50]}
                     disableRowSelectionOnClick
                     editMode="row"
                     rowModesModel={rowModesModel}
+                    paginationMode="server"
                     onRowModesModelChange={handleRowModesModelChange}
                     onRowEditStop={handleRowEditStop}
                     processRowUpdate={processRowUpdate}
