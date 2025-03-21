@@ -42,6 +42,7 @@ import Skeleton from '@mui/material/Skeleton';
 import DeleteConfirm from './components/DeleteConfirm';
 import { downloadExcel } from "react-export-table-to-excel";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import StockModal from './components/StockModal';
 function ManageClothes(props) {
 
 
@@ -62,10 +63,11 @@ function ManageClothes(props) {
     const [isOpenImgModal, setIsOpenImgModal] = useState(false);
     const [isOpenMardownModal, setIsOpenMarkdownModal] = useState(false);
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+    const [isOpenStockModal, setIsOpenStockModal] = useState(false);
     const [imgArray, setImgArray] = useState([]);
     const [prevImg, setPrevImg] = useState(0);
     const [idOfClothesToChange, setIdOfClothesToChange] = useState(0);
-
+    const [dataOfStockToChange, setDataOfStockToChange] = useState('');
     const rowCountRef = useRef(0);
 
     const rowCount = useMemo(() => {
@@ -170,6 +172,14 @@ function ManageClothes(props) {
         setIsOpenDeleteModal(!isOpenDeleteModal);
     }
 
+    const handleOpenStockModal = (id, data) => {
+        if (isOpenDeleteModal === false) {
+            setIdOfClothesToChange(id);
+            setDataOfStockToChange(data);
+        }
+        setIsOpenStockModal(!isOpenStockModal);
+    }
+
 
     const handleDeleteImg = () => {
         if (prevImg > 0) {
@@ -193,6 +203,10 @@ function ManageClothes(props) {
             setRows(rows.filter((row) => row.id !== idOfClothesToChange));
         }
     };
+
+    const handleStockClick = async () => {
+        console.log('id')
+    }
 
     const handleReplaceImg = (img) => {
         if (img) {
@@ -282,7 +296,7 @@ function ManageClothes(props) {
             let res = await updateClothesService(payload);
 
             if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
-                let res = await getClothesService({ type: 'ALL', id: 12 });
+                let res = await getClothesService({ type: 'PAGINATION', id: 0, page: paginationModel.page, pageSize: paginationModel.pageSize });
                 if (res && res.data && res.data.EC === 0 && isLoading === false) {
                     handleOpenImgModal();
                 }
@@ -291,7 +305,7 @@ function ManageClothes(props) {
 
 
         }
-        else if (type === 'MARKDOWN') {
+        else if (type === 'MARKDOWN' || type === 'STOCK') {
             rows.map(async (row) => {
                 if (row.id === idOfClothesToChange) {
                     let data = {
@@ -300,7 +314,7 @@ function ManageClothes(props) {
                         price: row.price,
                         discount: row.discount,
                         contentMarkdown: contentMarkdown,
-                        color_size: row.stock,
+                        color_size: type === 'STOCK' ? dataOfStockToChange : row.stock,
                     }
                     let payload = {
                         type: 'OTHER',
@@ -309,10 +323,16 @@ function ManageClothes(props) {
                     let res = await updateClothesService(payload);
 
                     if (res && res.data && res.data.EC === 0 && updateIsLoading === false) {
-                        let res = await getClothesService({ type: 'ALL', id: 12 });
+                        let res = await getClothesService({ type: 'PAGINATION', id: 0, page: paginationModel.page, pageSize: paginationModel.pageSize });
                         // console.log('res', res);
                         if (res && res.data && res.data.EC === 0 && isLoading === false) {
-                            handleOpenMarkdownModal();
+                            if (type === 'MARKDOWN') {
+                                handleOpenMarkdownModal();
+                            }
+                            else if (type === 'STOCK') {
+                                handleOpenStockModal();
+                            }
+
                         }
 
                     }
@@ -321,6 +341,7 @@ function ManageClothes(props) {
             })
 
         }
+
         else {
             let rowsToMutate = rows.map((row) => {
                 if (row.id === updatedRow.id) {
@@ -393,7 +414,7 @@ function ManageClothes(props) {
                 let arrColor = params.value;
                 return (
                     <>
-                        <div onClick={() => { console.log('hihi', rowModesModel) }} className='color-group'>
+                        <div onClick={() => handleOpenStockModal(params.id, params.value)} className='color-group'>
                             <AvatarGroup max={4}>
                                 {arrColor && arrColor.length > 0 && arrColor.map((item) => {
                                     let colorHex = asignColor(item.color);
@@ -401,9 +422,7 @@ function ManageClothes(props) {
                                     return (
                                         <Avatar alt={size} style={{ backgroundColor: `${colorHex}`, width: '30px', height: '30px' }} src="/static/images/avatar/2.jpg" />
                                     )
-
                                 })}
-
                             </AvatarGroup>
                         </div>
                     </>
@@ -604,12 +623,12 @@ function ManageClothes(props) {
 
 
                 <DataGrid
-                    style={{ height: 'fit-content' }}
+                    // style={{ height: 'fit-content' }}
                     rows={rows}
                     columns={columns}
                     slots={{
                         toolbar: CustomToolbar,
-                        noRowsOverlay: customNoRows
+                        // noRowsOverlay: customNoRows
                     }}
                     loading={isLoading}
                     initialState={{
@@ -619,7 +638,7 @@ function ManageClothes(props) {
                     }}
                     onPaginationModelChange={handleChangePaginationPage}
                     rowCount={+rowCount}
-                    // pageSizeOptions={[5, 10, 25, 50]}
+                    pageSizeOptions={[5, 10, 25]}
                     disableRowSelectionOnClick
                     editMode="row"
                     rowModesModel={rowModesModel}
@@ -809,6 +828,9 @@ function ManageClothes(props) {
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
+                            width: '100%',
+                            height: '100%',
+
                             bgcolor: 'background.paper',
                             boxShadow: 24,
 
@@ -821,10 +843,46 @@ function ManageClothes(props) {
                     </Fade>
                 </Modal>
 
+                <Modal
+                    style={{ width: "100%" }}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={isOpenStockModal}
+                    onClose={handleOpenStockModal}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                        backdrop: {
+                            timeout: 500,
+                        },
+                    }}
+                >
+                    <Fade in={isOpenStockModal}>
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+
+                        }}>
+                            <StockModal
+                                processRowUpdate={processRowUpdate}
+                                handleOpenStockModal={handleOpenStockModal}
+                                stock={dataOfStockToChange}
+                                asignColor={asignColor}
+                                setDataOfStockToChange={setDataOfStockToChange}
+                                updateIsLoading={updateIsLoading}
+                                isLoading={isLoading}
+                            >
+                            </StockModal>
+                        </Box>
+                    </Fade>
+                </Modal>
+
                 <Alert style={{ justifyContent: 'center', alignItems: 'center' }} severity="warning">
                     Dcm fix Stock column after finished manage Orders function!
                 </Alert>
-            </div>
+            </div >
         </>
     );
 }
