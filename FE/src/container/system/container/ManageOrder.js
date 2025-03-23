@@ -37,7 +37,7 @@ import Skeleton from '@mui/material/Skeleton';
 import DeleteConfirm from './components/DeleteConfirm';
 import { downloadExcel } from "react-export-table-to-excel";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { useGetBillMutation, useUpdateBillMutation } from '../../../store/slice/API/userAPI';
+import { useDeleteBillMutation, useGetBillMutation, useUpdateBillMutation } from '../../../store/slice/API/userAPI';
 import { setBillDataSlice } from '../../../store/slice/Reducer/systemSlice';
 import Chip from '@mui/material/Chip';
 import Select from '@mui/material/Select';
@@ -53,11 +53,12 @@ function ManageOrder(props) {
     const [idOfBillToChange, setIdOfBillToChange] = useState(0);
     const [paginationModel, setPaginationModel] = React.useState({
         page: 0,
-        pageSize: 3,
+        pageSize: 25,
     });
 
     const [getBillService, { isLoading, data }] = useGetBillMutation();
     const [updateBillService, { }] = useUpdateBillMutation();
+    const [deleteBillService, { }] = useDeleteBillMutation();
     const rowCountRef = useRef(0);
     const rowCount = useMemo(() => {
         if (isLoading === false && data && data.DT) {
@@ -85,13 +86,13 @@ function ManageOrder(props) {
             bills.data.map(item => {
                 let obj = {
                     id: item.id,
-                    customer: item.User.firstName + " " + item.User.lastName,
+                    customer: item.User.firstName + " " + item.User.lastName + " ( " + item.User.email + " )",
                     userId: item.userId,
                     status: item.status,
                     amount: item.amount,
                     bankName: item.bankName,
                     accountNumber: item.accountNumber,
-                    time: item.time
+                    time: item.time,
                 }
                 arrRows.push(obj)
             })
@@ -101,6 +102,7 @@ function ManageOrder(props) {
 
     console.log('paginationModel', paginationModel)
     console.log('rowCount', rowCount)
+    console.log('rows', rows);
     console.log('bills', bills)
 
     //My functions
@@ -218,7 +220,8 @@ function ManageOrder(props) {
         {
             field: 'status',
             headerName: 'Status',
-            width: 150,
+            width: 180,
+            editable: false,
             renderCell: (params) =>
                 <>
                     <Select
@@ -234,10 +237,11 @@ function ManageOrder(props) {
                     >
                         <MenuItem value={'Pending'}>
                             <Chip
-                                label={params.value}
+                                label={'Pending'}
                                 style={{
                                     color: asignChipColor('Pending').color,
                                     backgroundColor: asignChipColor('Pending').backgroundColor
+                                    , height: '23px', width: '100px'
                                 }}
                             ></Chip></MenuItem>
                         <MenuItem value={'EXPIRED'}>
@@ -246,6 +250,17 @@ function ManageOrder(props) {
                                 style={{
                                     color: asignChipColor('EXPIRED').color,
                                     backgroundColor: asignChipColor('EXPIRED').backgroundColor
+                                    , height: '23px', width: '100px'
+                                }}
+                            ></Chip></MenuItem>
+
+                        <MenuItem value={'Ordering'}>
+                            <Chip
+                                label={'Ordering'}
+                                style={{
+                                    color: asignChipColor('Ordering').color,
+                                    backgroundColor: asignChipColor('Ordering').backgroundColor
+                                    , height: '23px', width: '100px'
                                 }}
                             ></Chip></MenuItem>
                         <MenuItem value={'Done'}>
@@ -254,6 +269,17 @@ function ManageOrder(props) {
                                 style={{
                                     color: asignChipColor('Done').color,
                                     backgroundColor: asignChipColor('Done').backgroundColor
+                                    , height: '23px', width: '100px'
+                                }}
+                            ></Chip>
+                        </MenuItem>
+                        <MenuItem value={'Return'}>
+                            <Chip
+                                label={'Return'}
+                                style={{
+                                    color: asignChipColor('Return').color,
+                                    backgroundColor: asignChipColor('Return').backgroundColor
+                                    , height: '23px', width: '100px'
                                 }}
                             ></Chip>
                         </MenuItem>
@@ -265,22 +291,22 @@ function ManageOrder(props) {
         {
             field: 'bankName',
             headerName: 'Bank',
-            width: 120,
+            width: 150,
             renderCell: (params) => <>{params.value}</>,
             editable: true,
         },
         {
             field: 'accountNumber',
             headerName: 'Account number',
-            width: 120,
+            width: 150,
             renderCell: (params) => <>{params.value}</>,
             editable: true,
         },
         {
             field: 'time',
             headerName: 'Time',
-            width: 120,
-            renderCell: (params) => <>{params.value}</>,
+            width: 180,
+            renderCell: (params) => <><span>{params.value}</span></>,
             editable: true,
         },
 
@@ -336,29 +362,35 @@ function ManageOrder(props) {
         if (label === 'Done') {
             return {
                 color: 'white',
-                backgroundColor: '#2e7d32'
+                backgroundColor: '#28a745'
             }
         }
         else if (label === 'Ordering') {
             return {
                 color: 'white',
-                backgroundColor: '#1976d2'
+                backgroundColor: '#17a2b8'
             }
 
         }
+        else if (label === 'Return') {
+            return {
+                color: 'white',
+                backgroundColor: '#6c757d'
+            }
+        }
         else {
             return {
-                color: 'black',
-                backgroundColor: 'rgba(0, 0, 0, 0.08)'
+                color: '#343a40',
+                backgroundColor: '#f8f9fa'
             }
         }
     }
 
-    const header = ["ID", "Name product", "Type", "Category", "Price", "Updated At", "Created At"];
+    const header = ["ID", "Customer", "userId", "Status", "Price", "Bank", 'Account Number', 'Time'];
 
     const handleDownloadExcel = () => {
 
-        let rowsToStoreExcel = _.cloneDeep();
+        let rowsToStoreExcel = _.cloneDeep(rows);
 
         rowsToStoreExcel.map(item => {
             let rowAfterDeletedImg = '';
@@ -397,11 +429,19 @@ function ManageOrder(props) {
         );
     }
 
+    const handleDeleteClick = async () => {
+        let res = await deleteBillService(idOfBillToChange);
+        if (res && res.data && res.data.EC === 0) {
+            handleOpenDeleteModal();
+            setRows(rows.filter((row) => row.id !== idOfBillToChange));
+        }
+    };
+
 
     return (
-        <div>
+        <div className='manage-order-container'>
             <DataGrid
-                style={{ height: 'fit-content' }}
+                // style={{ height: 'fit-content', width: 'fit-content' }}
                 rows={rows}
                 columns={columns}
                 slots={{
@@ -410,13 +450,14 @@ function ManageOrder(props) {
                 }}
                 loading={isLoading}
                 initialState={{
+                    density: 'compact',
                     pagination: {
                         paginationModel: paginationModel,
                     },
                 }}
                 onPaginationModelChange={handleChangePaginationPage}
                 rowCount={+rowCount}
-                // pageSizeOptions={[5, 10, 25, 50]}
+                pageSizeOptions={[5, 10, 25]}
                 disableRowSelectionOnClick
                 editMode="row"
                 rowModesModel={rowModesModel}
@@ -429,9 +470,42 @@ function ManageOrder(props) {
 
                 }}
                 sx={{ marginTop: 2 }}
-                rowHeight={100}
+                rowHeight={70}
 
             />
+
+            <Modal
+                style={{ width: "100%" }}
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={isOpenDeleteModal}
+                onClose={handleOpenDeleteModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+
+            >
+                <Fade in={isOpenDeleteModal}>
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+
+                    }}>
+                        <DeleteConfirm
+                            handleDeleteClick={handleDeleteClick}
+                            handleOpenDeleteModal={handleOpenDeleteModal}
+                        ></DeleteConfirm>
+                    </Box>
+                </Fade>
+            </Modal>
 
         </div>
     );
