@@ -1,0 +1,46 @@
+.my-orders-container {
+    .bill-item {
+        width           : 100%;
+        margin-top      : 15px;
+        border          : 1px solid red;
+        background-color: white;
+
+        .bill-item-content {
+            .title {
+                height         : 60px;
+                border         : 1px solid green;
+                display        : flex;
+                flex-direction : row;
+                align-items    : center;
+                justify-content: center;
+                padding        : 25px;
+
+                .content-left {
+                    display         : flex;
+                    flex-direction  : row;
+                    background-color: '';
+                }
+
+                .content-right {}
+            }
+
+            .item-info {
+                height: 200px;
+                width : 100%;
+
+                .content-left {}
+
+                .content-right {}
+            }
+
+            .action-group {
+                height: 200px;
+                width : 100%;
+
+                .price {}
+
+                .actions {}
+            }
+        }
+    }
+}
