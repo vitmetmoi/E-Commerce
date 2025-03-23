@@ -51,8 +51,8 @@ const handleGetBill = async (req, res) => {
         let billId = req.query.id;
         let page = req.query.page;
         let pageSize = req.query.pageSize;
-
-        let response = await billService.getBillService(type, billId, page, pageSize);
+        let userId = req.query.userId;
+        let response = await billService.getBillService(type, billId, page, pageSize, userId);
 
         return res.status(200).json({
             DT: response.DT,
@@ -73,8 +73,8 @@ const handleGetBill = async (req, res) => {
 
 const handleDeleteBill = async (req, res) => {
     try {
-        let webHookData = req.body;
-        let response = webHookService.getPaymentWebHookService(webHookData);
+        let id = req.query.id;
+        let response = await billService.deleteBillService(id);
 
         return res.status(200).json({
             DT: response.DT,

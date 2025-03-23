@@ -1,5 +1,8 @@
+import { includes } from "lodash";
 import db from "../models"
 import { Op, where } from "sequelize";
+import { convertClothesImgArray } from './clothesService'
+import color_size from "../models/color_size";
 
 const createBillService = async (billData) => {
     try {
@@ -77,9 +80,7 @@ const updateBillService = async (billData) => {
 
             let bill = await db.Bill.findOne({
                 where: { id: billData.id },
-                attributes: {
-                    exclude: ['colorSizeId']
-                }
+
             })
 
             if (bill) {
@@ -111,7 +112,7 @@ const updateBillService = async (billData) => {
     }
 }
 
-const getBillService = async (type, billId, page, pageSize) => {
+const getBillService = async (type, billId, page, pageSize, userId) => {
     try {
         if (!type) {
             return {
@@ -152,9 +153,6 @@ const getBillService = async (type, billId, page, pageSize) => {
                         },
 
                     ],
-                    attributes: {
-                        exclude: ['colorSizeId']
-                    }
                 })
 
 
@@ -169,12 +167,60 @@ const getBillService = async (type, billId, page, pageSize) => {
                 }
 
             }
+
+            else if (type === 'SCROLL') {
+
+                let billData = await db.Bill.findAll({
+                    offset: (+page) * (+pageSize),
+                    limit: +pageSize,
+                    distinct: true,
+                    where: { userId: userId },
+                    include: [
+                        {
+                            model: db.ShoppingCart,
+                            order: [['createdAt', 'DESC']],
+                            include: [
+                                {
+                                    model: db.Color_Size,
+                                    include: [{
+                                        model: db.Clothes,
+                                        include: [{
+                                            model: db.Discount
+                                        },
+                                        {
+                                            model: db.RelevantImage
+                                        }
+
+                                        ]
+
+                                    }]
+                                }
+                            ]
+                        },
+
+                    ],
+                })
+
+                // console.log('colorSize', billData)
+                billData.map(item1 => {
+                    item1.ShoppingCarts.map(item2 => {
+
+                        item2.Color_Size.Clothe = convertClothesImgArray(item2.Color_Size.Clothe);
+                        return item2
+                    })
+                    return item1;
+                })
+
+                return {
+                    DT: billData,
+                    EC: 0,
+                    EM: 'Get bill scroll completed!',
+                }
+
+            }
             else {
                 let bill = await db.Bill.findOne({
                     where: { id: billId },
-                    attributes: {
-                        exclude: ['colorSizeId']
-                    }
                 })
 
 
@@ -200,6 +246,35 @@ const getBillService = async (type, billId, page, pageSize) => {
     }
 }
 
+const deleteBillService = async (id) => {
+    try {
+        if (!id) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Err from bill service: missing parameter!'
+            }
+        }
+        else {
+
+            await db.Bill.destroy({ where: { id: id } })
+
+            return {
+                DT: '',
+                EC: 0,
+                EM: 'Delete bill completed!'
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from bill service!'
+        }
+    }
+}
 module.exports = {
-    createBillService, getBillService, updateBillService
+    createBillService, getBillService, updateBillService, deleteBillService
 }

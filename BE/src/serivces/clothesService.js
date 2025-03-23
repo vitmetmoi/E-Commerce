@@ -506,5 +506,5 @@ const deleteClothesService = async (id) => {
 }
 
 module.exports = {
-    createClothesService, getClothesService, updateClothesService, deleteClothesService
+    createClothesService, getClothesService, updateClothesService, deleteClothesService, convertClothesImgArray
 }
