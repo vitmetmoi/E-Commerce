@@ -9,6 +9,9 @@ import SendIcon from '@mui/icons-material/Send';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import _ from 'lodash'
 import { toast } from 'react-toastify';
+import { useCreateReviewMutation, useGetReviewMutation } from '../../../../store/slice/API/userAPI';
+
+
 function RatingModal(props) {
     const defaultFormState = {
         note: '',
@@ -17,7 +20,7 @@ function RatingModal(props) {
     const [value, setValue] = useState(5);
     const [hover, setHover] = useState(-1);
     const [formState, setFormState] = useState(defaultFormState);
-
+    const [createReviewService, { data, isLoading }] = useCreateReviewMutation();
     const labels = {
 
         1: 'Terrible',
@@ -55,6 +58,28 @@ function RatingModal(props) {
 
         }
 
+    }
+
+    const handleCreateReview = async () => {
+        let data = {
+            star: value,
+            imgArr: formState.arrImg,
+            comment: formState.note,
+            clothesId: props.ratingData.id,
+            userId: props.userId
+        }
+        console.log('da', data)
+        let res = await createReviewService(data);
+        if (res && res.data && res.data.EC === 0) {
+            toast('Rating completed!')
+            props.handleOnClose();
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+        else {
+            toast(res.data.EM ? res.data.EM : 'Error!')
+        }
     }
 
     console.log('props', props)
@@ -145,7 +170,9 @@ function RatingModal(props) {
                         className='btn1'>Back
                     </button>
 
-                    <button className='btn2'>
+                    <button
+                        onClick={() => handleCreateReview()}
+                        className='btn2'>
                         <span>Send review</span>
                         <SendIcon />
                     </button>

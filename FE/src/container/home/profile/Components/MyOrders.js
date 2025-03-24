@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MyOrders.scss'
-import { useGetBillMutation, useUpdateBillMutation } from '../../../../store/slice/API/userAPI';
+import { useGetBillMutation, useGetReviewMutation, useUpdateBillMutation } from '../../../../store/slice/API/userAPI';
 import { useSelector, useDispatch } from 'react-redux'
 import _ from 'lodash';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -12,19 +12,21 @@ import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import { Box, IconButton } from '@mui/material';
 import RatingModal from './RatingModal';
+
 function MyOrders(props) {
     const navigate = useNavigate();
     const userData = useSelector((state) => state.user.userData);
     const [getBillService, { isLoading: getBillIsLoading, data: billData }] = useGetBillMutation();
     const [updateBillService, { isLoading: updateBillIsLoading }] = useUpdateBillMutation();
+    const [getReviewService, { data: reviewData, isLoading: getReviewIsLoading }] = useGetReviewMutation();
     const defaultFormState = {
         billDataArr: [],
         pagination: {
-            page: 24,
+            page: 23,
             pageSize: 3,
         },
         isOpenRatingModal: false,
-        dataRatingModal: ''
+        dataRatingModal: '',
 
     }
     const [formState, setFormState] = useState(defaultFormState)
@@ -33,6 +35,7 @@ function MyOrders(props) {
 
     useEffect(() => {
         handleGetBill();
+
     }, [])
 
     useEffect(() => {
@@ -56,18 +59,35 @@ function MyOrders(props) {
         })
     }
 
-    const handleOnChange = (name, value) => {
+    const handleGetReviewDataByClothesId = async (clothesId) => {
+        let res = await getReviewService({
+            type: 'Other',
+            reviewId: '',
+            page: '',
+            pageSize: '',
+            clothesId: clothesId
+        })
+        if (res && res.data && res.data.EC === 0) {
+            return res.data.DT
+        }
+
+    }
+
+    const handleOnChange = async (name, value) => {
         let _formState = _.cloneDeep(formState);
         if (name === 'billDataArr') {
-            value.map(item1 => {
+            value.map(async (item1) => {
                 let isValid = true;
                 formState.billDataArr.map(item2 => {
+
+                    // handleGetReviewId(item2.Color_Size.Clothe.id);
                     if (item2.id === item1.id) {
                         isValid = false
                     }
                 })
                 if (isValid === true) {
-                    _formState.billDataArr.push(item1);
+                    let billIsValid = await asignBillHaveIsRatingValue(item1);
+                    _formState.billDataArr.push(billIsValid);
                 }
             })
         }
@@ -76,6 +96,26 @@ function MyOrders(props) {
         }
 
         setFormState(_formState);
+    }
+
+    const asignBillHaveIsRatingValue = async (isValidBill) => {
+        let newBill = _.cloneDeep(isValidBill);
+        if (newBill && newBill.ShoppingCarts) {
+            let billArr = []
+            newBill.ShoppingCarts.map(async (item) => {
+                let obj = _.cloneDeep(item);
+                obj.isRated = false;
+                let clothesId = item.Color_Size.Clothe.id;
+                let reviewData = await handleGetReviewDataByClothesId(clothesId);
+                if (reviewData && reviewData.clothesId === clothesId) {
+                    obj.isRated = true;
+                }
+                billArr.push(obj);
+            })
+            newBill.ShoppingCarts = billArr;
+            return newBill
+        }
+
     }
 
     const checkIfTimeRatingIsValid = (time) => {
@@ -116,10 +156,16 @@ function MyOrders(props) {
         }
     }
 
-    const handleShippingCases = (status, time) => {
-        if (status === 'Done') {
+    const handleShippingCases = (status, time, isRated) => {
+
+        if (status === 'Done' && isRated === false) {
             return (
                 <>{handleTime(7, time)}</>
+            )
+        }
+        else if (status === 'Done' && isRated === true) {
+            return (
+                <>Rated!</>
             )
         }
         else if (status === 'Ordering') {
@@ -129,7 +175,7 @@ function MyOrders(props) {
         }
     }
 
-    const handleOnClickRating = (productData) => {
+    const handleOnClickRating = async (productData) => {
         let _formState = _.cloneDeep(formState);
         if (formState.isOpenRatingModal === false) {
             _formState.dataRatingModal = productData;
@@ -145,7 +191,7 @@ function MyOrders(props) {
 
                     return (
                         item1 && item1.status !== 'Pending' && item1.status !== 'EXPIRED' && item1.ShoppingCarts && item1.ShoppingCarts.map(item2 => {
-                            console.log('item2', item2)
+                            // console.log('item2', item2)
                             let product = item2.Color_Size.Clothe
                             let discount = +product.Discounts[0].value / 100;
                             return (
@@ -193,7 +239,7 @@ function MyOrders(props) {
                                                             <span className='total'>x{item2.total}</span>
                                                         </div>
 
-                                                        <span className='inf-bottom'>{handleShippingCases(item1.status, item1.time)}</span>
+                                                        <span className='inf-bottom'>{handleShippingCases(item1.status, item1.time, item2.isRated)}</span>
 
                                                     </div>
                                                 </div>
@@ -207,7 +253,7 @@ function MyOrders(props) {
 
                                                     <div className='action-group'>
                                                         {
-                                                            checkIfTimeRatingIsValid(item1.time) === true && item1.status === 'Done' ?
+                                                            checkIfTimeRatingIsValid(item1.time) === true && item1.status === 'Done' && item2.isRated === false ?
                                                                 <button
                                                                     onClick={() => handleOnClickRating(product)}
                                                                     className='btn2'>Rating
@@ -269,6 +315,7 @@ function MyOrders(props) {
                         <RatingModal
                             handleOnClose={handleOnClickRating}
                             ratingData={formState.dataRatingModal}
+                            userId={userData.id}
                         ></RatingModal>
                     </Box>
                 </Fade>
