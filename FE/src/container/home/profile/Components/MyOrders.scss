@@ -2,45 +2,231 @@
     .bill-item {
         width           : 100%;
         margin-top      : 15px;
-        border          : 1px solid red;
         background-color: white;
 
         .bill-item-content {
+            display       : flex;
+            flex-direction: column;
+
             .title {
                 height         : 60px;
-                border         : 1px solid green;
                 display        : flex;
                 flex-direction : row;
                 align-items    : center;
-                justify-content: center;
+                justify-content: space-between;
                 padding        : 25px;
 
                 .content-left {
                     display         : flex;
                     flex-direction  : row;
-                    background-color: '';
+                    gap             : 5px;
+                    width           : fit-content;
+                    background-color: white;
+
+                    .name {
+                        font-size  : 14px;
+                        font-weight: 600;
+                    }
+
+                    .hight-light {
+                        // width              : fit-content;
+                        font-size       : .875rem;
+                        height          : 16px;
+                        padding         : 5px;
+                        line-height     : 1.2;
+                        background-color: #f06e00;
+                        color           : white;
+                        display         : flex;
+                        flex-direction  : row;
+                        align-items     : center;
+                        justify-content : center;
+                        margin-top      : 5px;
+                        border-radius   : 3px;
+
+                    }
+
+                    .chat-btn {
+                        width           : 48px;
+                        height          : 20px;
+                        background-color: #f06e00;
+                        color           : white;
+                        display         : flex;
+                        flex-direction  : row;
+                        align-items     : center;
+                        justify-content : center;
+                        margin-top      : 5px;
+                        border-radius   : 3px;
+                        margin-left     : 10px;
+
+
+                        span {
+                            text-align: center;
+                            font-size : 13px;
+                        }
+                    }
+
                 }
 
-                .content-right {}
+                .content-right {
+                    background-color: white;
+                    width           : fit-content;
+                    display         : flex;
+                    flex-direction  : row;
+
+                    .delivery {
+                        color        : #26aa99;
+                        font-size    : .875rem;
+                        border-right : 1px solid rgba(0, 0, 0, 0.2);
+                        padding-right: 10px;
+                    }
+
+                    span {
+                        margin-left   : 10px;
+                        text-transform: uppercase;
+                        color         : #f06e00;
+                        font-size     : .875rem;
+                    }
+                }
             }
 
             .item-info {
-                height: 200px;
-                width : 100%;
+                width  : 100%;
+                padding: 25px;
 
-                .content-left {}
+                .content {
+                    width          : 100%;
+                    height         : 100%;
+                    border-top     : 1px solid rgba(0, 0, 0, 0.2);
+                    border-bottom  : 1px solid rgba(0, 0, 0, 0.2);
+                    padding        : 10px 0;
+                    display        : flex;
+                    flex-direction : row;
+                    justify-content: space-between;
 
-                .content-right {}
+                    .left {
+                        display       : flex;
+                        flex-direction: row;
+
+                        .image {
+                            width     : 100px;
+                            height    : 150px;
+                            object-fit: contain;
+                        }
+
+                        .info {
+                            margin-left    : 15px;
+                            display        : flex;
+                            flex-direction : column;
+                            justify-content: space-between;
+
+                            .inf-top {
+                                display       : flex;
+                                flex-direction: column;
+                                width         : fit-content;
+                                max-width     : 500px;
+
+                                .name {
+                                    font-size: 16px;
+                                }
+
+                                .des {
+                                    font-size: 13px;
+                                    color    : #707070;
+                                }
+
+                                .total {
+                                    font-size: 15px;
+                                }
+                            }
+
+                            .inf-bottom {
+                                margin-bottom: 3px;
+                                color        : #707070;
+                                font-size    : 13px;
+                            }
+
+
+                        }
+                    }
+
+                    .right {
+                        display        : flex;
+                        flex-direction : column;
+                        justify-content: space-between;
+
+                        .price-groups {
+                            width          : fit-content;
+                            display        : flex;
+                            justify-content: right;
+                            width          : 100%;
+
+                            .dis-price {
+                                color               : #000;
+                                margin              : 0 4px 0 0;
+                                opacity             : .26;
+                                overflow            : hidden;
+                                text-decoration-line: line-through;
+                                text-overflow       : ellipsis;
+
+                            }
+
+                            .bare-price {
+                                color: #f06e00;
+
+                            }
+                        }
+
+                        .action-group {
+                            display        : flex;
+                            flex-direction : row;
+                            gap            : 15px;
+                            align-items    : center;
+                            justify-content: center;
+                            margin-bottom  : 4px;
+
+                            button {
+                                width      : 150px;
+                                height     : 40px;
+                                font-size  : 13px;
+                                font-weight: 400;
+                                transition : all 0.5s;
+                            }
+
+                            .btn1 {
+                                border             : 1px solid rgba(0, 0, 0, 0.1);
+                                background-color   : white;
+                                // padding         : 15px 15px;
+
+                                &:hover {
+                                    opacity: 0.8;
+                                    border : 1px solid black;
+
+                                }
+                            }
+
+                            .btn2 {
+
+                                background-color   : white;
+                                // padding         : 15px 15px;
+                                color              : white;
+                                background-color   : #f06e00;
+                                border             : 1px solid #f06e00;
+
+                                &:hover {
+                                    opacity         : 0.8;
+                                    background-color: white;
+                                    color           : #f06e00;
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+
             }
 
-            .action-group {
-                height: 200px;
-                width : 100%;
 
-                .price {}
-
-                .actions {}
-            }
         }
     }
 }
