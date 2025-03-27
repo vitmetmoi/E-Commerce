@@ -1,0 +1,127 @@
+.review-content {
+    width : 100%;
+    height: fit-content;
+
+    .review-header {
+        font-size  : 25px;
+        font-weight: 400;
+        text-align : left;
+
+        span {
+            font-weight: 600;
+        }
+    }
+
+    .review-average {
+        width         : 100%;
+        height        : 237px;
+        padding       : 25px;
+        border-top    : 2px solid black;
+        border-bottom : 1px solid rgba(0, 0, 0, 0.2);
+        margin-top    : 30px;
+        display       : flex;
+        flex-direction: row;
+
+        .left {
+            width          : 50%;
+            height         : 100%;
+            border-right   : 1px solid rgba(0, 0, 0, 0.2);
+            display        : flex;
+            flex-direction : column;
+            align-items    : center;
+            justify-content: center;
+
+            .star-group {
+                display        : flex;
+                flex-direction : row;
+                align-items    : center;
+                justify-content: center;
+
+                span {
+                    font-size    : 60px;
+                    font-weight  : 700;
+                    margin-bottom: 3px;
+                }
+            }
+
+            .percent-text {
+                display: flex;
+
+                .percent {
+                    font-weight : 500;
+                    margin-right: 3px;
+                }
+            }
+        }
+
+        .right {
+            width          : 50%;
+            height         : 100%;
+            display        : flex;
+            flex-direction : row;
+            gap            : 5px;
+            align-items    : center;
+            justify-content: center;
+            gap            : 15px;
+
+            .item-left {
+                width         : 90px;
+                height        : fit-content;
+                display       : flex;
+                flex-direction: column;
+                text-align    : right;
+                gap           : 5px;
+
+                .first {
+                    font-weight: 500;
+                    color      : black;
+                }
+
+                span {
+                    font-size: 15px;
+                    color    : #707070;
+                }
+
+                // height        : 500px;
+            }
+
+            .item-right {
+                width          : 230px;
+                height         : 122px;
+                display        : flex;
+                flex-direction : column;
+                justify-content: space-between;
+
+                .item {
+                    display        : flex;
+                    flex-direction : row;
+                    width          : 100%;
+                    align-items    : center;
+                    justify-content: center;
+                    opacity        : 0.3;
+
+                    &.first {
+                        opacity: 1;
+                    }
+
+                    .amount {
+                        font-size  : 13px;
+                        font-weight: 500;
+                        margin-left: 10px;
+
+
+                        // margin-bottom: 3px;
+                    }
+                }
+
+                // height        : 500px;
+
+            }
+        }
+    }
+
+    .review-list {
+        width : 100%;
+        height: fit-content;
+    }
+}

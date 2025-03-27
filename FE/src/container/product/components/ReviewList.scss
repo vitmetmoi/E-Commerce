@@ -1,0 +1,181 @@
+.list-container {
+    width        : 100%;
+    margin-top   : 50px;
+    // border    : 1px solid red;
+    position     : relative;
+
+    .conditional-groups {
+        display         : flex;
+        flex-direction  : row;
+        gap             : 30px;
+        position        : absolute;
+        z-index         : 5;
+        background-color: white;
+
+        .item {
+            width           : 400px;
+            height          : 50px;
+            background-color: white;
+
+            .css-hrc0q-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
+                background-color: white;
+            }
+        }
+    }
+
+    .conditional-buttons {
+        display       : flex;
+        flex-direction: row;
+        margin-bottom : 100px;
+        gap           : 30px;
+        margin-top    : 10px;
+        z-index       : 1;
+        position      : absolute;
+        left          : 0;
+        margin-top    : 60px;
+
+        button {
+            width           : 400px;
+            height          : 40px;
+            background-color: white;
+            border-radius   : 10px;
+
+            &:hover {
+                opacity: 0.6;
+            }
+        }
+
+        .btn1 {
+            border     : 1px solid rgba(0, 0, 0, 0.2);
+            color      : black;
+            font-weight: bold;
+
+        }
+
+        .btn2 {
+            border          : 1px solid #14161a;
+            background-color: #14161a;
+            color           : white;
+            font-weight     : bold;
+        }
+
+        .btn3 {
+            border          : 1px solid #14161a;
+            background-color: white;
+            color           : black;
+            font-weight     : bold;
+        }
+    }
+
+    .rating-table {
+        display       : flex;
+        flex-direction: column;
+        padding-top   : 200px;
+
+        .item {
+            width         : 100%;
+            height        : 350px;
+            border-top    : 1px solid rgba(0, 0, 0, 0.2);
+            padding       : 25px 0;
+            display       : flex;
+            flex-direction: row;
+
+            .left {
+                width         : 80%;
+                height        : 100%;
+                border-right  : 1px solid rgba(0, 0, 0, 0.2);
+                display       : flex;
+                flex-direction: column;
+                padding-right : 30px;
+
+                .rating-star {
+                    display        : flex;
+                    flex-direction : row;
+                    align-items    : center;
+                    justify-content: space-between;
+
+                    .stars {
+                        display        : flex;
+                        flex-direction : row;
+                        align-items    : center;
+                        justify-content: center;
+
+                        span {
+                            margin-left: 5px;
+                        }
+                    }
+
+                    .time {
+                        font-size: 15px;
+                        color    : #707070;
+                    }
+                }
+
+                .review-text {
+                    font-size : 13px;
+                    text-align: left;
+                    margin-top: 20px;
+                }
+
+                .images {
+                    display    : flex;
+                    align-items: start;
+                    gap        : 10px;
+                    margin-top : 20px;
+                    width      : 100%;
+                    overflow   : hidden;
+
+                    img {
+                        border-radius  : 7px;
+                        width          : 153px;
+                        height         : 153px;
+                        object-fit     : cover;
+                        object-position: top;
+                    }
+                }
+            }
+
+            .right {
+                width          : 20%;
+                height         : 100%;
+                display        : flex;
+                flex-direction : column;
+                align-items    : center;
+                justify-content: center;
+
+                .text-box {
+                    width         : fit-content;
+                    height        : fit-content;
+                    display       : flex;
+                    flex-direction: column;
+                    text-align    : left;
+
+                    .text-group {
+                        .text-1 {
+                            font-size  : 13px;
+                            font-weight: 600;
+                        }
+
+                        .text-2 {
+                            font-size: 12px;
+                            color    : #707070
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    .pagination-page {
+        width          : 100%;
+        display        : flex;
+        flex-direction : row;
+        align-items    : center;
+        justify-content: center;
+        margin-bottom  : 200px;
+        border-top     : 2px solid rgba(0, 0, 0, 0.2);
+        padding-top    : 20px;
+    }
+
+}

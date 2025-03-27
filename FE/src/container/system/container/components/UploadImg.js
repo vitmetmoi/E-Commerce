@@ -19,7 +19,6 @@ function UploadImg(props) {
         <div className='upload-img-container'>
             <PhotoProvider>
                 <PhotoView
-
                     src={`${props && props.prevImg && props.prevImg !== '' ? props.imgArray[props.prevImg] : (props && props.imgArray && props.imgArray[0])}`}>
                     <div
                         style={{ backgroundImage: "url('" + `${props && props.prevImg && props.prevImg !== '' ? props.imgArray[props.prevImg] : (props && props.imgArray && props.imgArray[0])}` + "')" }}

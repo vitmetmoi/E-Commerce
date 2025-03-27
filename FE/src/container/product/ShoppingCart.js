@@ -451,9 +451,9 @@ function ShoppingCart(props) {
                 <div className='submit-group'>
                     <button className='btn1'>Continue Shopping</button>
                     <button
-
                         onClick={() => handleOnClickOrder()}
-                        className='btn2'>Order All Products</button>
+                        className='btn2'>Order All Products
+                    </button>
                 </div>
 
                 <div className='informations'>

@@ -64,6 +64,26 @@ export const userAPI = createApi({
                 url: `/api/bill/delete?id=${id}`, method: 'delete',
             })
         }),
+        createReview: build.mutation({
+            query: (reviewData) => ({ url: '/api/review/create', method: 'post', data: reviewData })
+        }),
+
+        getReview: build.mutation({
+            query: (params) => ({
+                url: `/api/review/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}&clothesId=${params.clothesId}`, method: 'get',
+            })
+        }),
+
+        updateReview: build.mutation({
+            query: (data) => ({
+                url: `/api/review/update`, method: 'put', data: data
+            })
+        }),
+        deleteReview: build.mutation({
+            query: (id) => ({
+                url: `/api/review/delete?id=${id}`, method: 'delete',
+            })
+        }),
 
     }),
 })
@@ -73,5 +93,7 @@ export const { useRegisterMutation, useLazyLoginQuery,
     useGetUserDataQuery, useCreateUserMutation,
     useLazyCheckUserAccountQuery, useUpdateMutation,
     useCreateBillMutation, useGetBillMutation,
-    useUpdateBillMutation, useDeleteBillMutation
+    useUpdateBillMutation, useDeleteBillMutation,
+    useGetReviewMutation, useCreateReviewMutation,
+    useDeleteReviewMutation, useUpdateReviewMutation
 } = userAPI
