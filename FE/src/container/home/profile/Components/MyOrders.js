@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './MyOrders.scss'
 import { useGetBillMutation, useGetReviewMutation, useUpdateBillMutation } from '../../../../store/slice/API/userAPI';
 import { useSelector, useDispatch } from 'react-redux'
@@ -12,6 +12,7 @@ import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import { Box, IconButton } from '@mui/material';
 import RatingModal from './RatingModal';
+import LinearProgress from '@mui/material/LinearProgress';
 
 function MyOrders(props) {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ function MyOrders(props) {
     const defaultFormState = {
         billDataArr: [],
         pagination: {
-            page: 23,
+            page: 0,
             pageSize: 3,
         },
         isOpenRatingModal: false,
@@ -30,42 +31,67 @@ function MyOrders(props) {
 
     }
     const [formState, setFormState] = useState(defaultFormState)
-
-    const arr = [1, 2, 3, 4, 5]
+    const listInnerRef = useRef();
+    const [offset, setOffset] = useState(0);
 
     useEffect(() => {
-        handleGetBill();
+        handleGetBill(formState.pagination.page, formState.pagination.pageSize);
+
+        const onScroll = () => setOffset(window.scrollY);
+        // clean up code
+        window.removeEventListener('scroll', onScroll);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
 
     }, [])
 
     useEffect(() => {
-        if (getBillIsLoading === false && billData && billData.DT) {
+
+        if (offset + 800 >= listInnerRef.current.clientHeight) {
+            console.log('reached', getBillIsLoading)
+            if (getBillIsLoading !== true && billData && billData.DT && !_.isEmpty(billData.DT)) {
+
+                handleOnChange(
+                    'pagination',
+                    { page: +(formState.pagination.page) + 1, pageSize: formState.pagination.pageSize }
+                )
+                handleGetBill(+(formState.pagination.page) + 1, formState.pagination.pageSize);
+
+
+            }
+        }
+    }, [offset])
+
+    useEffect(() => {
+        console.log("billda", billData)
+        if (getBillIsLoading === false && billData && billData.DT && !_.isEmpty(billData.DT)) {
             handleOnChange('billDataArr', billData.DT);
         }
     }, [getBillIsLoading])
 
     console.log('state', formState);
-    console.log('userData', userData)
+    console.log('userData', userData);
 
     //function
 
-    const handleGetBill = async () => {
+    const handleGetBill = async (page, pageSize) => {
         await getBillService({
             type: 'SCROLL',
             id: 0,
-            page: formState.pagination.page,
-            pageSize: formState.pagination.pageSize,
+            page: page,
+            pageSize: pageSize,
             userId: userData.id
         })
     }
 
-    const handleGetReviewDataByClothesId = async (clothesId) => {
+    const handleGetReviewDataByClothesId = async (clothesId, userId) => {
         let res = await getReviewService({
             type: 'Other',
             reviewId: '',
             page: '',
             pageSize: '',
-            clothesId: clothesId
+            clothesId: clothesId,
+            userId: userId
         })
         if (res && res.data && res.data.EC === 0) {
             return res.data.DT
@@ -76,6 +102,7 @@ function MyOrders(props) {
     const handleOnChange = async (name, value) => {
         let _formState = _.cloneDeep(formState);
         if (name === 'billDataArr') {
+            console.log('value', value)
             value.map(async (item1) => {
                 let isValid = true;
                 formState.billDataArr.map(item2 => {
@@ -86,6 +113,7 @@ function MyOrders(props) {
                     }
                 })
                 if (isValid === true) {
+
                     let billIsValid = await asignBillHaveIsRatingValue(item1);
                     _formState.billDataArr.push(billIsValid);
                 }
@@ -106,8 +134,8 @@ function MyOrders(props) {
                 let obj = _.cloneDeep(item);
                 obj.isRated = false;
                 let clothesId = item.Color_Size.Clothe.id;
-                let reviewData = await handleGetReviewDataByClothesId(clothesId);
-                if (reviewData && reviewData.clothesId === clothesId) {
+                let reviewData = await handleGetReviewDataByClothesId(clothesId, userData.id);
+                if (reviewData && reviewData.clothesId === clothesId && reviewData.userId === userData.id) {
                     obj.isRated = true;
                 }
                 billArr.push(obj);
@@ -175,17 +203,19 @@ function MyOrders(props) {
         }
     }
 
-    const handleOnClickRating = async (productData) => {
+    const handleOnClickRating = async (productData, billId) => {
         let _formState = _.cloneDeep(formState);
         if (formState.isOpenRatingModal === false) {
-            _formState.dataRatingModal = productData;
+            _formState.dataRatingModal = { ...productData, billId: billId };
         }
         _formState.isOpenRatingModal = !formState.isOpenRatingModal;
         setFormState(_formState);
     }
 
     return (
-        <div className='my-orders-container'>
+        <div
+            ref={listInnerRef}
+            className='my-orders-container'>
             {
                 formState && formState.billDataArr.map(item1 => {
 
@@ -255,7 +285,7 @@ function MyOrders(props) {
                                                         {
                                                             checkIfTimeRatingIsValid(item1.time) === true && item1.status === 'Done' && item2.isRated === false ?
                                                                 <button
-                                                                    onClick={() => handleOnClickRating(product)}
+                                                                    onClick={() => handleOnClickRating(product, item1.id)}
                                                                     className='btn2'>Rating
                                                                 </button>
                                                                 :
@@ -289,6 +319,12 @@ function MyOrders(props) {
                 })
 
             }
+            <div className='isLoading-container'>
+                {
+                    getBillIsLoading === true && <LinearProgress style={{ width: '100%' }} color="inherit" />
+                }
+            </div>
+
 
             <Modal
                 style={{ width: "100%" }}

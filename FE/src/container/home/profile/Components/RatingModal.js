@@ -42,7 +42,7 @@ function RatingModal(props) {
 
     const handleAddImage = (img) => {
         if (img) {
-            if (formState.arrImg.length < 5) {
+            if (formState.arrImg.length < 4) {
                 let _formState = _.cloneDeep(formState);
                 var reader = new FileReader();
                 reader.readAsDataURL(img);
@@ -66,6 +66,7 @@ function RatingModal(props) {
             imgArr: formState.arrImg,
             comment: formState.note,
             clothesId: props.ratingData.id,
+            billId: props.ratingData.billId,
             userId: props.userId
         }
         console.log('da', data)
@@ -159,7 +160,7 @@ function RatingModal(props) {
                         >
                         </input>
                         <AddAPhotoIcon />
-                        <span>{formState.arrImg.length}/5</span>
+                        <span>{formState.arrImg.length}/4</span>
                     </button>
                 </div>
 

@@ -1,8 +1,7 @@
 import { includes } from "lodash";
 import db from "../models"
 import { Op, where } from "sequelize";
-import { convertClothesImgArray } from './clothesService'
-import color_size from "../models/color_size";
+import _ from "lodash";
 
 const checkValidReview = async (userId, clothesId) => {
     let review = await db.Review.findOne({
@@ -39,6 +38,7 @@ const createReviewService = async (reviewData) => {
                     star: reviewData.star,
                     userId: reviewData.userId,
                     clothesId: reviewData.clothesId,
+                    billId: reviewData.billId,
                     comment: reviewData.comment
                 })
 
@@ -121,7 +121,20 @@ const updateReviewService = async (reviewData) => {
     }
 }
 
-const getReviewService = async (type, reviewId, page, pageSize, clothesId) => {
+const convertBufferToBase64 = (reviewData) => {
+    let newData = []
+    reviewData.map(item => {
+        item.ReviewImages.map(item2 => {
+            let base64String = new Buffer(item2.image, 'base64').toString('binary');
+            item2.image = base64String;
+            return item2;
+        })
+        newData.push(item);
+    })
+    return newData
+}
+
+const getReviewService = async (type, reviewId, page, pageSize, clothesId, userId, size, star) => {
     try {
         if (!type) {
             return {
@@ -132,11 +145,21 @@ const getReviewService = async (type, reviewId, page, pageSize, clothesId) => {
         }
         else {
             if (type === 'ALL') {
-                let review = await db.Review.findAll({})
+                let review = await db.Review.findAll({
+                    where: { clothesId: clothesId },
+                    distinct: true,
+                    include: [
+                        {
+                            model: db.ReviewImage,
+                            order: [['createdAt', 'DESC']],
+                        },
+                    ]
+                })
 
+                let reviewData = convertBufferToBase64(review);
 
                 return {
-                    DT: review,
+                    DT: reviewData,
                     EC: 0,
                     EM: 'Get review completed!'
                 }
@@ -144,10 +167,19 @@ const getReviewService = async (type, reviewId, page, pageSize, clothesId) => {
             }
             else if (type === 'PAGINATION') {
 
+                if (size || star) { }
+
                 const { count, rows } = await db.Review.findAndCountAll({
                     offset: (+page) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
+                    order: [["id", "DESC"]],
+                    where: {
+                        star: star ? star : { [Op.ne]: null },
+
+                        clothesId: clothesId,
+
+                    },
                     include: [
                         {
                             model: db.ReviewImage,
@@ -160,16 +192,38 @@ const getReviewService = async (type, reviewId, page, pageSize, clothesId) => {
                                 exclude: ['password', 'createdAt', 'updatedAt']
                             }
                         },
+                        {
+                            model: db.Bill,
+                            order: [['createdAt', 'DESC']],
+                            include: [
+                                {
+                                    model: db.ShoppingCart,
+                                    order: [['createdAt', 'DESC']],
+                                    include: [
+                                        {
+                                            model: db.Color_Size,
+                                            where: {
+                                                size: size ? size : { [Op.ne]: null },
+                                            }
+                                        }]
+                                }
+                            ]
+                        },
+
+
+
 
                     ],
                 })
 
+                let rowsIdValid = rows.filter(item => !_.isEmpty(item.Bill.ShoppingCarts))
 
+                let reviewData = convertBufferToBase64(rowsIdValid);
 
                 return {
                     DT: {
                         rowCount: count,
-                        data: rows
+                        data: reviewData
                     },
                     EC: 0,
                     EM: 'Get review completed!'
@@ -179,7 +233,10 @@ const getReviewService = async (type, reviewId, page, pageSize, clothesId) => {
 
             else {
                 let review = await db.Review.findOne({
-                    where: { clothesId: clothesId },
+                    where: {
+                        clothesId: clothesId,
+                        userId: userId
+                    },
                 })
 
 

@@ -139,6 +139,7 @@ const getBillService = async (type, billId, page, pageSize, userId) => {
                     offset: (+page) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
+                    order: [["id", "DESC"]],
                     include: [
                         {
                             model: db.ShoppingCart,
@@ -174,7 +175,11 @@ const getBillService = async (type, billId, page, pageSize, userId) => {
                     offset: (+page) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
-                    where: { userId: userId },
+                    where: {
+                        userId: userId,
+                        status: { [Op.ne]: 'EXPIRED' }
+                    },
+                    order: [["id", "DESC"]],
                     include: [
                         {
                             model: db.ShoppingCart,

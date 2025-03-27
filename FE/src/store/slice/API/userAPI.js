@@ -70,7 +70,7 @@ export const userAPI = createApi({
 
         getReview: build.mutation({
             query: (params) => ({
-                url: `/api/review/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}&clothesId=${params.clothesId}`, method: 'get',
+                url: `/api/review/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}&clothesId=${params.clothesId}&userId=${params.userId}&size=${params.size}&star=${params.star}`, method: 'get',
             })
         }),
 

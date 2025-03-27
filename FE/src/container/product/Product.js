@@ -15,6 +15,7 @@ import Footer from '../home/Footer';
 import MDEditor from '@uiw/react-md-editor';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import MyFitSize from './components/MyFitSize';
+import Review from './components/Review';
 
 function Product(props) {
     const [searchParams] = useSearchParams();
@@ -23,7 +24,6 @@ function Product(props) {
     const [product, setProduct] = useState('');
     const [offset, setOffset] = useState(0);
     const [isShowDetail, setIsShowDetail] = useState(false);
-
     const [isReachedDesBar, setIsReachedDesBar] = useState(false);
 
     useEffect(() => {
@@ -37,11 +37,9 @@ function Product(props) {
     useEffect(() => {
 
         if (offset <= 2918 || offset <= '2918') {
-            console.log("off", offset)
             setIsReachedDesBar(false)
         }
         else {
-            console.log("reached!", offset)
             setIsReachedDesBar(true)
         }
     }, [offset])
@@ -219,7 +217,14 @@ function Product(props) {
                         <div className='my-fit-size'>
                             <MyFitSize></MyFitSize>
                         </div>
-                        <div className='rating'></div>
+
+                        <div className='rating-container'>
+                            <Review>
+
+                            </Review>
+
+                        </div>
+
                     </div>
 
                 </div>

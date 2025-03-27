@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Bill.belongsTo(models.User, { foreignKey: "userId" })
             Bill.hasMany(models.ShoppingCart, { foreignKey: 'billId' })
+            Bill.hasOne(models.Review, { foreignKey: 'billId' })
         }
     }
     Bill.init({

@@ -146,9 +146,8 @@ const convertClothesImgArray = (clothesArr) => {
     }
 }
 
-const getClothesService = async (type, id, page, pageSize) => {
+const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, price) => {
     try {
-        console.log('ok');
         if (!type) {
             return {
                 DT: "",
@@ -157,15 +156,14 @@ const getClothesService = async (type, id, page, pageSize) => {
             }
         }
         else {
-            console.log('p', type);
 
             let paginationData = {
                 rowCount: 0,
                 data: ''
             };
 
-            let data = '';
-
+            let data = [];
+            console.log('type', type)
 
             if (type === 'ALL') {
                 data = await db.Clothes.findAll({
@@ -230,6 +228,7 @@ const getClothesService = async (type, id, page, pageSize) => {
                     offset: (+page) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
+
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -284,6 +283,110 @@ const getClothesService = async (type, id, page, pageSize) => {
                     ]
 
                 })
+
+            }
+
+            else if (type === 'BEST') {
+                let topData = await db.Review.findAll({
+                    attributes: ['id', 'clothesId'],
+                    raw: true
+                });
+                let countsData = {}
+                topData.map(item => {
+                    countsData[item.clothesId] = (countsData[item.clothesId] || 0) + 1;
+                })
+
+                let sortable = [];
+
+                for (let item in countsData) {
+                    sortable.push([item, countsData[item]]);
+                }
+
+                sortable.sort(function (a, b) {
+                    return b[1] - a[1];
+                });
+
+                for (let i = 0; i < sortable.length; i++) {
+                    let clothes = await db.Clothes.findOne({
+                        where: { id: +sortable[i][0] },
+                        include: [{
+                            model: db.Discount,
+                            attributes: ['id', 'value'],
+
+                        },
+                        {
+                            model: db.Markdown,
+                            attributes: ['id', 'contentMarkdown'],
+
+                        },
+                        {
+                            model: db.RelevantImage,
+                            attributes: ['id', 'image'],
+
+                        },
+                        {
+                            model: db.Color_Size,
+                            attributes: ['id', 'color', 'size', 'stock'],
+
+                        }]
+
+                    })
+                    if (clothes) {
+                        data.push(clothes)
+                    }
+                }
+
+                if (data.length === 0) {
+                    data = await db.Clothes.findAll({
+                        limit: 8,
+                        order: [['createdAt', 'DESC']],
+
+                        include: [{
+                            model: db.Discount,
+                            attributes: ['id', 'value'],
+
+                        },
+                        {
+                            model: db.Markdown,
+                            attributes: ['id', 'contentMarkdown'],
+
+                        },
+                        {
+                            model: db.RelevantImage,
+                            attributes: ['id', 'image'],
+
+                        },
+                        {
+                            model: db.Color_Size,
+                            attributes: ['id', 'color', 'size', 'stock'],
+
+                        }
+                        ]
+
+                    })
+                }
+
+                // if (data.length < 8) {
+                //     let topClothesIdArr = []
+
+                //     sortable.map(item => {
+                //         topClothesIdArr.push(+item[0])
+                //     })
+
+                //     console.log('sort', topClothesIdArr)
+
+
+                //     let clothes = await db.Clothes.findAll({
+                //         limit: 8 - data.length,
+                //         where: { id: { $not: 68 } },
+                //     })
+                //     console.log('clo', clothes)
+
+                //     clothes.map(item => {
+                //         data.push(item);
+                //     })
+
+                // }
 
             }
             else {

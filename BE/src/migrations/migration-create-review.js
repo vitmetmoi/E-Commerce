@@ -22,6 +22,10 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.INTEGER
             },
+            billId: {
+                allowNull: true,
+                type: Sequelize.INTEGER
+            },
             comment: {
                 allowNull: true,
                 type: Sequelize.TEXT('long')

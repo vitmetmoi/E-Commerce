@@ -122,6 +122,8 @@ const loginService = async (loginAcc, password) => {
                 if (checkPassword === true) {
                     let base64String = new Buffer(user.avatar, 'base64').toString('binary');
 
+                    console.log(user)
+
                     let data = {
                         id: user.id,
                         firstName: user.firstName,
@@ -132,10 +134,10 @@ const loginService = async (loginAcc, password) => {
                         avatar: base64String,
                         birthDay: user.birthDay,
                         address: {
-                            provinceId: user.Addresses[0].provinceId,
-                            districtId: user.Addresses[0].districtId,
-                            wardId: user.Addresses[0].wardId,
-                            note: user.Addresses[0].note
+                            provinceId: user.Addresses[0].provinceId ? user.Addresses[0].provinceId : 0,
+                            districtId: user.Addresses[0].districtId ? user.Addresses[0].districtId : 0,
+                            wardId: user.Addresses[0].wardId ? user.Addresses[0].wardId : 0,
+                            note: user.Addresses[0].note ? user.Addresses[0].note : 0
                         },
                         groupId: user.groupId ? user.groupId : 3,
                     }

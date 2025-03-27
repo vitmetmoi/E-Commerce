@@ -162,7 +162,6 @@ function Review(props) {
 
             <div className='review-list'>
                 <ReviewList>
-
                 </ReviewList>
             </div>
 
