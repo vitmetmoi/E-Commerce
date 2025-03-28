@@ -21,7 +21,7 @@ function ProductCard(props) {
     }
 
     return (
-        <div className='product-card-container'>
+        <div className={props.isInList === true ? 'product-card-container in-list' : 'product-card-container'}>
             <div className='content-top'>
 
                 <div
@@ -64,12 +64,12 @@ function ProductCard(props) {
                 onClick={() => handleOnclickProductCard()}
                 className='content-bottom noselect'>
                 <div className='name-container'>
-                    <span className='name-product noselect'>{props.name}</span>
+                    <span className={props.isInList === true ? 'name-product noselect in-list' : 'name-product noselect'}>{props.name}</span>
                     <div className='icon-save'><BookmarkBorderIcon></BookmarkBorderIcon></div>
                 </div>
                 <div className='price-inf noselect'>
                     <span className='discount noselect'>{props.discount}%</span>
-                    <span className='price noselect'>{priceAfterDiscouted.toFixed(3)}</span>
+                    <span className='price noselect'>{priceAfterDiscouted.toFixed(3)}$</span>
                     <span className='primary-price noselect'>{props.price}</span>
                 </div>
             </div>

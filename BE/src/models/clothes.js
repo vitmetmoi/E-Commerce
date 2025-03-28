@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         name: DataTypes.STRING,
         type: DataTypes.STRING,
         category: DataTypes.STRING,
-        price: DataTypes.STRING,
+        price: DataTypes.FLOAT,
     }, {
         sequelize,
         modelName: 'Clothes',
     });
-    Clothes.sync()
+    Clothes.sync({ alter: true })
     return Clothes;
 };

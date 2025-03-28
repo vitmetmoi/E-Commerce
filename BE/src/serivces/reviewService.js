@@ -170,13 +170,12 @@ const getReviewService = async (type, reviewId, page, pageSize, clothesId, userI
                 if (size || star) { }
 
                 const { count, rows } = await db.Review.findAndCountAll({
-                    offset: (+page) * (+pageSize),
+                    offset: (+page - 1) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
                     order: [["id", "DESC"]],
                     where: {
                         star: star ? star : { [Op.ne]: null },
-
                         clothesId: clothesId,
 
                     },

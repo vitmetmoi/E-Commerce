@@ -1,8 +1,7 @@
 import { raw } from "body-parser";
 import db from "../models";
 import _ from "lodash"
-import { where } from "sequelize";
-import Op from "sequelize";
+import { Op } from "sequelize";
 const validateClothes = async (name) => {
     let isValid = true;
     let clothes = await db.Clothes.findOne({
@@ -146,7 +145,7 @@ const convertClothesImgArray = (clothesArr) => {
     }
 }
 
-const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, price) => {
+const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, priceRange) => {
     try {
         if (!type) {
             return {
@@ -224,11 +223,19 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
             }
 
             else if (type === 'PAGINATION') {
+                console.log('color', color)
+
                 const { count, rows } = await db.Clothes.findAndCountAll({
-                    offset: (+page) * (+pageSize),
+                    offset: ((+page) - 1) * (+pageSize),
                     limit: +pageSize,
                     distinct: true,
-
+                    order: [["id", "DESC"]],
+                    where: {
+                        category: (category && category !== 'ALL') ? category : { [Op.ne]: null },
+                        type: clothesType ? clothesType : { [Op.ne]: null },
+                        price: priceRange ? { [Op.between]: priceRange } : { [Op.ne]: null },
+                    },
+                    order: [["id", "DESC"]],
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -248,6 +255,10 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                     {
                         model: db.Color_Size,
                         attributes: ['id', 'color', 'size', 'stock'],
+                        where: {
+                            color: color ? color : { [Op.ne]: null },
+                            size: size ? size : { [Op.ne]: null }
+                        }
 
                     }
                     ],

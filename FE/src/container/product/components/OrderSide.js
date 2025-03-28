@@ -18,19 +18,20 @@ import 'swiper/css/scrollbar';
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { useSelector, useDispatch } from 'react-redux'
 import { setShoppingCart } from '../../../store/slice/Reducer/shoppingCartSilce';
+import { setCheckOutDataSlice } from '../../../store/slice/Reducer/checkOutSlice';
+import { useGetClothesDataMutation } from '../../../store/slice/API/systemAPI';
 
 function OrderSide(props) {
 
-    const shoppingCartData = useSelector((state) => state.shoppingCart);
     const userData = useSelector((state) => state.user.userData);
-    const dispath = useDispatch();
+    const dispatch = useDispatch();
     let priceAfterDiscouted = 0;
     const navigate = useNavigate();
 
     if (props.price || props.discount || props.price) {
         priceAfterDiscouted = props.price - ((props.discount / 100) * props.price)
     }
-
+    const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const [defaultColorArr, setDefaultColorArr] = useState([]);
     const [defaultSizeArr, setDefaultSizeArr] = useState([]);
     const [colorArr, setColorArr] = useState([]);
@@ -224,6 +225,7 @@ function OrderSide(props) {
         let _orderList = _.cloneDeep(orderList);
         let color = '';
         let size = '';
+
         colorArr.map(item => {
             if (item.isSelected === true) {
                 color = item.color
@@ -324,13 +326,44 @@ function OrderSide(props) {
                 data.push(obj);
             })
 
-            dispath(setShoppingCart(data));
+            dispatch(setShoppingCart(data));
         }
     }
 
-    const handlePurchaseButton = () => {
+    const handlePurchaseButton = async () => {
         console.log('userData', userData)
         if (userData && userData.authenticated === true) {
+            let clothesData = []
+            let data = [];
+
+            if (props.productData) {
+                orderList.map(item => {
+                    let colorSizeId = '';
+                    props.productData.Color_Sizes.map(item2 => {
+                        if (item2.color === item.color && item2.size === item.size) {
+                            colorSizeId = item2.id
+                        }
+                    })
+                    let obj = {
+                        clothesId: props.clothesId,
+                        color: item.color,
+                        size: item.size,
+                        total: item.total,
+                        category: props.productData.category,
+                        colorSizeId: colorSizeId,
+                        image: props.productData.RelevantImages[0].image,
+                        name: props.productData.name,
+                        price: props.productData.price,
+                        type: props.productData.type,
+                        discount: props.productData.Discounts[0].value
+
+                    }
+                    data.push(obj);
+                })
+            }
+            console.log('data to shop', data)
+            dispatch(setCheckOutDataSlice({ type: 'clothesData', data: data }))
+
             navigate('/checkout')
         }
         else {
@@ -504,7 +537,7 @@ function OrderSide(props) {
                                             className='button-adj'><span>+</span></button>
                                     </div>
 
-                                    <span className='sumary-price'>{props.price * item.total}</span>
+                                    <span className='sumary-price'>{(props.price * item.total).toFixed(3)}$</span>
 
                                     <div className='remove-ele' >
                                         <IconButton
@@ -533,7 +566,7 @@ function OrderSide(props) {
                 <div className='total-price'>
                     <span className='total-title'>Total product price</span>
                     <div className='group-price'>
-                        <span className='price'>{orderPrice}</span>
+                        <span className='price'>{orderPrice.toFixed(3)} $</span>
                         <span className='total'>({orderTotal} pices)</span>
                     </div>
                 </div>

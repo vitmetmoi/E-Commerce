@@ -72,11 +72,23 @@ function Review(props) {
     const calcSumStars = (type) => {
         if (type === 'STAR') {
             let avg = ((5 * formState.ratingNumber['5']) + (4 * formState.ratingNumber['4']) + (3 * formState.ratingNumber['3']) + (2 * formState.ratingNumber['2']) + (1 * formState.ratingNumber['1'])) / formState.ratingNumber['sum'];
-            return avg
+            if (avg) {
+                return avg
+            }
+            else {
+                return 0;
+            }
+
         }
         else if (type === 'PERCENT') {
             let percent = (formState.ratingNumber['5']) / (formState.ratingNumber['sum']) * 100
-            return percent.toFixed(0)
+            if (percent) {
+                return percent.toFixed(0)
+            }
+            else {
+                return 0;
+            }
+
         }
 
     }

@@ -6,6 +6,11 @@
     overflow      : hidden;
     cursor        : pointer;
 
+    &.in-list {
+        width : 24.5%;
+        height: 560px;
+    }
+
     .content-top {
         width   : 100%;
         height  : 80%;
@@ -151,6 +156,10 @@
                 white-space: nowrap;
                 color      : #221f1f;
                 overflow   : hidden;
+
+                &.in-list {
+                    font-weight: 400;
+                }
             }
 
             .icon-save {
@@ -167,7 +176,7 @@
 
             .discount {
                 margin-right: 7px;
-                margin-top  : 4px;
+                margin-top  : 3px;
                 font-size   : 14px;
                 font-weight : 600;
                 color       : #f06e00;

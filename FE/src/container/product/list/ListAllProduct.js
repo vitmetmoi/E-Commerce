@@ -8,17 +8,19 @@ import { useSearchParams } from 'react-router';
 import NavigationHome from '../../home/NavigationHome';
 import AdsHome from '../../home/AdsHome';
 import Footer from '../../home/Footer';
-
+import { useLocation } from 'react-router-dom';
 function ListAllProduct(props) {
     const defalutFormState = {
         type: '',
         category: '',
-        size: '',
-        color: '',
-        priceRange: 0
+        size: [],
+        color: [],
+        priceRange: [0, 300],
+        onFilter: 1,
     }
     const [formState, setFormState] = useState(defalutFormState);
     const [searchParams] = useSearchParams();
+    const location = useLocation();
     console.log('formState', formState)
     useEffect(() => {
 
@@ -26,6 +28,15 @@ function ListAllProduct(props) {
         handleOnChange('type', type);
 
     }, [])
+
+    useEffect(() => {
+
+        if (formState.type) {
+            let category = searchParams.get('category')
+            handleOnChange('category', category);
+        }
+
+    }, [location])
 
     useEffect(() => {
         if (formState.type) {
@@ -38,11 +49,26 @@ function ListAllProduct(props) {
 
 
     const handleOnChange = (name, value) => {
-        if (value) {
-            let _formState = _.cloneDeep(formState);
-            _formState[name] = value;
-            setFormState(_formState)
+        let _formState = _.cloneDeep(formState);
+        if (name === 'color' || name === 'size') {
+            if (_formState[name].includes(value)) {
+                _formState[name] = _formState[name].filter((item) => { return item !== value })
+            }
+            else {
+                _formState[name].push(value);
+            }
+
         }
+        else if (name === 'clear') {
+            _formState.color = [];
+            _formState.size = [];
+            _formState.priceRange = [0, 300]
+        }
+        else {
+            _formState[name] = value;
+        }
+        setFormState(_formState)
+
     }
 
     return (
@@ -61,9 +87,28 @@ function ListAllProduct(props) {
 
                 <div>
                     <ConditionalTable
+                        priceRange={formState.priceRange}
+                        color={formState.color}
+                        size={formState.size}
+                        handleOnChange={handleOnChange}
+                        onFilter={formState.onFilter}
                     />
                 </div>
+
+                <div>
+                    <TableProduct
+                        priceRange={formState.priceRange}
+                        color={formState.color}
+                        size={formState.size}
+                        onFilter={formState.onFilter}
+                    />
+                </div>
+
+
+
             </div>
+
+            <Footer />
 
         </>
     );

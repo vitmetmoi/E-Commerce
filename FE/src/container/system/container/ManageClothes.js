@@ -97,7 +97,17 @@ function ManageClothes(props) {
     }, [])
 
     const getClothes = async () => {
-        await getClothesService({ type: 'PAGINATION', id: 0, page: paginationModel.page, pageSize: paginationModel.pageSize });
+        await getClothesService({
+            type: 'PAGINATION',
+            id: 0,
+            page: paginationModel.page + 1,
+            pageSize: paginationModel.pageSize,
+            category: '',
+            clothesType: '',
+            color: '',
+            size: '',
+            priceRange: ''
+        });
     }
 
     useEffect(() => {
@@ -204,9 +214,6 @@ function ManageClothes(props) {
         }
     };
 
-    const handleStockClick = async () => {
-        console.log('id')
-    }
 
     const handleReplaceImg = (img) => {
         if (img) {
@@ -244,7 +251,17 @@ function ManageClothes(props) {
     }
 
     const handleChangePaginationPage = async (pageInfo) => {
-        let res = await getClothesService({ type: 'PAGINATION', page: pageInfo.page, pageSize: pageInfo.pageSize })
+        let res = await getClothesService({
+            type: 'PAGINATION',
+            page: pageInfo.page + 1,
+            pageSize: pageInfo.pageSize,
+            category: '',
+            clothesType: '',
+            color: '',
+            size: '',
+            priceRange: ''
+
+        })
 
         if (res && res.data && res.data.EC === 0) {
 
