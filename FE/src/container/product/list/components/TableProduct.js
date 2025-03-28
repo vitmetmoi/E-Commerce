@@ -6,8 +6,9 @@ import './TableProduct.scss'
 import ProductCard from '../../../home/section/components/ProductCard';
 import Pagination from '@mui/material/Pagination';
 import Skeleton from '@mui/material/Skeleton';
+import { useLocation } from 'react-router-dom';
 function TableProduct(props) {
-
+    const location = useLocation();
     const [getClothesDataService, { data, isLoading }] = useGetClothesDataMutation()
     const [clothesData, setClothesData] = useState([])
     const [searchParams] = useSearchParams();
@@ -19,9 +20,12 @@ function TableProduct(props) {
     console.log('clothesData', clothesData)
     console.log('props', props)
     useEffect(() => {
-
         handleGetClothesData();
     }, [])
+
+    useEffect(() => {
+        handleGetClothesData();
+    }, [location])
 
     useEffect(() => {
         if (isLoading === false && data && data.EC === 0 && data.DT) {
@@ -43,6 +47,29 @@ function TableProduct(props) {
 
         let category = searchParams.get('category')
         let type = searchParams.get('type')
+
+        if (category === 'TOP') {
+            category = ['T-Shirt', 'Jacket', 'Hoodie', 'Sweater', 'Cardigan'];
+        }
+        else if (category === 'BOTTOM') {
+            category = ['Long-Pants', 'Short', 'Skirt'];
+        }
+        else if (category === 'ACC') {
+            category = ['Shoes', 'Hat', 'Backpack', 'Slides'];
+        }
+        else if (category === 'SHOES' || category === 'Shoes') {
+            category = ['Slides', 'Shoes']
+        }
+        else if (category === 'ALL') {
+            category = ''
+        }
+
+        if (type === 'WOMEN') {
+            type = ['Women', 'Unisex']
+        }
+        if (type === 'MEN') {
+            type = ['Men', 'Unisex']
+        }
 
         await getClothesDataService({
             type: 'PAGINATION',

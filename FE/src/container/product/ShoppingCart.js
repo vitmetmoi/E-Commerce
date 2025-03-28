@@ -34,7 +34,7 @@ function ShoppingCart(props) {
     const navigate = useNavigate();
     // console.log("shop", shoppingCartData)
     // console.log("shopCart", shoppingCart)
-    // console.log('tabledata', tableData)
+
     useEffect(() => {
 
         if (_.isEmpty(shoppingCartData) || shoppingCartData[0] === '') {
@@ -63,7 +63,7 @@ function ShoppingCart(props) {
             let arrDataClothes = [];
 
             arrId.map(async (item) => {
-                console.log(item);
+
                 let res = await getClothesService({ type: 'ONE', id: item });
                 if (res && res.data && res.data.EC === 0 && res.data.DT) {
                     arrDataClothes.push(res.data.DT);
@@ -260,6 +260,7 @@ function ShoppingCart(props) {
                 }
 
             })
+            console.log('tableData', clothesData)
 
             dispatch(setCheckOutDataSlice({ type: 'clothesData', data: clothesData }))
             navigate('/checkOut');
@@ -284,111 +285,116 @@ function ShoppingCart(props) {
                     <font>Shopping Cart</font>
                 </h2>
 
+                {isLoading === true && tableData ?
+                    ''
+                    :
+                    <div className='orders-table'>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope='col' >
+                                        <IconButton
+                                            onClick={() => { handleSelecAll() }}>
+                                            <div className={isSelectAll === true ? 'action-box active' : 'action-box'}>
+                                                <div className='round'></div>
+                                            </div>
+                                        </IconButton>
 
-                <div className='orders-table'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th scope='col' >
-                                    <IconButton
-                                        onClick={() => { handleSelecAll() }}>
-                                        <div className={isSelectAll === true ? 'action-box active' : 'action-box'}>
-                                            <div className='round'></div>
-                                        </div>
-                                    </IconButton>
+                                    </th>
+                                    <th scope='col'></th>
+                                    <th scope='col'><font>Product Information</font></th>
+                                    <th scope='col'></th>
+                                    <th scope='col'><font>Savings</font></th>
+                                    <th scope='col'><font>Delivery fee</font></th>
+                                    <th scope='col'><font>Price</font></th>
+                                    <th scope='col'><font>Select</font></th>
+                                </tr>
+                            </thead>
 
-                                </th>
-                                <th scope='col'></th>
-                                <th scope='col'><font>Product Information</font></th>
-                                <th scope='col'></th>
-                                <th scope='col'><font>Savings</font></th>
-                                <th scope='col'><font>Delivery fee</font></th>
-                                <th scope='col'><font>Price</font></th>
-                                <th scope='col'><font>Select</font></th>
-                            </tr>
-                        </thead>
+                            <tbody>
+                                {
+                                    tableData && tableData.map(item => {
 
-                        <tbody>
-                            {
-                                tableData && tableData.map(item => {
-
-                                    return (
-                                        <>
-                                            <tr>
-                                                <td>
-                                                    <div className='action-content'>
-                                                        <IconButton
-                                                            onClick={() => hanleIsSelected(item.id)}
-                                                        >
-                                                            <div className={item.isSelected === true ? 'action-box active' : 'action-box'}>
-                                                                <div className='round'></div>
-                                                            </div>
-                                                        </IconButton>
-
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <img width={100} height={133} src={item.image}></img>
-                                                </td>
-                                                <td>
-                                                    <div className='infor-group'>
-                                                        <font className='name'>{item.name}</font>
-                                                        <font className='relevant'>[{item.color} / {item.size}]</font>
-                                                    </div>
-
-
-                                                </td>
-                                                <td>
-                                                    <div className='total-container'>
-                                                        <button
-                                                            onClick={() => handleOnclickTotal('SUBTRACT', item.id)}
-                                                            className='button-adj'><span>-</span></button>
-                                                        <span className='total'>{item.total}</span>
-                                                        <button
-                                                            onClick={() => handleOnclickTotal('ADD', item.id)}
-                                                            className='button-adj'><span>+</span></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='discount'>
-                                                        <font>{item.discount}%</font>
-                                                    </div>
-
-                                                </td>
-                                                <td>
-                                                    <div className='delivery'>
-                                                        <font>Free</font>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='price'>
-                                                        <font>{item.price}$</font>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='select-group'>
-
-                                                        <button className='btn-top'>Order now</button>
-
-                                                        <div className='btn-bottom'>
-                                                            <IconButton>
-                                                                <RemoveCircleOutlineIcon></RemoveCircleOutlineIcon>
+                                        return (
+                                            <>
+                                                <tr>
+                                                    <td>
+                                                        <div className='action-content'>
+                                                            <IconButton
+                                                                onClick={() => hanleIsSelected(item.id)}
+                                                            >
+                                                                <div className={item.isSelected === true ? 'action-box active' : 'action-box'}>
+                                                                    <div className='round'></div>
+                                                                </div>
                                                             </IconButton>
-                                                            <IconButton>
-                                                                <BookmarkBorderIcon></BookmarkBorderIcon>
-                                                            </IconButton>
+
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                                                    </td>
+                                                    <td>
+                                                        <img width={100} height={133} src={item.image}></img>
+                                                    </td>
+                                                    <td>
+                                                        <div className='infor-group'>
+                                                            <font className='name'>{item.name}</font>
+                                                            <font className='relevant'>[{item.color} / {item.size}]</font>
+                                                        </div>
 
-                </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div className='total-container'>
+                                                            <button
+                                                                onClick={() => handleOnclickTotal('SUBTRACT', item.id)}
+                                                                className='button-adj'><span>-</span></button>
+                                                            <span className='total'>{item.total}</span>
+                                                            <button
+                                                                onClick={() => handleOnclickTotal('ADD', item.id)}
+                                                                className='button-adj'><span>+</span></button>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className='discount'>
+                                                            <font>{item.discount}%</font>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div className='delivery'>
+                                                            <font>Free</font>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className='price'>
+                                                            <font>{item.price}$</font>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className='select-group'>
+
+                                                            <button className='btn-top'>Order now</button>
+
+                                                            <div className='btn-bottom'>
+                                                                <IconButton>
+                                                                    <RemoveCircleOutlineIcon></RemoveCircleOutlineIcon>
+                                                                </IconButton>
+                                                                <IconButton>
+                                                                    <BookmarkBorderIcon></BookmarkBorderIcon>
+                                                                </IconButton>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                }
+
 
 
                 <div className="sum-price">

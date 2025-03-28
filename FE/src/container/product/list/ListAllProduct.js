@@ -8,7 +8,7 @@ import { useSearchParams } from 'react-router';
 import NavigationHome from '../../home/NavigationHome';
 import AdsHome from '../../home/AdsHome';
 import Footer from '../../home/Footer';
-
+import { useLocation } from 'react-router-dom';
 function ListAllProduct(props) {
     const defalutFormState = {
         type: '',
@@ -20,6 +20,7 @@ function ListAllProduct(props) {
     }
     const [formState, setFormState] = useState(defalutFormState);
     const [searchParams] = useSearchParams();
+    const location = useLocation();
     console.log('formState', formState)
     useEffect(() => {
 
@@ -27,6 +28,15 @@ function ListAllProduct(props) {
         handleOnChange('type', type);
 
     }, [])
+
+    useEffect(() => {
+
+        if (formState.type) {
+            let category = searchParams.get('category')
+            handleOnChange('category', category);
+        }
+
+    }, [location])
 
     useEffect(() => {
         if (formState.type) {

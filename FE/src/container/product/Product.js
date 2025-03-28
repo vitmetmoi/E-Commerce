@@ -18,6 +18,7 @@ import MyFitSize from './components/MyFitSize';
 import Review from './components/Review';
 
 function Product(props) {
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const [getClothesService, { data, isLoading }] = useGetClothesDataMutation();
     const clothesData = useSelector((state) => state.system.clothesData);
@@ -26,6 +27,8 @@ function Product(props) {
     const [isShowDetail, setIsShowDetail] = useState(false);
     const [isReachedDesBar, setIsReachedDesBar] = useState(false);
 
+    console.log('clothes', product)
+
     useEffect(() => {
         const onScroll = () => setOffset(window.scrollY);
         // clean up code
@@ -33,17 +36,6 @@ function Product(props) {
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, [])
-
-    useEffect(() => {
-
-        if (offset <= 2918 || offset <= '2918') {
-            setIsReachedDesBar(false)
-        }
-        else {
-            setIsReachedDesBar(true)
-        }
-    }, [offset])
-
 
     useEffect(() => {
         setTimeout(() => {
@@ -68,6 +60,42 @@ function Product(props) {
         }
 
     }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        });
+        let productId = searchParams.get('id')
+
+        if (!_.isEmpty(clothesData)) {
+
+            if (productId) {
+                clothesData.map(item => {
+
+                    if (_.isEqual(item.id, +productId)) {
+                        console.log('item', item)
+                        setProduct(item);
+                    }
+                })
+            }
+        }
+        else {
+            getClothesData();
+        }
+    }, [location])
+
+    useEffect(() => {
+
+        if (offset <= 2918 || offset <= '2918') {
+            setIsReachedDesBar(false)
+        }
+        else {
+            setIsReachedDesBar(true)
+        }
+    }, [offset])
+
+
+
 
     const getClothesData = async () => {
         let productId = searchParams.get('id')
@@ -237,6 +265,7 @@ function Product(props) {
                         price={product && product.price}
                         discount={product && product.Discounts[0].value}
                         clothesId={product.id}
+                        productData={product && product}
                     ></OrderSide>
                 </div>
 

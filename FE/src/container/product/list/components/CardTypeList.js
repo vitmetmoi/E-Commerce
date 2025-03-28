@@ -4,20 +4,19 @@ import { useNavigate } from 'react-router';
 function CardTypeList(props) {
 
     const categoryList = {
-        MEN: ['ALL', 'BEST', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
-        WOMEN: ['ALL', 'BEST', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
-        ALL: ['ALL', 'BEST', 'TOP', 'BOTTOM', 'ACC'],
+        MEN: ['ALL', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
+        WOMEN: ['ALL', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
+        ALL: ['ALL', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
         BEST: [''],
         TOP: ['T-Shirt', 'Jacket', 'Hoodie', 'Sweater', 'Cardigan'],
-        BOTTOM: ['Long-Pans', 'Short', 'Skirt'],
-        ACC: ['Shoes', 'Hat', 'Backpack', 'Slides'],
+        BOTTOM: ['Long-Pants', 'Short', 'Skirt'],
+        ACC: ['Shoes', 'Hat', 'Backpack', 'Shoes'],
         SHOES: []
     }
     const navigate = useNavigate();
-
+    console.log('cardprop', props)
     const handleOnClickCard = (type, category) => {
         navigate(`/list?type=${type}&category=${category}`)
-        window.location.reload();
     }
 
     return (
@@ -27,7 +26,8 @@ function CardTypeList(props) {
                 <h3 className='card-header'>{props.category ? props.category : props.type}</h3>
                 <div className='category-group'>
                     {
-                        props.type && categoryList[props.category ? props.category : props.type] && categoryList[props.category ? props.category : props.type].map(item => {
+                        props.type && categoryList[props.category ? props.category : props.type]
+                        && categoryList[props.category ? props.category : props.type].map(item => {
                             return (
                                 <h4
                                     onClick={() => handleOnClickCard(props.type, item)}
