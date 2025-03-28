@@ -34,12 +34,18 @@ const handleGetClothes = async (req, res) => {
         let pageSize = req.query.pageSize;
         let clothesType = req.query.clothesType;
         let category = req.query.category;
-        let size = req.query.size;
-        let color = req.query.color;
-        let price = req.query.price;
+        let size = req.query.size ? req.query.size.split(',') : '';
+        let color = req.query.color ? req.query.color.split(',') : '';
+        let priceRange = req.query.priceRange ? req.query.priceRange.split(',') : '';
 
-        console.log('query', req.query)
-        let response = await clothesService.getClothesService(type, id, page, pageSize, clothesType, category, size, color, price);
+        if (priceRange) {
+            priceRange = priceRange.map(item => {
+                return (+item + (+item * 0.1))
+            })
+        }
+
+        console.log(type, id, page, pageSize, clothesType, category, size, color, priceRange)
+        let response = await clothesService.getClothesService(type, id, page, pageSize, clothesType, category, size, color, priceRange);
 
         if (response) {
             return res.status(200).json({

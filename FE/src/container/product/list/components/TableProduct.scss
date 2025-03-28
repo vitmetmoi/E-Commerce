@@ -1,0 +1,24 @@
+.table-product-container {
+    padding: 0 60px;
+
+    .list-product {
+        display       : flex;
+        flex-direction: row;
+        flex-wrap     : wrap;
+        gap           : 3px;
+    }
+
+    .pagination-page {
+        margin         : 100px 0;
+        width          : 100%;
+        display        : flex;
+        align-items    : center;
+        justify-content: center;
+    }
+
+    .skeleton-container {
+        width : 330px;
+        height: 600px;
+    }
+
+}
