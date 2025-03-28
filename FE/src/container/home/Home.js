@@ -33,7 +33,11 @@ function Home(props) {
                     <CollecSection></CollecSection>
                 </div>
                 <div className='secitons col-12'>
-                    <BestItemSection></BestItemSection>
+                    <BestItemSection
+                        slicePerView1={1}
+                        slicePerView2={3}
+                        slicePerView3={5}
+                    ></BestItemSection>
                 </div>
             </div>
 

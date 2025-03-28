@@ -371,16 +371,21 @@ function ManageAddNewClothes(props) {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <ListSubheader>Category 1</ListSubheader>
-                                                <MenuItem value={'Out-Wear'}>Out-Wear</MenuItem>
+                                                <ListSubheader>category: TOP</ListSubheader>
+                                                <MenuItem value={'T-Shirt'}>T-shirt</MenuItem>
+                                                <MenuItem value={'Jacket'}>Jacket</MenuItem>
                                                 <MenuItem value={'Hoodie'}>Hoodie</MenuItem>
                                                 <MenuItem value={'Sweater'}>Sweater</MenuItem>
-                                                <ListSubheader>Category 2</ListSubheader>
-                                                <MenuItem value={'T-shirt'}>T-shirt</MenuItem>
-                                                <ListSubheader>Category 3</ListSubheader>
-                                                <MenuItem value={'Bottom'}>Bottom</MenuItem>
-                                                <ListSubheader>Category 4</ListSubheader>
-                                                <MenuItem value={'Accessory'}>Accessory</MenuItem>
+                                                <MenuItem value={'Cardigan'}>Cardigan</MenuItem>
+                                                <ListSubheader>category: BOTTOM</ListSubheader>
+                                                <MenuItem value={'Long-Pans'}>Long pans</MenuItem>
+                                                <MenuItem value={'Short'}>Short</MenuItem>
+                                                <MenuItem value={'Skirt'}>Skirt</MenuItem>
+                                                <ListSubheader>category: ACC</ListSubheader>
+                                                <MenuItem value={'Shoes'}>Shoes</MenuItem>
+                                                <MenuItem value={'Hat'}>Hat</MenuItem>
+                                                <MenuItem value={'Backpack'}>Backpack</MenuItem>
+                                                <MenuItem value={'Slides'}>Slides</MenuItem>
                                             </Select>
                                         </FormControl>
 

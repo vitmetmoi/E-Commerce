@@ -52,7 +52,10 @@ const handleGetReview = async (req, res) => {
         let page = req.query.page;
         let pageSize = req.query.pageSize;
         let clothesId = req.query.clothesId;
-        let response = await reviewService.getReviewService(type, reviewId, page, pageSize, clothesId);
+        let userId = req.query.userId;
+        let star = req.query.star;
+        let size = req.query.size;
+        let response = await reviewService.getReviewService(type, reviewId, page, pageSize, clothesId, userId, size, star);
 
         return res.status(200).json({
             DT: response.DT,

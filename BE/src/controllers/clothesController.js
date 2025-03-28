@@ -32,7 +32,14 @@ const handleGetClothes = async (req, res) => {
         let id = req.query.id;
         let page = req.query.page;
         let pageSize = req.query.pageSize;
-        let response = await clothesService.getClothesService(type, id, page, pageSize);
+        let clothesType = req.query.clothesType;
+        let category = req.query.category;
+        let size = req.query.size;
+        let color = req.query.color;
+        let price = req.query.price;
+
+        console.log('query', req.query)
+        let response = await clothesService.getClothesService(type, id, page, pageSize, clothesType, category, size, color, price);
 
         if (response) {
             return res.status(200).json({

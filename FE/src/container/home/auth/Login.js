@@ -89,7 +89,7 @@ function Login(props) {
                                         navigate('/');
                                     }
                                     else {
-                                        toast('Err from sever!')
+                                        toast(res.data.EM ? res.data.EM : 'Err from sever!')
                                     }
                                     setIsOpenBackDrop(false);
                                 }, 3000);

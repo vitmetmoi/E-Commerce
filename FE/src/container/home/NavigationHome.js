@@ -53,6 +53,11 @@ function NavigationHome(props) {
         navigate('/user/profile');
     }
 
+    const handleOnClickList = (type, category) => {
+        navigate(`/list?type=${type}&category=${category}`);
+        window.location.reload();
+    }
+
     const handleOnclickLogo = () => [
         navigate('/')
     ]
@@ -103,11 +108,11 @@ function NavigationHome(props) {
                                             </div>
                                             <div className='section section2'>
                                                 <ul>
-                                                    <li>SHOP ALL</li>
-                                                    <li>BEST SELLER</li>
-                                                    <li>TOP</li>
-                                                    <li>BOTTOM</li>
-                                                    <li>SHOES</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'ALL')}>SHOP ALL</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'BEST')}>BEST SELLER</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'TOP')}>TOP</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'BOTTOM')}>BOTTOM</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'SHOES')}>SHOES</li>
                                                 </ul>
 
                                             </div>
@@ -141,11 +146,11 @@ function NavigationHome(props) {
                                             </div>
                                             <div className='section section2'>
                                                 <ul>
-                                                    <li>SHOP ALL</li>
-                                                    <li>BEST SELLER</li>
-                                                    <li>TOP</li>
-                                                    <li>BOTTOM</li>
-                                                    <li>SHOES</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'ALL')}>SHOP ALL</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'BEST')}>BEST SELLER</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'TOP')}>TOP</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'BOTTOM')}>BOTTOM</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'SHOES')}>SHOES</li>
                                                 </ul>
 
                                             </div>
@@ -176,7 +181,7 @@ function NavigationHome(props) {
                                             </div>
                                             <div className='section section2'>
                                                 <ul>
-                                                    <li>SHOP ALL</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'ALL')}>SHOP ALL</li>
                                                     <li>BEST SELLER</li>
                                                     <li>HAT</li>
                                                     <li>CAP</li>

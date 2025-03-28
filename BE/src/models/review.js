@@ -13,12 +13,14 @@ module.exports = (sequelize, DataTypes) => {
             Review.belongsTo(models.User, { foreignKey: "userId" })
             Review.belongsTo(models.Clothes, { foreignKey: "clothesId" })
             Review.hasMany(models.ReviewImage, { foreignKey: 'reviewId' });
+            Review.belongsTo(models.Bill, { foreignKey: 'billId' })
         }
     }
     Review.init({
         star: DataTypes.STRING,
         userId: DataTypes.INTEGER,
         clothesId: DataTypes.INTEGER,
+        billId: DataTypes.INTEGER,
         comment: DataTypes.TEXT('long'),
     }, {
         sequelize,

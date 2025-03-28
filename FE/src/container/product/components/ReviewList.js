@@ -35,7 +35,7 @@ function ReviewList(props) {
 
     const defaultFormState = {
         pagination: {
-            page: 0,
+            page: 1,
             pageSize: 3
         },
         size: [],
@@ -155,6 +155,10 @@ function ReviewList(props) {
     const handleReloadConditionalButton = () => {
         handleOnChange('size', [])
         handleOnChange('star', [])
+    }
+
+    const handleChangePagination = (event, value) => {
+        handleOnChange('pagination', { page: value, pageSize: formState.pagination.pageSize })
     }
 
     return (
@@ -316,11 +320,13 @@ function ReviewList(props) {
             <div className='pagination-page'>
                 {reviewData &&
                     <Pagination
+                        showFirstButton
+                        showLastButton
                         size='large'
-                        count={(reviewData.rowCount / formState.pagination.pageSize) + 1}
+                        count={Math.round(reviewData.rowCount / formState.pagination.pageSize)}
                         defaultPage={1}
                         page={formState.pagination.page}
-                        onChange={(event) => handleOnChange('pagination', { page: +event.target.textContent - 1, pageSize: formState.pagination.pageSize })}
+                        onChange={handleChangePagination}
                         shape="rounded" />
                 }
             </div>

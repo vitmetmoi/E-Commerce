@@ -32,9 +32,9 @@ function ShoppingCart(props) {
     const [tableData, setTableData] = useState('');
     const [isSelectAll, setIsSelectAll] = useState(true);
     const navigate = useNavigate();
-    console.log("shop", shoppingCartData)
-    console.log("shopCart", shoppingCart)
-    console.log('tabledata', tableData)
+    // console.log("shop", shoppingCartData)
+    // console.log("shopCart", shoppingCart)
+    // console.log('tabledata', tableData)
     useEffect(() => {
 
         if (_.isEmpty(shoppingCartData) || shoppingCartData[0] === '') {
