@@ -51,6 +51,8 @@ const initApiRoutes = (app) => {
     router.get('/review/get', reviewController.handleGetReview);
     router.delete('/review/delete', reviewController.handleDeleteReview);
 
+    //Socket
+    router.get('/socket.io', userController.handleGetRoomId)
 
     return app.use("/api", router)
 

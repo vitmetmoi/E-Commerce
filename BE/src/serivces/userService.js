@@ -122,7 +122,6 @@ const loginService = async (loginAcc, password) => {
                 if (checkPassword === true) {
                     let base64String = new Buffer(user.avatar, 'base64').toString('binary');
 
-                    console.log(user)
 
                     let data = {
                         id: user.id,

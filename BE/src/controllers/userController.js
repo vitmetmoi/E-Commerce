@@ -1,4 +1,5 @@
 import userService from '../serivces/userService'
+import { v4 as uuidv4 } from 'uuid';
 
 const handleCreateUser = async (req, res) => {
     try {
@@ -101,15 +102,13 @@ const handleLogin = async (req, res) => {
         let response = await userService.loginService(loginAcc, password);
         if (response) {
 
-
-            res.cookie('user', response.DT.token);
-
-
-            return res.status(200).json({
+            console.log('res', response.DT.token);
+            res.cookie("user", response.DT.token, { secure: false }).status(200).json({
                 DT: response.DT.data,
                 EC: response.EC,
                 EM: response.EM
-            })
+            });
+
 
         }
         else {
@@ -199,6 +198,14 @@ const handleUpdateUser = async (req, res) => {
     }
 }
 
+const handleGetRoomId = () => {
+    const randomGenUniqueName = uuidv4();
+    return res.status(200).json({
+        roomUrl: randomGenUniqueName
+    });
+}
+
 module.exports = {
-    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem, handleAccount, handleUpdateUser
+    handleCreateUser, handleGetUser, handleRegister, handleLogin, handleCreateItem,
+    handleAccount, handleUpdateUser, handleGetRoomId
 }
