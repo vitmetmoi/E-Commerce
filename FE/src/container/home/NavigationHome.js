@@ -112,7 +112,7 @@ function NavigationHome(props) {
                                                     <li onClick={() => handleOnClickList('WOMEN', 'BEST')}>BEST SELLER</li>
                                                     <li onClick={() => handleOnClickList('WOMEN', 'TOP')}>TOP</li>
                                                     <li onClick={() => handleOnClickList('WOMEN', 'BOTTOM')}>BOTTOM</li>
-                                                    <li onClick={() => handleOnClickList('WOMEN', 'SHOES')}>SHOES</li>
+                                                    <li onClick={() => handleOnClickList('WOMEN', 'SLIDES')}>SLIDES</li>
                                                 </ul>
 
                                             </div>
@@ -150,7 +150,7 @@ function NavigationHome(props) {
                                                     <li onClick={() => handleOnClickList('MEN', 'BEST')}>BEST SELLER</li>
                                                     <li onClick={() => handleOnClickList('MEN', 'TOP')}>TOP</li>
                                                     <li onClick={() => handleOnClickList('MEN', 'BOTTOM')}>BOTTOM</li>
-                                                    <li onClick={() => handleOnClickList('MEN', 'SHOES')}>SHOES</li>
+                                                    <li onClick={() => handleOnClickList('MEN', 'SLIDES')}>SLIDES</li>
                                                 </ul>
 
                                             </div>
