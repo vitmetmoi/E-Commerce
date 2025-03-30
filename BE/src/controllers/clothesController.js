@@ -32,8 +32,8 @@ const handleGetClothes = async (req, res) => {
         let id = req.query.id;
         let page = req.query.page;
         let pageSize = req.query.pageSize;
-        let clothesType = req.query.clothesType;
-        let category = req.query.category;
+        let clothesType = req.query.clothesType ? req.query.clothesType.split(',') : '';
+        let category = req.query.category ? req.query.category.split(',') : '';
         let size = req.query.size ? req.query.size.split(',') : '';
         let color = req.query.color ? req.query.color.split(',') : '';
         let priceRange = req.query.priceRange ? req.query.priceRange.split(',') : '';

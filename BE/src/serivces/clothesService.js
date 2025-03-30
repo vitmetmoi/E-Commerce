@@ -196,26 +196,25 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                     limit: 8,
                     order: [['createdAt', 'DESC']],
 
-                    include: [{
-                        model: db.Discount,
-                        attributes: ['id', 'value'],
+                    include: [
+                        {
+                            model: db.Discount,
+                            attributes: ['id', 'value'],
 
-                    },
-                    {
-                        model: db.Markdown,
-                        attributes: ['id', 'contentMarkdown'],
+                        },
+                        {
+                            model: db.Markdown,
+                            attributes: ['id', 'contentMarkdown'],
+                        },
+                        {
+                            model: db.RelevantImage,
+                            attributes: ['id', 'image'],
+                        },
+                        {
+                            model: db.Color_Size,
+                            attributes: ['id', 'color', 'size', 'stock'],
 
-                    },
-                    {
-                        model: db.RelevantImage,
-                        attributes: ['id', 'image'],
-
-                    },
-                    {
-                        model: db.Color_Size,
-                        attributes: ['id', 'color', 'size', 'stock'],
-
-                    }
+                        }
                     ]
 
                 })

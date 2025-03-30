@@ -4,12 +4,13 @@ import initWebRoutes from "./routes/web";
 import initApiRoutes from './routes/api';
 import configCors from './config/cors';
 import connectToDataBase from './config/connectDb';
-// import webHookService from './serivces/webHookService'
+import { Server } from 'socket.io';
+import { createServer } from 'node:http';
+import socketService from './middleware/SocketIO'
 require('dotenv').config();
 const app = express();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-
 
 //configCors
 configCors(app);
@@ -31,11 +32,29 @@ initApiRoutes(app);
 //init web routes
 initWebRoutes(app);
 
-const PORT = process.env.PORT || 8080;
+
 connectToDataBase();
 
-// webHookService();
+//socketService
 
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ["GET", "POST"],
+        credentials: true,
+        allowEIO3: true
+    }
+});
+
+socketService(io);
+
+//Connect
+
+const PORT = process.env.PORT || 8080;
+const SOCKET_PORT = process.env.SOCKET_PORT || 8081;
+
+server.listen(SOCKET_PORT);
 
 app.listen(PORT, () => {
     console.log(">>> Backend is running on the port = " + PORT);

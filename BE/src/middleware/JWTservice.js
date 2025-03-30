@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 import db from '../models';
 import { RAW } from 'sequelize/lib/query-types';
 
-const exceptionPath = ['/', '/api/user/login', '/api/user/register', '/api/account', '/api/clothes/get', '/api/hooks/payment', '/api/review/get'];
+const exceptionPath = ['/', '/api/user/login', '/api/user/register',
+    '/api/account', '/api/clothes/get', '/api/hooks/payment', '/api/review/get', '/socket.io/'];
 
 const createJwtTokenService = (data) => {
 
@@ -43,7 +44,7 @@ const verifyTokenService = (token) => {
 const checkCookieService = (req, res, next) => {
     try {
         let path = req.path;
-        console.log('path', req.headers.origin)
+        // console.log('path', req.headers.origin)
         // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         // console.log("full", fullUrl)
         let isValid = exceptionPath.includes(path)
@@ -94,7 +95,7 @@ const checkCookieService = (req, res, next) => {
 
 const authenticateCookieService = async (req, res, next) => {
     try {
-        console.log('check2');
+
         let path = req.path;
         console.log('path', path)
         if (exceptionPath.includes(path) === true) {
@@ -102,7 +103,6 @@ const authenticateCookieService = async (req, res, next) => {
         }
         else {
             let isValid = await checkUserPermission(req.user, path)
-            console.log(isValid);
             if (isValid === true) {
                 next();
             }
