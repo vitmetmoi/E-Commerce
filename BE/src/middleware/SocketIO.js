@@ -11,42 +11,107 @@ const socketService = (io) => {
         socket.on("CREATE_ROOM", async (adminId, customerId) => {
 
             let roomId = uuidv4();
+            let room = await db.Room.findOne({ where: { customerId: customerId } });
 
-            await db.Room.create({
-                roomId: roomId,
-                adminId: adminId,
-                customerId: customerId
-            })
+            if (room && room.roomId) {
+                socket.emit('NEW_MESSAGE', 'Room is exist!')
+            }
+            else {
+                await db.Room.create({
+                    roomId: roomId,
+                    adminId: adminId,
+                    customerId: customerId
+                })
+
+                socket.emit('NEW_MESSAGE', roomId)
+            }
+
+        });
+
+        // socket.on("FIND_ROOM", async (customerId) => {
+
+
+        //     let room = await db.Room.findOne({
+        //         where: {
+        //             customerId: customerId
+        //         }
+        //     })
+        //     console.log('room', room)
+        //     if (room && room.roomId) {
+        //         socket.emit('NEW_MESSAGE', {
+        //             roomId: room.roomId,
+        //             msg: 'Find room completed!'
+        //         })
+        //     }
+        //     else {
+        //         socket.emit('NEW_MESSAGE', {
+        //             roomId: '',
+        //             msg: 'No room exist!'
+        //         })
+        //     }
+
+        // });
+
+
+        socket.on("JOIN_ROOM", async (customerId) => {
+
+            // let room = await db.Room.findOne({
+            //     where: {
+            //         customerId: +customerId
+            //     },
+            //     include: [
+            //         {
+            //             model: db.Message,
+            //         }
+            //     ]
+            // })
+
+
+            let room = ''
+
+            if (room && room.roomId) {
+
+                rooms.Messages.map(item => {
+                    socket.emit("NEW_MESSAGE", {
+                        type: 'msg',
+                        msg: item
+                    });
+                })
+
+            }
+            else {
+                socket.emit('NEW_MESSAGE', {
+                    roomId: '',
+                    msg: 'No room exist!'
+                })
+            }
         });
 
 
-        socket.on("JOIN_ROOM", async (roomId) => {
 
-            socket.join(roomId);
-            let message = await db.Room.findOne({
+        socket.on("NEW_MESSAGE", async (adminId, customerId, msg) => {
+
+            let room = await db.Room.findOne({
                 where: {
-                    roomId: roomId
-                },
-                include: [
-                    {
-                        model: db.Message,
-                    }
-                ]
+                    customerId: +customerId
+                }
             })
 
-            io.to(roomId).emit("NEW_MESSAGE", message);
-        });
+            if (room && room.roomId) {
+                await db.Message.create({
+                    roomId: room.roomId,
+                    message: msg
+                })
+
+                socket.emit("NEW_MESSAGE", {
+                    type: 'msg',
+                    senderId: customerId,
+                    msg: msg
+                });
+            }
 
 
 
-        socket.on("NEW_MESSAGE", async (roomId, msg) => {
-
-            await db.Message.Create({
-                roomId: roomId,
-                message: msg
-            })
-
-            io.to(roomId).emit("NEW_MESSAGE", msg);
         });
 
         socket.on("disconnect", (roomId) => {

@@ -52,10 +52,7 @@ socketService(io);
 //Connect
 
 const PORT = process.env.PORT || 8080;
-const SOCKET_PORT = process.env.SOCKET_PORT || 8081;
 
-server.listen(SOCKET_PORT);
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(">>> Backend is running on the port = " + PORT);
-})
+});

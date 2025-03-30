@@ -22,6 +22,26 @@ import { styled } from '@mui/material/styles';
 
 function UserProfile(props) {
 
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.user.userData);
+
+
+    useEffect(() => {
+        console.log('search', location.pathname);
+    }, [])
+    console.log('user', userData);
+
+    const handleOnClickMenu = (path) => {
+        navigate(path);
+    }
+
+    const handleLogOut = () => {
+        dispatch(clearUserData());
+    }
+
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             width: '12px',
@@ -53,25 +73,6 @@ function UserProfile(props) {
             },
         },
     }));
-
-    const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user.userData);
-
-
-    useEffect(() => {
-        console.log('search', location.pathname);
-    }, [])
-    console.log('user', userData);
-
-    const handleOnClickMenu = (path) => {
-        navigate(path);
-    }
-
-    const handleLogOut = () => {
-        dispatch(clearUserData());
-    }
     return (
         <>
             <AdsHome></AdsHome>

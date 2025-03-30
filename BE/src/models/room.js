@@ -10,12 +10,13 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Room.belongsTo(models.User, { foreignKey: "adminId", as: 'adminData' });
-            Room.belongsTo(models.User, { foreignKey: "customerId", as: 'customerData' });
+            Room.belongsTo(models.User, { foreignKey: "adminId", as: 'adminData', constraints: false });
+            Room.belongsTo(models.User, { foreignKey: "customerId", as: 'customerData', constraints: false });
+            Room.hasMany(models.Message, { foreignKey: 'roomId' })
         }
     }
     Room.init({
-        roomID: DataTypes.STRING,
+        roomId: DataTypes.STRING,
         adminId: DataTypes.INTEGER,
         customerId: DataTypes.INTEGER,
     }, {
