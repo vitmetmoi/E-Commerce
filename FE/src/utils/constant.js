@@ -14,18 +14,19 @@ export const GENDERS = {
 }
 
 export const GROUPID = {
-    ADMIN: '1',
-    DEVELOPER: '2',
-    USER: '3'
+    ADMIN: 1,
+    DEVELOPER: 2,
+    USER: 3
 }
 
 export const SYSTEM_NAV = {
     DASH_BOARD: 'dashboard',
     ORDERS: 'orders',
     CLOTHES: 'clothes',
-    GROUPS: 'groups',
+    SUPPORTS: 'supports',
     CREATE: 'create',
     MENU: 'menu',
     MANAGE: 'manage',
-
+    LIST: 'list',
+    CREATE_CHAT: 'create-chat'
 } 

@@ -10,6 +10,9 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             roomId: {
+                type: Sequelize.STRING
+            },
+            senderId: {
                 type: Sequelize.INTEGER
             },
             message: {

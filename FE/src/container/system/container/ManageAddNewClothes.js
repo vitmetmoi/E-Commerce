@@ -378,7 +378,7 @@ function ManageAddNewClothes(props) {
                                                 <MenuItem value={'Sweater'}>Sweater</MenuItem>
                                                 <MenuItem value={'Cardigan'}>Cardigan</MenuItem>
                                                 <ListSubheader>category: BOTTOM</ListSubheader>
-                                                <MenuItem value={'Long-Pans'}>Long pans</MenuItem>
+                                                <MenuItem value={'Long-Pants'}>Long pants</MenuItem>
                                                 <MenuItem value={'Short'}>Short</MenuItem>
                                                 <MenuItem value={'Skirt'}>Skirt</MenuItem>
                                                 <ListSubheader>category: ACC</ListSubheader>

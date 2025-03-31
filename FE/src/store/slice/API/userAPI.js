@@ -33,7 +33,7 @@ export const userAPI = createApi({
             })
         }),
         checkUserAccount: build.query({ query: () => ({ url: `/api/account`, method: 'get' }) }),
-        getUserData: build.query({ query: (type, id) => ({ url: `/api/user/get?type=${type}&id=${id}`, method: 'get' }) }),
+        getUserData: build.query({ query: (params) => ({ url: `/api/user/get?type=${params.type}&id=${params.id}`, method: 'get' }) }),
         createUser: build.mutation({
             query: (userData) => ({ url: '/api/user/create', method: 'post', data: userData }),
         }),
@@ -90,7 +90,7 @@ export const userAPI = createApi({
 
 
 export const { useRegisterMutation, useLazyLoginQuery,
-    useGetUserDataQuery, useCreateUserMutation,
+    useGetUserDataQuery, useLazyGetUserDataQuery, useCreateUserMutation,
     useLazyCheckUserAccountQuery, useUpdateMutation,
     useCreateBillMutation, useGetBillMutation,
     useUpdateBillMutation, useDeleteBillMutation,

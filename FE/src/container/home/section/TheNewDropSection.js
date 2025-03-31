@@ -19,6 +19,8 @@ function TheNewDropSection(props) {
     const clothes = useSelector((state) => state.system.clothesData)
     const [clothesData, setClothesData] = useState('');
 
+    console.log('clothesData', clothesData)
+
     useEffect(() => {
 
         getClothes();

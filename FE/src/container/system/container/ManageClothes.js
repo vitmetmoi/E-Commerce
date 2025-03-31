@@ -56,7 +56,7 @@ function ManageClothes(props) {
     const [rowModesModel, setRowModesModel] = useState({});
     const [paginationModel, setPaginationModel] = React.useState({
         page: 0,
-        pageSize: 3,
+        pageSize: 5,
     });
 
     //modal

@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Bill.belongsTo(models.User, { foreignKey: "userId" })
-            Bill.hasMany(models.ShoppingCart, { foreignKey: 'billId' })
-            Bill.hasOne(models.Review, { foreignKey: 'billId' })
+            Bill.belongsTo(models.User, { foreignKey: "userId", constraints: false })
+            Bill.hasMany(models.ShoppingCart, { foreignKey: 'billId', constraints: false })
+            Bill.hasOne(models.Review, { foreignKey: 'billId', constraints: false })
         }
     }
     Bill.init({
@@ -27,6 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Bill',
     });
-
+    Bill.sync({ alter: true })
     return Bill;
 };

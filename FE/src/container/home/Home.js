@@ -9,7 +9,7 @@ import FirstAboutSection from './section/FirstAboutSection.js';
 import SecondAboutSection from './section/SecondAboutSection.js';
 import Footer from './Footer.js';
 import './Home.scss'
-
+import ChatSupport from './socket/ChatSupport.js'
 function Home(props) {
 
     return (
@@ -49,6 +49,10 @@ function Home(props) {
             </div>
 
             <Footer></Footer>
+
+            <div className=''>
+                <ChatSupport></ChatSupport>
+            </div>
 
         </>
     );

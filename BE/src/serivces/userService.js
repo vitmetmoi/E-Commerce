@@ -7,34 +7,6 @@ const fs = require('fs');
 
 const saltRounds = 10;
 
-const createUserService = async (data) => {
-    try {
-        if (!data || !data.email || !data.firstName || !data.lastName) {
-            return {
-                DT: "",
-                EC: -1,
-                EM: 'Missing parameter!'
-            }
-        }
-        else {
-            await db.User.create(data);
-            return {
-                DT: "",
-                EC: 0,
-                EM: 'Create new user completed!'
-            }
-        }
-    }
-    catch (e) {
-        console.log(e);
-        return {
-            DT: "",
-            EC: -1,
-            EM: 'Err from sever service...'
-        }
-    }
-}
-
 
 const getUserService = async (type, userId) => {
     try {
@@ -61,16 +33,29 @@ const getUserService = async (type, userId) => {
                 }
             }
             else {
-                data = await db.User.findOne({
+                userId = userId.split(',')
+
+                userId = userId.map(item => {
+                    return +item;
+                })
+
+
+                data = await db.User.findAll({
                     where: { id: userId },
                     include: [{
                         model: db.Address,
                     },],
-                    nested: true
 
                 });
+                let convertedData = '';
+
+
+                convertedData = data.map(item => {
+                    item.avatar = new Buffer(item.avatar, 'base64').toString('binary');
+                    return item
+                })
                 return {
-                    DT: data,
+                    DT: convertedData,
                     EC: 0,
                     EM: 'Get user completed!'
                 }
@@ -367,5 +352,5 @@ const updateUserService = async (userData) => {
 }
 
 module.exports = {
-    createUserService, getUserService, registerService, loginService, updateUserService
+    getUserService, registerService, loginService, updateUserService
 }

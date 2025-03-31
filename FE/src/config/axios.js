@@ -24,7 +24,7 @@ instance.interceptors.response.use(function (response) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     console.log('error from axios', error.response.data.EM)
-    toast.error(error.response.data.EM ? error.response.data.EM : "error from sever");
+    // toast.error(error.response.data.EM ? error.response.data.EM : "error from sever");
     return error.response;
 });
 
