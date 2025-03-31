@@ -147,15 +147,17 @@ const convertClothesImgArray = (clothesArr) => {
 
 const sortArrImageById = (clothesArr) => {
     let data = [];
-    clothesArr.map((item) => {
-        let child = item;
+    if (clothesArr && clothesArr.length > 0) {
+        clothesArr.map((item) => {
+            let child = item;
 
-        child.RelevantImages.sort(function (a, b) {
-            return a.id - b.id;
-        });
+            child.RelevantImages.sort(function (a, b) {
+                return a.id - b.id;
+            });
 
-        data.push(child);
-    })
+            data.push(child);
+        })
+    }
     return data;
 }
 
@@ -436,7 +438,11 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
             else {
                 let clothesData = convertClothesImgArray(data);
-                clothesData = sortArrImageById(clothesData);
+
+                if (_.isArray(clothesData)) {
+                    clothesData = sortArrImageById(clothesData);
+                }
+
                 return {
                     DT: clothesData,
                     EC: 0,
