@@ -28,6 +28,9 @@ import ManageAddNewClothes from './container/ManageAddNewClothes';
 import { Scrollbar } from 'react-scrollbars-custom';
 import { createTheme } from '@mui/material/styles';
 import ManageClothes from './container/ManageClothes';
+import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import ManageSupport from './container/ManageSupport';
 function SystemHome(props) {
 
     const navigate = useNavigate();
@@ -83,19 +86,20 @@ function SystemHome(props) {
             title: 'Groups',
         },
         {
-            segment: SYSTEM_NAV.GROUP_MANAGE,
-            title: 'Groups',
-            icon: <GroupsIcon />,
+            segment: SYSTEM_NAV.SUPPORTS,
+            title: 'Support',
+            icon: <SupportAgentIcon />,
             children: [
+                // {
+                //     segment: SYSTEM_NAV.CREATE_CHAT,
+                //     title: 'Create chat',
+                //     icon: <MarkUnreadChatAltIcon />,
+                // },
                 {
-                    segment: SYSTEM_NAV.GROUP_MANAGE,
-                    title: 'Manage',
-                    icon: <ManageHistoryIcon />,
-                },
-                {
-                    segment: SYSTEM_NAV.GROUP_MENU,
-                    title: 'Menu',
-                    icon: <FormatListBulletedIcon />,
+                    segment: SYSTEM_NAV.LIST,
+                    title: 'List',
+                    // icon: <FormatListBulletedIcon />,
+                    icon: <MarkUnreadChatAltIcon />
                 },
             ],
         },
@@ -120,6 +124,8 @@ function SystemHome(props) {
                 {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.CREATE}` && <ManageAddNewClothes></ManageAddNewClothes>}
                 {pathname === `/${SYSTEM_NAV.CLOTHES}/${SYSTEM_NAV.MENU}` && <ManageClothes></ManageClothes>}
                 {pathname === `/${SYSTEM_NAV.CLOTHES}` && <ManageClothes></ManageClothes>}
+                {pathname === `/${SYSTEM_NAV.SUPPORTS}` && <ManageSupport />}
+                {pathname === `/${SYSTEM_NAV.SUPPORTS}/${SYSTEM_NAV.LIST}` && <ManageSupport />}
             </Box>
         );
     }

@@ -6,11 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     class Message extends Model {
 
         static associate(models) {
-            Message.belongsTo(models.Room, { foreignKey: 'roomId' })
+            Message.belongsTo(models.Room, { foreignKey: 'roomId', constraints: false })
         }
     }
     Message.init({
-        roomId: DataTypes.TEXT,
+        roomId: DataTypes.STRING,
+        senderId: DataTypes.INTEGER,
         message: DataTypes.TEXT
     }, {
         sequelize,

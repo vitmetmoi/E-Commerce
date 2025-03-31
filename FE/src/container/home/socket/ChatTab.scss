@@ -54,37 +54,48 @@
         overflow-y    : scroll;
         padding-top   : 10px;
         padding-left  : 3px;
-        gap           : 15px;
+        gap           : 3px;
         display       : flex;
         flex-direction: column;
 
         .msg-container {
-            width     : 100%;
-            min-height: 40px;
-            position  : relative;
+            width            : 100%;
+            // min-height    : 40px;
+            position         : relative;
+            display          : flex;
+            flex-direction   : row;
+            height           : fit-content;
 
             .msg {
                 border-radius: 20px;
-                height       : fit-content;
                 max-width    : 290px;
+                height       : fit-content;
                 width        : fit-content;
                 text-align   : left;
                 padding      : 10px 20px;
                 font-size    : 14px;
-                position     : absolute;
+                position     : relative;
 
                 &.right {
-                    right           : 0;
+                    text-align      : left;
                     background-color: white;
                     border          : 1px solid #f06e00;
                     color           : #f06e00;
                 }
 
                 &.left {
+                    text-align      : left;
                     background-color: #f06e00;
                     color           : white;
-                    left            : 0;
                 }
+            }
+
+            &.right {
+                justify-content: end;
+            }
+
+            &.left {
+                justify-content: left;
             }
         }
 

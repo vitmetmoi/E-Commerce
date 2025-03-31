@@ -44,19 +44,19 @@ function ChatTab(props) {
             socket.on("NEW_MESSAGE", (message) => {
                 console.log('new message', message);
                 if (message && message.type && message.type === 'msg') {
-                    let _messages = _.cloneDeep(messages);
-                    let obj = {}
-                    obj.senderId = message.senderId;
-                    obj.msg = message.msg;
-                    _messages.push(obj);
-                    setMessages(_messages);
+
+                    if (messages.some(item => item.id === message.id) !== true) {
+                        setMessages((prevState) => [...prevState, message]);
+                    }
+
+
                 }
             });
         }
     }, [props.isOpenChatTab])
 
     const handleSendMessage = () => {
-        console.log('clicked')
+
         if (messages.length === 1) {
             socket.connect();
             socket.emit('CREATE_ROOM', 0, userData.id)
@@ -65,7 +65,7 @@ function ChatTab(props) {
         else {
             socket.emit('NEW_MESSAGE', 0, userData.id, inputValue)
         }
-
+        setInputValue('')
     }
 
     return (
@@ -104,7 +104,7 @@ function ChatTab(props) {
 
                                     return (
                                         <>
-                                            <div className={'msg-container'}>
+                                            <div className={item.senderId === userData.id ? 'msg-container right' : 'msg-container left'}>
                                                 <span className={item.senderId === userData.id ? 'msg right' : 'msg left'}>{item.msg}</span>
                                             </div>
                                         </>

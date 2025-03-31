@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Room.belongsTo(models.User, { foreignKey: "adminId", as: 'adminData', constraints: false });
             Room.belongsTo(models.User, { foreignKey: "customerId", as: 'customerData', constraints: false });
-            Room.hasMany(models.Message, { foreignKey: 'roomId' })
+            Room.hasMany(models.Message, { foreignKey: 'roomId', constraints: false })
         }
     }
     Room.init({

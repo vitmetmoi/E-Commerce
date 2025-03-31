@@ -61,16 +61,29 @@ const getUserService = async (type, userId) => {
                 }
             }
             else {
-                data = await db.User.findOne({
+                userId = userId.split(',')
+
+                userId = userId.map(item => {
+                    return +item;
+                })
+
+
+                data = await db.User.findAll({
                     where: { id: userId },
                     include: [{
                         model: db.Address,
                     },],
-                    nested: true
 
                 });
+                let convertedData = '';
+
+
+                convertedData = data.map(item => {
+                    item.avatar = new Buffer(item.avatar, 'base64').toString('binary');
+                    return item
+                })
                 return {
-                    DT: data,
+                    DT: convertedData,
                     EC: 0,
                     EM: 'Get user completed!'
                 }
