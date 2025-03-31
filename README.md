@@ -105,14 +105,6 @@ E-Commerce/
     └── package.json      # Frontend dependencies
 ```
 
-## Special Features
-
-### Real-time Chat
-The application uses Socket.io to provide real-time chat functionality between customers and support staff. Customers can initiate conversations from product pages or their account dashboard.
-
-### Excel Export
-Administrators can export product data to Excel format using the React Export Table to Excel library, facilitating inventory management and reporting.
-
 ## Development Notes
 
 - The frontend uses CRACO for configuration override, allowing customization without ejecting from Create React App
