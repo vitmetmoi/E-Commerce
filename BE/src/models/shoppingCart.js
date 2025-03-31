@@ -22,5 +22,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'ShoppingCart',
     });
+    ShoppingCart.sync({ alter: true })
     return ShoppingCart;
 };
