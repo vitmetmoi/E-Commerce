@@ -14,9 +14,9 @@ export const GENDERS = {
 }
 
 export const GROUPID = {
-    ADMIN: '1',
-    DEVELOPER: '2',
-    USER: '3'
+    ADMIN: 1,
+    DEVELOPER: 2,
+    USER: 3
 }
 
 export const SYSTEM_NAV = {

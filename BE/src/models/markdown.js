@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Markdown.belongsTo(models.Clothes, { foreignKey: "clothesId" })
+            Markdown.belongsTo(models.Clothes, { foreignKey: "clothesId", constraints: false })
         }
     }
     Markdown.init({
@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Markdown',
     });
-    Markdown.sync();
+    // Markdown.sync({ force: true });
     return Markdown;
 };

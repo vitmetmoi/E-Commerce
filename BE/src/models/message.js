@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     class Message extends Model {
 
         static associate(models) {
-            Message.belongsTo(models.Room, { foreignKey: 'roomId', constraints: false })
+            Message.belongsTo(models.Room, { foreignKey: 'roomId', constraints: false, constraints: false })
         }
     }
     Message.init({

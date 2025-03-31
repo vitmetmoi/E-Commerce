@@ -7,34 +7,6 @@ const fs = require('fs');
 
 const saltRounds = 10;
 
-const createUserService = async (data) => {
-    try {
-        if (!data || !data.email || !data.firstName || !data.lastName) {
-            return {
-                DT: "",
-                EC: -1,
-                EM: 'Missing parameter!'
-            }
-        }
-        else {
-            await db.User.create(data);
-            return {
-                DT: "",
-                EC: 0,
-                EM: 'Create new user completed!'
-            }
-        }
-    }
-    catch (e) {
-        console.log(e);
-        return {
-            DT: "",
-            EC: -1,
-            EM: 'Err from sever service...'
-        }
-    }
-}
-
 
 const getUserService = async (type, userId) => {
     try {
@@ -380,5 +352,5 @@ const updateUserService = async (userData) => {
 }
 
 module.exports = {
-    createUserService, getUserService, registerService, loginService, updateUserService
+    getUserService, registerService, loginService, updateUserService
 }

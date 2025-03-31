@@ -145,6 +145,20 @@ const convertClothesImgArray = (clothesArr) => {
     }
 }
 
+const sortArrImageById = (clothesArr) => {
+    let data = [];
+    clothesArr.map((item) => {
+        let child = item;
+
+        child.RelevantImages.sort(function (a, b) {
+            return a.id - b.id;
+        });
+
+        data.push(child);
+    })
+    return data;
+}
+
 const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, priceRange) => {
     try {
         if (!type) {
@@ -166,6 +180,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
             if (type === 'ALL') {
                 data = await db.Clothes.findAll({
+
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],
@@ -180,6 +195,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                     {
                         model: db.RelevantImage,
                         attributes: ['id', 'image'],
+                        order: [['id', 'ASC']],
 
                     },
                     {
@@ -195,7 +211,6 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                 data = await db.Clothes.findAll({
                     limit: 8,
                     order: [['createdAt', 'DESC']],
-
                     include: [
                         {
                             model: db.Discount,
@@ -214,7 +229,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                             model: db.Color_Size,
                             attributes: ['id', 'color', 'size', 'stock'],
 
-                        }
+                        },
                     ]
 
                 })
@@ -229,6 +244,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                     limit: +pageSize,
                     distinct: true,
                     order: [["id", "DESC"]],
+
                     where: {
                         category: (category && category !== 'ALL') ? category : { [Op.ne]: null },
                         type: clothesType ? clothesType : { [Op.ne]: null },
@@ -409,7 +425,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
             if (type === 'PAGINATION') {
                 paginationData.data = convertClothesImgArray(paginationData.data);
-
+                paginationData.data = sortArrImageById(paginationData.data);
                 return {
                     DT: paginationData,
                     EC: 0,
@@ -420,7 +436,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
             else {
                 let clothesData = convertClothesImgArray(data);
-
+                clothesData = sortArrImageById(clothesData);
                 return {
                     DT: clothesData,
                     EC: 0,

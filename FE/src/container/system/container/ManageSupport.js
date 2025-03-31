@@ -176,6 +176,12 @@ function ManageSupport(props) {
 
                     <div className='text-input'>
                         <TextField
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    handleSendMessage()
+                                }
+                            }}
+                            autoComplete='off'
                             value={inputValue}
                             onChange={(event) => setInputValue(event.target.value)}
                             color="primary"

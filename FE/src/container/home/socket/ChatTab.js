@@ -11,15 +11,8 @@ import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login';
 import _ from 'lodash'
 function ChatTab(props) {
-    const defaultMessageArr = [
-        {
-            senderId: 0,
-            msg: 'What can we help you ?'
-        },
 
-    ]
-
-    const [messages, setMessages] = useState(defaultMessageArr);
+    const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('')
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -36,8 +29,7 @@ function ChatTab(props) {
                 console.log(`connect_error due to ${err}`);
             });
 
-            if (userData.id) {
-                console.log('join room')
+            if (userData.id && messages.length === 0) {
                 socket.emit("JOIN_ROOM", userData.id)
             }
 
@@ -56,16 +48,13 @@ function ChatTab(props) {
     }, [props.isOpenChatTab])
 
     const handleSendMessage = () => {
-
-        if (messages.length === 1) {
-            socket.connect();
-            socket.emit('CREATE_ROOM', 0, userData.id)
-            socket.emit('NEW_MESSAGE', 0, userData.id, inputValue)
-        }
-        else {
-            socket.emit('NEW_MESSAGE', 0, userData.id, inputValue)
-        }
+        socket.emit('NEW_MESSAGE', 0, userData.id, inputValue)
         setInputValue('')
+    }
+
+    const handleCreateRoom = () => {
+        socket.connect();
+        socket.emit('CREATE_ROOM', 0, userData.id)
     }
 
     return (
@@ -98,38 +87,60 @@ function ChatTab(props) {
 
                     :
                     <>
-                        <div className='content-middle'>
-                            {
-                                messages && messages.length > 0 && messages.map(item => {
+                        {messages.length === 0 ?
+                            <>
+                                <div className='create-room'>
+                                    <Button
+                                        onClick={() => handleCreateRoom()}
+                                        color="warning"
+                                        variant="outlined"
+                                        endIcon={<LoginIcon />} >Contact Help</Button>
+                                </div>
 
-                                    return (
-                                        <>
-                                            <div className={item.senderId === userData.id ? 'msg-container right' : 'msg-container left'}>
-                                                <span className={item.senderId === userData.id ? 'msg right' : 'msg left'}>{item.msg}</span>
-                                            </div>
-                                        </>
-                                    )
-                                })
-                            }
-                        </div>
-                        <div className='content-bottom'>
+                            </>
+                            :
+                            <>
+                                <div className='content-middle'>
+                                    {
+                                        messages && messages.length > 0 && messages.map(item => {
+
+                                            return (
+                                                <>
+                                                    <div className={item.senderId === userData.id ? 'msg-container right' : 'msg-container left'}>
+                                                        <span className={item.senderId === userData.id ? 'msg right' : 'msg left'}>{item.msg}</span>
+                                                    </div>
+                                                </>
+                                            )
+                                        })
+                                    }
+                                </div>
+                                <div className='content-bottom'>
 
 
-                            <div className='text-input'>
-                                <TextField
-                                    value={inputValue}
-                                    onChange={(event) => setInputValue(event.target.value)}
-                                    color="warning"
-                                    fullWidth
-                                    id="standard-basic"
-                                    label="..."
-                                    variant="standard" />
-                            </div>
-                            <IconButton
-                                onClick={() => handleSendMessage()}>
-                                <SendIcon></SendIcon>
-                            </IconButton>
-                        </div>
+                                    <div className='text-input'>
+                                        <TextField
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Enter') {
+                                                    handleSendMessage()
+                                                }
+                                            }}
+                                            autoComplete='off'
+                                            value={inputValue}
+                                            onChange={(event) => setInputValue(event.target.value)}
+                                            color="warning"
+                                            fullWidth
+                                            id="standard-basic"
+                                            label="..."
+                                            variant="standard" />
+                                    </div>
+                                    <IconButton
+                                        onClick={() => handleSendMessage()}>
+                                        <SendIcon></SendIcon>
+                                    </IconButton>
+                                </div>
+                            </>
+                        }
+
 
                     </>
 

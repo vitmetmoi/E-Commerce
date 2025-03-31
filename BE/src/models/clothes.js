@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // Clothes.belongsTo(models.Color_Size, { foreignKey: "clothesId" })
-            Clothes.hasMany(models.Color_Size, { foreignKey: 'clothesId' });
-            Clothes.hasMany(models.Discount, { foreignKey: 'clothesId' });
-            Clothes.hasMany(models.RelevantImage, { foreignKey: 'clothesId' });
-            Clothes.hasMany(models.Markdown, { foreignKey: 'clothesId' });
-            Clothes.hasMany(models.Review, { foreignKey: 'clothesId' });
+            Clothes.hasMany(models.Color_Size, { foreignKey: 'clothesId', constraints: false });
+            Clothes.hasMany(models.Discount, { foreignKey: 'clothesId', constraints: false });
+            Clothes.hasMany(models.RelevantImage, { foreignKey: 'clothesId', constraints: false });
+            Clothes.hasMany(models.Markdown, { foreignKey: 'clothesId', constraints: false });
+            Clothes.hasMany(models.Review, { foreignKey: 'clothesId', constraints: false });
         }
     }
     Clothes.init({
@@ -27,6 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Clothes',
     });
-    Clothes.sync({ alter: true })
+    // Clothes.sync({ alter: true, force: true })
     return Clothes;
 };

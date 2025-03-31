@@ -31,6 +31,20 @@
         }
     }
 
+    .create-room {
+        display        : flex;
+        flex-direction : column;
+        align-items    : center;
+        justify-content: center;
+        gap            : 10px;
+        height         : 100%;
+        width          : 100%;
+
+        .tex {
+            color: #707070;
+        }
+    }
+
     .content-top {
         width          : 100%;
         display        : flex;

@@ -21,10 +21,8 @@ const initApiRoutes = (app) => {
 
     //user
     router.get("/account", userController.handleAccount)
-    router.post("/item/create", userController.handleCreateItem)
     router.get("/user/login", userController.handleLogin)
     router.post("/user/register", userController.handleRegister)
-    router.post("/user/create", userController.handleCreateUser)
     router.get("/user/get", userController.handleGetUser)
     router.put('/user/update', userController.handleUpdateUser)
 

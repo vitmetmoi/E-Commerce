@@ -24,7 +24,11 @@ const socketService = (io) => {
                     customerId: customerId
                 })
 
-                socket.emit('NEW_MESSAGE', roomId)
+                socket.emit('NEW_MESSAGE', {
+                    type: 'msg',
+                    senderId: 0,
+                    msg: 'What can we help you ?'
+                },)
             }
 
         });
