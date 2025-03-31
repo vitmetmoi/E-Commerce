@@ -1,17 +1,28 @@
 # E-Commerce System
 
-A full-featured e-commerce platform with a React frontend and Node.js backend, allowing customers to browse products, make purchases, and chat in real-time with customer support.
+A full-featured e-commerce platform with a React frontend and Node.js backend, designed to provide a comprehensive online shopping experience. The system supports the entire e-commerce lifecycle from product discovery to post-purchase support.
 
-## Features
-
-- **User Authentication** - Secure login and registration
-- **Product Management** - Browse, search, and filter products
-- **Shopping Cart & Checkout** - Complete purchasing flow
-- **Order Management** - View and track orders
-- **Real-time Chat Support** - Connect customers with support staff instantly
-- **Admin Dashboard** - Comprehensive management interface
-- **Data Export** - Export product data to Excel format
-- **Responsive Design** - Optimized for mobile and desktop experiences
+### Customer Features
+- Payment online via banking and pay after received products
+- Browse and search products with advanced filtering
+- Detailed product views with images, specifications, and reviews
+- Secure account management with order history
+- Shopping cart with saved items and guest checkout
+- Real-time chat with customer support representatives
+- Order tracking and notification system
+- Responsive desgined, compatible with both mobile and laptop
+- Wishlist functionality for future purchases
+  
+### Admin Features
+- Comprehensive dashboard with sales analytics and metrics
+- Complete product management (add, edit, delete, categorize)
+- Inventory management with low stock alerts
+- Order processing workflow management
+- Customer data management with privacy controls
+- Export functionality for products and sales data to Excel
+- Support products management with real-time chat interface
+- User role management with customizable permissions
+- Content management for promotional banners and featured products
 
 ## Tech Stack
 
