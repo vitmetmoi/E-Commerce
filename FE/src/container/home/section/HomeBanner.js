@@ -11,14 +11,14 @@ function HomeBanner(props) {
         <div className='home-banner-container'>
             <Swiper
                 // install Swiper modules
-                modules={[Navigation, A11y]}
+                modules={[Navigation, A11y, Autoplay]}
                 spaceBetween={0}
                 slidesPerView={1}
                 navigation
-            // autoplay={{
-            //     delay: 5000,
-            //     disableOnInteraction: false,
-            // }}
+                autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                }}
             >
 
                 <SwiperSlide>

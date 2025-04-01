@@ -109,7 +109,7 @@ function NavigationHome(props) {
                                             <div className='section section2'>
                                                 <ul>
                                                     <li onClick={() => handleOnClickList('WOMEN', 'ALL')}>SHOP ALL</li>
-                                                    <li onClick={() => handleOnClickList('WOMEN', 'BEST')}>BEST SELLER</li>
+
                                                     <li onClick={() => handleOnClickList('WOMEN', 'TOP')}>TOP</li>
                                                     <li onClick={() => handleOnClickList('WOMEN', 'BOTTOM')}>BOTTOM</li>
                                                     <li onClick={() => handleOnClickList('WOMEN', 'SLIDES')}>SLIDES</li>
@@ -147,7 +147,7 @@ function NavigationHome(props) {
                                             <div className='section section2'>
                                                 <ul>
                                                     <li onClick={() => handleOnClickList('MEN', 'ALL')}>SHOP ALL</li>
-                                                    <li onClick={() => handleOnClickList('MEN', 'BEST')}>BEST SELLER</li>
+
                                                     <li onClick={() => handleOnClickList('MEN', 'TOP')}>TOP</li>
                                                     <li onClick={() => handleOnClickList('MEN', 'BOTTOM')}>BOTTOM</li>
                                                     <li onClick={() => handleOnClickList('MEN', 'SLIDES')}>SLIDES</li>
@@ -181,12 +181,11 @@ function NavigationHome(props) {
                                             </div>
                                             <div className='section section2'>
                                                 <ul>
-                                                    <li onClick={() => handleOnClickList('WOMEN', 'ALL')}>SHOP ALL</li>
-                                                    <li>BEST SELLER</li>
-                                                    <li>HAT</li>
-                                                    <li>CAP</li>
-                                                    <li>BACKPACK</li>
-                                                    <li>SLIDES</li>
+                                                    <li onClick={() => handleOnClickList('Unisex', 'ACC')}>SHOP ALL</li>
+                                                    <li onClick={() => handleOnClickList('Unisex', 'Hat')}>HAT</li>
+                                                    <li onClick={() => handleOnClickList('Unisex', 'Cap')}>CAP</li>
+                                                    <li onClick={() => handleOnClickList('Unisex', 'Backpack')}>BACKPACK</li>
+                                                    <li onClick={() => handleOnClickList('Unisex', 'Slides')}>SLIDES</li>
 
                                                 </ul>
 

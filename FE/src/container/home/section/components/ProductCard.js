@@ -35,6 +35,10 @@ function ProductCard(props) {
                         spaceBetween={0}
                         slidesPerView={1}
                         navigation
+                        autoplay={{
+                            delay: 2000,
+                            disableOnInteraction: false,
+                        }}
                     >
                         {props.imageArr && props.imageArr.map(item => {
                             return (
