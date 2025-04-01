@@ -5,6 +5,7 @@ A full-featured e-commerce platform with a React frontend and Node.js backend, d
 ### Customer Features
 - Payment online via banking and pay after received products
 - Browse and search products with advanced filtering
+- Rating product after purchased
 - Detailed product views with images, specifications, and reviews
 - Secure account management with order history
 - Shopping cart with saved items and guest checkout
@@ -111,6 +112,7 @@ E-Commerce/
 - The backend uses Babel to enable modern JavaScript features
 - Authentication is handled with JWT tokens and secure cookies
 - The system uses Sequelize ORM for database interactions, supporting both MySQL and PostgreSQL
+- Included both pagination and infinity scroll for reduce time from fetching data.
 
 
 
