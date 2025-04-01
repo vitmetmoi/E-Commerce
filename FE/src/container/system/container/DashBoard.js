@@ -171,8 +171,8 @@ function DashBoard(props) {
                             width={1100}
                             height={300}
                             series={[
-                                { data: pData, label: 'First half' },
-                                { data: uData, label: 'Top gross' },
+                                { data: pData },
+                                { data: uData },
                             ]}
                             xAxis={[{ scaleType: 'point', data: xLabels }]}
                         />
