@@ -123,7 +123,7 @@ const convertClothesImgArray = (clothesArr) => {
         let data = [];
         clothesArr.map((item) => {
             let child = item;
-            child.RelevantImages && child.RelevantImages.map((item) => {
+            child.RelevantImages && child.RelevantImages.length > 0 && child.RelevantImages.map((item) => {
                 let base64String = new Buffer(item.image, 'base64').toString('binary');
                 item.image = base64String;
                 return item;
@@ -148,16 +148,18 @@ const convertClothesImgArray = (clothesArr) => {
 const sortArrImageById = (clothesArr) => {
     let data = [];
     if (clothesArr && clothesArr.length > 0) {
+
         clothesArr.map((item) => {
             let child = item;
 
-            child.RelevantImages.sort(function (a, b) {
+            child.RelevantImages && child.RelevantImages.length > 0 && child.RelevantImages.sort(function (a, b) {
                 return a.id - b.id;
             });
 
             data.push(child);
         })
     }
+
     return data;
 }
 
@@ -334,13 +336,13 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                     return b[1] - a[1];
                 });
 
+
                 for (let i = 0; i < sortable.length; i++) {
                     let clothes = await db.Clothes.findOne({
                         where: { id: +sortable[i][0] },
                         include: [{
                             model: db.Discount,
                             attributes: ['id', 'value'],
-
                         },
                         {
                             model: db.Markdown,
@@ -360,6 +362,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
                     })
                     if (clothes) {
+                        clothes.setDataValue('total', sortable[i][1])
                         data.push(clothes)
                     }
                 }
@@ -437,8 +440,8 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
 
 
             else {
-                let clothesData = convertClothesImgArray(data);
 
+                let clothesData = convertClothesImgArray(data);
                 if (_.isArray(clothesData)) {
                     clothesData = sortArrImageById(clothesData);
                 }
