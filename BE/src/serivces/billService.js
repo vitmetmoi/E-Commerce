@@ -123,7 +123,11 @@ const getBillService = async (type, billId, page, pageSize, userId) => {
         }
         else {
             if (type === 'ALL') {
-                let bill = await db.Bill.findAll({})
+                let bill = await db.Bill.findAll({
+                    where: {
+                        status: 'Done'
+                    }
+                })
 
 
                 return {
