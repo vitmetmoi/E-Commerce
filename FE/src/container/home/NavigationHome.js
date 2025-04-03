@@ -13,12 +13,14 @@ import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux'
 import _ from 'lodash';
-
+import SearchIcon from '@mui/icons-material/Search';
 
 function NavigationHome(props) {
     const shoppingCartData = useSelector((state) => state.shoppingCart.shoppingCart);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [navClass, setNavClass] = useState('nav-sticky');
+    const [isOpenSearch, setIsOpenSearch] = useState(false)
+    const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -131,6 +133,7 @@ function NavigationHome(props) {
                                     </div>
                                 </div>
                             </li>
+
                             <li className='men'>
                                 <a href="#" class="desktop-item normal-item">MEN</a>
 
@@ -168,6 +171,7 @@ function NavigationHome(props) {
                                         </div>
                                     </div>
                                 </div>
+
                             </li>
 
                             <li className='acc'>
@@ -196,6 +200,7 @@ function NavigationHome(props) {
                                     </div>
                                 </div>
                             </li>
+
                             <li className='lookbook'>
                                 <a href="#" class="desktop-item normal-item">LOOKBOOK</a>
 
@@ -229,6 +234,7 @@ function NavigationHome(props) {
                                 </div>
                             </li>
                             <li><a className='normal-item about'>ABOUT</a></li>
+
                             <li className='community'>
                                 <a href="#" class="desktop-item normal-item">COMMUNITY</a>
 
@@ -256,6 +262,7 @@ function NavigationHome(props) {
                                     </div>
                                 </div>
                             </li>
+
                             <li><a className='normal-item magazine' >MAGAZINE</a></li>
                         </ul>
                     </div>
@@ -273,8 +280,9 @@ function NavigationHome(props) {
                             </svg>
 
                         </Tooltip>
-                        <Tooltip title="Save" arrow>
+                        <Tooltip title="My order" arrow>
                             <svg
+                                onClick={() => { navigate('/user/my-orders') }}
                                 className='icon'
                                 viewBox="0 0 147 180"
                                 fill="none"
@@ -282,16 +290,21 @@ function NavigationHome(props) {
                                 <path d="M5.63 5.63V170.63L73.13 140.63L140.63 170.63V5.63H5.63Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path>
                             </svg>
                         </Tooltip>
-                        <Tooltip title="Search" arrow>
+
+                        <Tooltip className='icon-search' title="Search" arrow>
                             <svg
+                                onClick={() => setIsOpenSearch(!isOpenSearch)}
                                 className='icon'
                                 viewBox="0 0 179 179"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M73.5 141C110.779 141 141 110.779 141 73.5C141 36.2208 110.779 6 73.5 6C36.2208 6 6 36.2208 6 73.5C6 110.779 36.2208 141 73.5 141Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M171 171L121.2 121.2" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path>
+                                <path d="M73.5 141C110.779 141 141 110.779 141 73.5C141 36.2208 110.779 6 73.5 6C36.2208 6 6 36.2208 6 73.5C6 110.779 36.2208 141 73.5 141Z" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M171 171L121.2 121.2" stroke="#1A1A1A" stroke-width="11.25" stroke-miterlimit="10" stroke-linecap="square">
+
+                                </path>
                             </svg>
                         </Tooltip>
-                        <Tooltip title="Order" arrow>
+
+                        <Tooltip title="Cart" arrow>
                             <StyledBadge
                                 onClick={() => { navigate('/order') }}
                                 badgeContent={!_.isEmpty(shoppingCartData) && shoppingCartData[0] !== '' ? shoppingCartData.length : 0}
@@ -321,6 +334,62 @@ function NavigationHome(props) {
 
                 </div>
             </nav >
+
+            <div className={isOpenSearch === true ? 'search-mega-box open' : 'search-mega-box'}>
+                <div className={isOpenSearch === true ? 'search-box-modal open' : 'search-box-modal'}>
+                    <div className='search-content'>
+                        <input
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    navigate(`/list?keyWord=${searchValue}`)
+                                }
+                            }}
+                            value={searchValue}
+                            onChange={(event) => setSearchValue(event.target.value)}
+                            placeholder='Please enter the product name...'
+                            className='search-input'></input>
+                        <SearchIcon
+                            onClick={() => {
+                                navigate(`/list?keyWord=${searchValue}`)
+                                window.location.reload()
+                            }}
+                            className='icon' />
+                    </div>
+
+                    <span className='title'>Recommended search terms</span>
+                    <div className='search-terms'>
+                        <span onClick={() => {
+                            navigate(`/list?keyWord=${'hoodie'}`)
+                            window.location.reload()
+                        }}
+                            className='term'>#hoodie</span>
+                        <span
+                            onClick={() => {
+                                navigate(`/list?keyWord=${'slides'}`)
+                                window.location.reload()
+                            }}
+                            className='term'>#slides</span>
+                        <span
+                            onClick={() => {
+                                navigate(`/list?keyWord=${'t-shirt'}`)
+
+                            }}
+                            className='term'>#t-shirt</span>
+                        <span
+                            onClick={() => {
+                                navigate(`/list?keyWord=${'steve'}`)
+                                window.location.reload()
+                            }}
+                            className='term'>#steve</span>
+                        <span
+                            onClick={() => {
+                                navigate(`/list?keyWord=${'AFGK'}`)
+                                window.location.reload()
+                            }}
+                            className='term'>#AFGK</span>
+                    </div>
+                </div>
+            </div>
 
 
         </div >

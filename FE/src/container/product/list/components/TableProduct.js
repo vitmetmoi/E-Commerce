@@ -47,7 +47,7 @@ function TableProduct(props) {
 
         let category = searchParams.get('category')
         let type = searchParams.get('type')
-
+        let keyWord = searchParams.get('keyWord')
         if (category === 'TOP') {
             category = ['T-Shirt', 'Jacket', 'Hoodie', 'Sweater', 'Cardigan'];
         }
@@ -78,8 +78,9 @@ function TableProduct(props) {
             color: props.color,
             size: props.size,
             priceRange: props.priceRange,
-            clothesType: type,
-            category: category
+            clothesType: type ? type : '',
+            category: category ? category : '',
+            keyWord: keyWord
         });
     }
 
