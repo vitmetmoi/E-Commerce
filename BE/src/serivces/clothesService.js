@@ -163,7 +163,7 @@ const sortArrImageById = (clothesArr) => {
     return data;
 }
 
-const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, priceRange) => {
+const getClothesService = async (type, id, page, pageSize, clothesType, category, size, color, priceRange, keyWord) => {
     try {
         if (!type) {
             return {
@@ -241,7 +241,7 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
             }
 
             else if (type === 'PAGINATION') {
-                console.log('color', color)
+                console.log('keyword', keyWord)
 
                 const { count, rows } = await db.Clothes.findAndCountAll({
                     offset: ((+page) - 1) * (+pageSize),
@@ -253,8 +253,12 @@ const getClothesService = async (type, id, page, pageSize, clothesType, category
                         category: (category && category !== 'ALL') ? category : { [Op.ne]: null },
                         type: clothesType ? clothesType : { [Op.ne]: null },
                         price: priceRange ? { [Op.between]: priceRange } : { [Op.ne]: null },
+
+                        name: keyWord ?
+                            { [Op.or]: keyWord.map(word => ({ [Op.iLike]: `%${word}%` })) } :
+                            { [Op.ne]: null },
                     },
-                    order: [["id", "DESC"]],
+
                     include: [{
                         model: db.Discount,
                         attributes: ['id', 'value'],

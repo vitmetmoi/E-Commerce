@@ -290,7 +290,7 @@ function CheckOut(props) {
                             </div>
                             <div className='address'>
                                 <span className='add-left'>{userData.firstName} {userData.lastName} ( {userData.phoneNumber} )</span>
-                                <span className='add-right'> {userData.address.note}, {formState.ward.full_name_en}, {formState.district.full_name_en}, {formState.province.full_name_en}</span>
+                                <span className='add-right'> {userData.address.note} {formState.ward.full_name_en} {formState.district.full_name_en} {formState.province.full_name_en}</span>
                                 <div className='default'>Default</div>
                             </div>
                         </div>

@@ -32,9 +32,9 @@ function ShoppingCart(props) {
     const [tableData, setTableData] = useState('');
     const [isSelectAll, setIsSelectAll] = useState(true);
     const navigate = useNavigate();
-    // console.log("shop", shoppingCartData)
-    // console.log("shopCart", shoppingCart)
-
+    console.log("shop", shoppingCartData)
+    console.log("shopCart", shoppingCart)
+    console.log('tableData', tableData);
     useEffect(() => {
 
         if (_.isEmpty(shoppingCartData) || shoppingCartData[0] === '') {
@@ -227,27 +227,24 @@ function ShoppingCart(props) {
         }
         else {
             if (tableData) {
-
                 let _tableData = _.cloneDeep(tableData);
 
-
-                _tableData.map(async (item, index) => {
+                _tableData = _tableData.filter((item, index) => {
                     if (item.isSelected === true) {
-                        await _tableData.splice(index, 1);
-                        await dispatch(deleteShoppingCart(item.id));
+                        dispatch(deleteShoppingCart(item.id));
                     }
+                    return item.isSelected === true;
                 })
 
-
-
                 setTableData(_tableData);
+
 
             }
         }
     }
 
     const handleOnClickOrder = () => {
-        if (tableData) {
+        if (tableData && tableData.length > 0) {
             let clothesData = []
             tableData.map(item => {
                 if (item.isSelected === true) {
@@ -264,6 +261,9 @@ function ShoppingCart(props) {
 
             dispatch(setCheckOutDataSlice({ type: 'clothesData', data: clothesData }))
             navigate('/checkOut');
+        }
+        else {
+            toast('Your shopping cart is empty!')
         }
     }
 
@@ -285,7 +285,7 @@ function ShoppingCart(props) {
                     <font>Shopping Cart</font>
                 </h2>
 
-                {isLoading === true && tableData ?
+                {isLoading === true || !tableData || tableData.length === 0 ?
                     ''
                     :
                     <div className='orders-table'>

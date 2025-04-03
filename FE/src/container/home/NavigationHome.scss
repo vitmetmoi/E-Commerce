@@ -449,37 +449,41 @@
             max-height: 0px;
             overflow  : hidden;
             transition: all 0.3s ease;
+
+
+            .content {
+                box-shadow    : none;
+                flex-direction: column;
+                padding       : 20px 20px 0 20px;
+
+                .row {
+                    width        : 100%;
+                    margin-bottom: 15px;
+                    border-top   : 1px solid rgba(255, 255, 255, 0.08);
+
+                    &:nth-child(1),
+                    &:nth-child(2) {
+                        border-top: 0px;
+                    }
+
+                    .mega-links {
+                        border-left : 0px;
+                        padding-left: 15px;
+
+                        li {
+                            margin: 0;
+                        }
+                    }
+
+                    header {
+                        font-size: 19px;
+                    }
+
+                }
+            }
+
         }
 
-        .mega-box .content {
-            box-shadow    : none;
-            flex-direction: column;
-            padding       : 20px 20px 0 20px;
-        }
-
-        .mega-box .content .row {
-            width        : 100%;
-            margin-bottom: 15px;
-            border-top   : 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .mega-box .content .row:nth-child(1),
-        .mega-box .content .row:nth-child(2) {
-            border-top: 0px;
-        }
-
-        .content .row .mega-links {
-            border-left : 0px;
-            padding-left: 15px;
-        }
-
-        .row .mega-links li {
-            margin: 0;
-        }
-
-        .content .row header {
-            font-size: 19px;
-        }
     }
 
     nav input {
@@ -519,5 +523,93 @@
     .css-ihowzd-MuiBadge-badge {
         cursor          : pointer;
         background-color: #f06e00;
+    }
+}
+
+.search-mega-box {
+    position        : fixed;
+    height          : 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    width           : 100%;
+    left            : 0;
+    top             : 40px;
+    z-index         : -1;
+    opacity         : 0;
+    transition      : all 0.5s;
+
+    &.open {
+        opacity: 1;
+        z-index: 3;
+    }
+
+    .search-box-modal {
+        width           : 100%;
+        height          : 450px;
+        background-color: white;
+        position        : absolute;
+        left            : 0;
+        top             : -390px;
+        transition      : all 0.5s;
+        z-index         : 0;
+        padding         : 100px 45px;
+        display         : flex;
+        flex-direction  : column;
+        align-items     : start;
+
+        &.open {
+            top: 0;
+        }
+
+        .search-content {
+
+            .search-input {
+                width           : 560px;
+                height          : 50px;
+                background-color: rgba(0, 0, 0, 0.05);
+                outline         : none;
+                border          : none;
+                padding-left    : 30px;
+                font-size       : 14px;
+
+                &::placeholder {
+                    color: 707070;
+                }
+            }
+
+            .icon {
+                width           : 54px;
+                height          : 50px;
+                padding-right   : 20px;
+                background-color: rgba(0, 0, 0, 0.05);
+                color           : #707070;
+                cursor          : pointer;
+            }
+
+        }
+
+        .title {
+            margin-top: 50px;
+            font-size : 15px;
+        }
+
+        .search-terms {
+            margin-top    : 10px;
+            width         : 50%;
+            display       : flex;
+            flex-direction: row;
+            gap           : 10px;
+
+            .term {
+                opacity  : 0.5;
+                font-size: 14.5px;
+                cursor   : pointer;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+
+
     }
 }

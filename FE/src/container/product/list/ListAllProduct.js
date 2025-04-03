@@ -13,6 +13,7 @@ function ListAllProduct(props) {
     const defalutFormState = {
         type: '',
         category: '',
+        keyWord: '',
         size: [],
         color: [],
         priceRange: [0, 300],
@@ -35,7 +36,11 @@ function ListAllProduct(props) {
             let category = searchParams.get('category')
             handleOnChange('category', category);
         }
+        let keyWord = searchParams.get('keyWord')
 
+        if (keyWord) {
+            handleOnChange('keyWord', keyWord);
+        }
     }, [location])
 
     useEffect(() => {
@@ -82,6 +87,7 @@ function ListAllProduct(props) {
                     <CardTypeList
                         type={formState.type}
                         category={formState.category}
+                        keyWord={formState.keyWord}
                     />
                 </div>
 
@@ -100,6 +106,7 @@ function ListAllProduct(props) {
                         priceRange={formState.priceRange}
                         color={formState.color}
                         size={formState.size}
+                        keyWord={formState.keyWord}
                         onFilter={formState.onFilter}
                     />
                 </div>
