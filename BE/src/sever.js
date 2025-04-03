@@ -7,7 +7,6 @@ import connectToDataBase from './config/connectDb';
 import { Server } from 'socket.io';
 import { createServer } from 'node:http';
 import socketService from './middleware/SocketIO';
-import implementOpenAIService from './middleware/OpenAI';
 require('dotenv').config();
 const app = express();
 var bodyParser = require('body-parser');
@@ -50,8 +49,6 @@ const io = new Server(server, {
 
 socketService(io);
 
-//Open AI
-implementOpenAIService();
 //Connect
 
 const PORT = process.env.PORT || 8080;

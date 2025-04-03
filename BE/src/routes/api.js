@@ -6,6 +6,7 @@ import webHookController from '../controllers/webHookController'
 import JWTservice from '../middleware/JWTservice'
 import billController from '../controllers/billController'
 import reviewController from '../controllers/reviewController'
+import implementOpenAIService from '../middleware/OpenAI'
 const router = express.Router();
 
 /**
@@ -51,6 +52,9 @@ const initApiRoutes = (app) => {
 
     //Socket
     router.get('/socket.io', userController.handleGetRoomId)
+
+    //Open AI
+    router.get('/openAI/get', implementOpenAIService)
 
     return app.use("/api", router)
 

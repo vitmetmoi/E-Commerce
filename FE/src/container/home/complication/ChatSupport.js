@@ -12,11 +12,14 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import { useNavigate } from 'react-router';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import ChatTab from './ChatTab'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import OpenAITab from './OpenAITab';
 
 function ChatSupport(props) {
 
     const navigate = useNavigate();
     const [isOpenChatTab, setIsOpenChatTab] = useState(false);
+    const [isOpenOpenAITab, setIsOpenAITab] = useState(false);
 
     const actions = [
         {
@@ -25,6 +28,14 @@ function ChatSupport(props) {
                     onClick={() => { setIsOpenChatTab(true) }}
                 />
             , name: 'Contact for support'
+        },
+        {
+            icon:
+                <AutoAwesomeIcon
+                    onClick={() => { setIsOpenAITab(true) }
+                    }
+                />
+            , name: 'Open help tab from AI'
         },
         {
             icon:
@@ -61,6 +72,15 @@ function ChatSupport(props) {
                 isOpenChatTab={isOpenChatTab}
                 setIsOpenChatTab={setIsOpenChatTab}
             />
+
+            <OpenAITab
+                isOpenAITab={isOpenOpenAITab}
+                setIsOpenChatTab={setIsOpenAITab}
+            />
+
+
+
+
         </div>
     );
 }

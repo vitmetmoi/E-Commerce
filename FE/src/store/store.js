@@ -12,6 +12,7 @@ import { otherAPI } from './slice/API/otherAPI';
 import otherReducer from './slice/Reducer/otherSlice'
 import checkOutReducer from './slice/Reducer/checkOutSlice';
 import { checkOutAPI } from './slice/API/checkOutAPI';
+
 const reducers = combineReducers({
     user: userReducer,
     shoppingCart: shopingCartReducer,
@@ -21,13 +22,13 @@ const reducers = combineReducers({
     [userAPI.reducerPath]: userAPI.reducer,
     [clothesAPI.reducerPath]: clothesAPI.reducer,
     [otherAPI.reducerPath]: otherAPI.reducer,
-    [checkOutAPI.reducerPath]: checkOutAPI.reducer
+    [checkOutAPI.reducerPath]: checkOutAPI.reducer,
 });
 
 const persistConfig = {
     key: 'root',
     storage,
-    blacklist: ['userAPI', 'systemAPI', 'system', 'otherAPI', 'checkOutAPI', 'checkOut']
+    blacklist: ['userAPI', 'systemAPI', 'system', 'otherAPI', 'checkOutAPI', 'checkOut', 'deepSeekAPI']
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

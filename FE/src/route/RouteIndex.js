@@ -23,10 +23,10 @@ function RouteIndex(props) {
                         <Route path="register" element={<Register />} />
                         <Route path="product" element={<Product></Product>}></Route>
                         <Route path="order" element={<ShoppingCart></ShoppingCart>}></Route>
-                        <Route path="checkout" element={<CheckOut></CheckOut>}></Route>
                         <Route path="list" element={<ListAllProduct />}></Route>
                         <Route path='user' >
                             <Route element={<AuthLayout />}>
+                                <Route path="checkout" element={<CheckOut></CheckOut>}></Route>
                                 <Route path="profile" element={<UserProfile />}></Route>
                                 <Route path="my-account" element={<UserProfile />}></Route>
                                 <Route path="my-orders" element={<UserProfile />}></Route>

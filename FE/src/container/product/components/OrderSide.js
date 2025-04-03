@@ -364,7 +364,7 @@ function OrderSide(props) {
             console.log('data to shop', data)
             dispatch(setCheckOutDataSlice({ type: 'clothesData', data: data }))
 
-            navigate('/checkout')
+            navigate('/user/checkout')
         }
         else {
             navigate('/login');

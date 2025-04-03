@@ -1,19 +1,53 @@
 import OpenAI from 'openai';
 
-const implementOpenAIService = async () => {
+const implementOpenAIService = async (req, res) => {
     console.log('Setting OpenAI...');
 
-    const client = new OpenAI({
-        apiKey: process.env['OPENAI_API_KEY']
-    });
+    try {
+        let msg = req.query.msg;
+        if (msg) {
+            const openai = new OpenAI({
+                baseURL: "https://openrouter.ai/api/v1",
+                apiKey: process.env['OPENAI_API_KEY']
+            });
 
-    const response = await client.responses.create({
-        model: 'gpt-4o',
-        instructions: 'You are a coding assistant that talks like a pirate',
-        input: 'Are semicolons optional in JavaScript?',
-    });
+            const completion = await openai.chat.completions.create({
+                model: "deepseek/deepseek-chat-v3-0324:free",
+                messages: [
+                    {
+                        "role": "user",
+                        "content": msg
+                    }
+                ],
 
-    console.log('implemented', response);
+            });
+            if (completion.choices[0].message) {
+                return res.status(200).json({
+                    DT: completion.choices[0].message,
+                    EC: 0,
+                    EM: "Done!"
+                })
+            }
+            console.log(completion.choices[0].message);
+        }
+        else {
+            return res.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: "err from sever..."
+            })
+        }
+
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: "err from sever..."
+        })
+    }
+
+
 }
-
 export default implementOpenAIService;
