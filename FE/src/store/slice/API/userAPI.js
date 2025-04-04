@@ -85,6 +85,13 @@ export const userAPI = createApi({
             })
         }),
 
+        getOpenAIMsg: build.mutation({
+            query: (msg) => ({
+                url: `/api/openAI/get?msg=${msg}`,
+                method: 'get',
+            })
+        }),
+
     }),
 })
 
@@ -95,5 +102,6 @@ export const { useRegisterMutation, useLazyLoginQuery,
     useCreateBillMutation, useGetBillMutation,
     useUpdateBillMutation, useDeleteBillMutation,
     useGetReviewMutation, useCreateReviewMutation,
-    useDeleteReviewMutation, useUpdateReviewMutation
+    useDeleteReviewMutation, useUpdateReviewMutation,
+    useGetOpenAIMsgMutation
 } = userAPI
