@@ -80,7 +80,8 @@ function MyOrders(props) {
             id: 0,
             page: page,
             pageSize: pageSize,
-            userId: userData.id
+            userId: userData.id,
+            status: ['Done', 'Pending']
         })
     }
 
@@ -298,7 +299,9 @@ function MyOrders(props) {
                                                         }
 
 
-                                                        <button className='btn1'>Ask for return</button>
+                                                        <button
+                                                            onClick={() => { navigate('/') }}
+                                                            className='btn1'>Ask for return</button>
 
                                                     </div>
                                                 </div>

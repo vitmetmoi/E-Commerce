@@ -50,7 +50,7 @@ export const userAPI = createApi({
 
         getBill: build.mutation({
             query: (params) => ({
-                url: `/api/bill/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}&userId=${params.userId}`, method: 'get',
+                url: `/api/bill/get?type=${params.type}&id=${params.id}&page=${params.page}&pageSize=${params.pageSize}&userId=${params.userId}&status=${params.status ? params.status : ''}`, method: 'get',
             })
         }),
 
@@ -85,6 +85,13 @@ export const userAPI = createApi({
             })
         }),
 
+        getOpenAIMsg: build.mutation({
+            query: (msg) => ({
+                url: `/api/openAI/get?msg=${msg}`,
+                method: 'get',
+            })
+        }),
+
     }),
 })
 
@@ -95,5 +102,6 @@ export const { useRegisterMutation, useLazyLoginQuery,
     useCreateBillMutation, useGetBillMutation,
     useUpdateBillMutation, useDeleteBillMutation,
     useGetReviewMutation, useCreateReviewMutation,
-    useDeleteReviewMutation, useUpdateReviewMutation
+    useDeleteReviewMutation, useUpdateReviewMutation,
+    useGetOpenAIMsgMutation
 } = userAPI

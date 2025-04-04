@@ -80,7 +80,8 @@ function ReturnsAndCancel(props) {
             id: 0,
             page: page,
             pageSize: pageSize,
-            userId: userData.id
+            userId: userData.id,
+            status: ['Cancel', 'Return']
         })
     }
 
@@ -91,7 +92,7 @@ function ReturnsAndCancel(props) {
             page: '',
             pageSize: '',
             clothesId: clothesId,
-            userId: userId
+            userId: userId,
         })
         if (res && res.data && res.data.EC === 0) {
             return res.data.DT
@@ -146,71 +147,7 @@ function ReturnsAndCancel(props) {
 
     }
 
-    const checkIfTimeRatingIsValid = (time) => {
-        let now = dayjs();
-        let order = time.split('/')
-        let _dayjs = dayjs(order[0] + '-' + (+order[1] + 1) + '-' + order[2]).add(7, 'day');
-        let resultTime = _dayjs.diff(now);
-        if (resultTime > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
-    const handleTime = (addDays, orderDate) => {
-        let time = [];
-        let order = orderDate.split('/')
-        let _dayjs = dayjs(order[0] + '-' + (+order[1] + 1) + '-' + order[2]).add(addDays, 'day');
-        //calc
-
-        if (checkIfTimeRatingIsValid(orderDate) === true) {
-            time.push(_dayjs.get('y'));
-            time.push(_dayjs.get('M') + 1);
-            time.push(_dayjs.get('D'));
-            return (
-                <>
-                    Rating product before <span> {time[2]}</span>/<span>{time[1]}</span>/<span>{time[0]}</span>
-                </>
-            );
-        }
-        else {
-            return (
-                <>
-                    <span>Time for rating is excessed</span>
-                </>
-            )
-        }
-    }
-
-    const handleShippingCases = (status, time, isRated) => {
-
-        if (status === 'Done' && isRated === false) {
-            return (
-                <>{handleTime(7, time)}</>
-            )
-        }
-        else if (status === 'Done' && isRated === true) {
-            return (
-                <>Rated!</>
-            )
-        }
-        else if (status === 'Ordering') {
-            return (
-                <span>Your items are delivering...</span>
-            )
-        }
-    }
-
-    const handleOnClickRating = async (productData, billId) => {
-        let _formState = _.cloneDeep(formState);
-        if (formState.isOpenRatingModal === false) {
-            _formState.dataRatingModal = { ...productData, billId: billId };
-        }
-        _formState.isOpenRatingModal = !formState.isOpenRatingModal;
-        setFormState(_formState);
-    }
 
     return (
         <div
@@ -269,7 +206,7 @@ function ReturnsAndCancel(props) {
                                                             <span className='total'>x{item2.total}</span>
                                                         </div>
 
-                                                        <span className='inf-bottom'>{handleShippingCases(item1.status, item1.time, item2.isRated)}</span>
+                                                        <span className='inf-bottom'>Your item has been returned !</span>
 
                                                     </div>
                                                 </div>
@@ -282,23 +219,15 @@ function ReturnsAndCancel(props) {
                                                     </div>
 
                                                     <div className='action-group'>
-                                                        {
-                                                            checkIfTimeRatingIsValid(item1.time) === true && item1.status === 'Done' && item2.isRated === false ?
-                                                                <button
-                                                                    onClick={() => handleOnClickRating(product, item1.id)}
-                                                                    className='btn2'>Rating
-                                                                </button>
-                                                                :
-                                                                <button
-                                                                    onClick={() => {
-                                                                        navigate(`/product?id=${product.id}`)
-                                                                    }}
-                                                                    className='btn2'>Buy again
-                                                                </button>
-                                                        }
+
+                                                        <button
+                                                            onClick={() => {
+                                                                navigate(`/product?id=${product.id}`)
+                                                            }}
+                                                            className='btn2'>Buy again
+                                                        </button>
 
 
-                                                        <button className='btn1'>Ask for return</button>
 
                                                     </div>
                                                 </div>
@@ -324,38 +253,6 @@ function ReturnsAndCancel(props) {
                     getBillIsLoading === true && <LinearProgress style={{ width: '100%' }} color="inherit" />
                 }
             </div>
-
-
-            <Modal
-                style={{ width: "100%" }}
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={formState.isOpenRatingModal}
-                onClose={handleOnClickRating}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
-            >
-                <Fade in={formState.isOpenRatingModal}>
-                    <Box sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-
-                    }}>
-                        <RatingModal
-                            handleOnClose={handleOnClickRating}
-                            ratingData={formState.dataRatingModal}
-                            userId={userData.id}
-                        ></RatingModal>
-                    </Box>
-                </Fade>
-            </Modal>
         </div >
     );
 }

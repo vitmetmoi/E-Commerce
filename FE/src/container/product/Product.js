@@ -66,8 +66,9 @@ function Product(props) {
             window.scrollTo(0, 0);
         });
         let productId = searchParams.get('id')
-
-        if (!_.isEmpty(clothesData)) {
+        let isExist = false;
+        clothesData.map(item => { if (item.id === +productId) { isExist = true } })
+        if (!_.isEmpty(clothesData) && isExist === true) {
 
             if (productId) {
                 clothesData.map(item => {

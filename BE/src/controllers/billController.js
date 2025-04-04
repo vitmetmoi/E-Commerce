@@ -52,7 +52,8 @@ const handleGetBill = async (req, res) => {
         let page = req.query.page;
         let pageSize = req.query.pageSize;
         let userId = req.query.userId;
-        let response = await billService.getBillService(type, billId, page, pageSize, userId);
+        let status = req.query.status ? req.query.status.split(',') : '';
+        let response = await billService.getBillService(type, billId, page, pageSize, userId, status);
 
         return res.status(200).json({
             DT: response.DT,

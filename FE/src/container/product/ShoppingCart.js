@@ -260,7 +260,7 @@ function ShoppingCart(props) {
             console.log('tableData', clothesData)
 
             dispatch(setCheckOutDataSlice({ type: 'clothesData', data: clothesData }))
-            navigate('/checkOut');
+            navigate('/user/checkOut');
         }
         else {
             toast('Your shopping cart is empty!')

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavigationHome from './NavigationHome.js';
 import HomeBanner from './section/HomeBanner';
 import AdsHome from './AdsHome.js';
@@ -9,7 +9,9 @@ import FirstAboutSection from './section/FirstAboutSection.js';
 import SecondAboutSection from './section/SecondAboutSection.js';
 import Footer from './Footer.js';
 import './Home.scss'
-import ChatSupport from './socket/ChatSupport.js'
+import ChatSupport from './complication/ChatSupport.js';
+
+
 function Home(props) {
 
     return (

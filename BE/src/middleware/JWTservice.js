@@ -3,7 +3,9 @@ import db from '../models';
 import { RAW } from 'sequelize/lib/query-types';
 
 const exceptionPath = ['/', '/api/user/login', '/api/user/register',
-    '/api/account', '/api/clothes/get', '/api/hooks/payment', '/api/review/get', '/socket.io/'];
+    '/api/account', '/api/clothes/get', '/api/hooks/payment', '/api/review/get', '/socket.io/',
+    '/api/openAI/get'
+];
 
 const createJwtTokenService = (data) => {
 
@@ -45,8 +47,8 @@ const checkCookieService = (req, res, next) => {
     try {
         let path = req.path;
         // console.log('path', req.headers.origin)
-        // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-        // console.log("full", fullUrl)
+        var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+        console.log("full", fullUrl)
         let isValid = exceptionPath.includes(path)
 
         if (path === '/api/account') {

@@ -112,7 +112,7 @@ const updateBillService = async (billData) => {
     }
 }
 
-const getBillService = async (type, billId, page, pageSize, userId) => {
+const getBillService = async (type, billId, page, pageSize, userId, status) => {
     try {
         if (!type) {
             return {
@@ -144,6 +144,7 @@ const getBillService = async (type, billId, page, pageSize, userId) => {
                     limit: +pageSize,
                     distinct: true,
                     order: [["id", "DESC"]],
+
                     include: [
                         {
                             model: db.ShoppingCart,
@@ -181,7 +182,7 @@ const getBillService = async (type, billId, page, pageSize, userId) => {
                     distinct: true,
                     where: {
                         userId: userId,
-                        status: { [Op.ne]: 'EXPIRED' }
+                        status: status ? status : { [Op.ne]: 'EXPIRED' },
                     },
                     order: [["id", "DESC"]],
                     include: [

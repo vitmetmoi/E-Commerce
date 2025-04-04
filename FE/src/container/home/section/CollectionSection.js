@@ -81,7 +81,7 @@ function CollectionSection(props) {
 
                 <SwiperSlide>
                     <div
-                        onClick={() => handleOnClickList('ALL', 'ACC')}
+                        onClick={() => handleOnClickList('Unisex', 'ACC')}
                         className='collection-card' style={{ backgroundImage: "url(" + "https://doncare-club.com/cdn/shop/files/1.jpg?v=1722845591&width=1800" + ")" }}>
                         <div className='text-group'>
                             <span className='header-text'>ACC</span>

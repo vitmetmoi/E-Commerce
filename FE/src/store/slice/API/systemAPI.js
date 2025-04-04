@@ -64,6 +64,8 @@ export const clothesAPI = createApi({
             }
         }),
 
+
+
     }),
 })
 
