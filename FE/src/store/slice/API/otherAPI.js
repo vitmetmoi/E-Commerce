@@ -22,7 +22,7 @@ const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
 export const otherAPI = createApi({
     reducerPath: 'otherAPI',
     baseQuery: axiosBaseQuery({
-        // baseUrl: 'http://34.227.27.223:8080',
+        // baseUrl: 'http://13.213.11.247:8080',
         baseUrl: 'https://esgoo.net',
 
     }),

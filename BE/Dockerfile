@@ -1,5 +1,5 @@
-FROM node:14-alpine
-WORKDIR /BaoDuy/BackEnd
+FROM node:lts-alpine as build
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 RUN npm install -g @babel/core @babel/cli

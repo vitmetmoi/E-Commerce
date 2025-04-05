@@ -20,6 +20,7 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.DATABASE_USERN
 });
 
 const connectToDataBase = async () => {
+    console.log(process.env.DATABASE_HOST, process.env.DATABASE_SSL)
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');

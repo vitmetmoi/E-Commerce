@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import axiosInstance from '../../../config/axios'
+import axiosInstance from '../../../config/axios';
 
 const axiosBaseQuery = ({ baseUrl } = { baseUrl: "" }) =>
     async ({ url, method, data, params, headers, body }) => {

@@ -10,6 +10,12 @@ module.exports = {
     "port": process.env.DATABASE_PORT,
     "logging": false,
     "dialect": process.env.DATABASE_DIALECT,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      },
+    }
   },
   "test": {
     "username": "root",
